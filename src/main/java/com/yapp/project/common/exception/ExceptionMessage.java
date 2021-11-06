@@ -9,7 +9,11 @@ import java.util.Arrays;
 @Getter
 public enum ExceptionMessage {
     EXCEPTION_MESSAGE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR),
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND);
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND),
+    NOT_EXIST_POST_STATUS(HttpStatus.NOT_FOUND),
+    NOT_EXIST_POSITION_CODE(HttpStatus.NOT_FOUND),
+    NOT_EXIST_SKILL_CODE(HttpStatus.NOT_FOUND),
+    NOT_EXIST_POST_CATEGORY_CODE(HttpStatus.NOT_FOUND);
 
     private final HttpStatus status;
 
