@@ -2,7 +2,6 @@ package com.yapp.project.post.entity.vo;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
-import com.yapp.project.common.vo.Skill;
 import lombok.Getter;
 
 import java.util.Arrays;
