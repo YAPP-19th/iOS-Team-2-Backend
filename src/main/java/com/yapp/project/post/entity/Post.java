@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 public class Post extends BaseEntity<Long> {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id", unique = true)
     private Long id;
 
