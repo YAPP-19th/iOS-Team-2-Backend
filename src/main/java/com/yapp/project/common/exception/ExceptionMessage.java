@@ -18,7 +18,7 @@ public enum ExceptionMessage {
     FILE_CONVERTION_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST),
     NOT_EXIST_POST_ID(HttpStatus.NOT_FOUND);
 
-    private final HttpStatus status;
+    private final HttpStatus status; //TODO: statusCode 커스터마이징 할 지 회의
 
     ExceptionMessage(HttpStatus status) {
         this.status = status;
