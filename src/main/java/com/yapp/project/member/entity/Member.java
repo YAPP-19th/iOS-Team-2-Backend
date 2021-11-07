@@ -17,6 +17,9 @@ public class Member extends BaseEntity<Long> {
     @Column(name = "member_id", unique = true)
     private Long id;
 
+    @Column(name = "member_nick_name", nullable = false, length = 10)
+    private String nickName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_member_id", referencedColumnName = "team_member_id")
     private TeamMember teamMember;
