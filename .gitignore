@@ -351,3 +351,6 @@ src/main/resources/aws.yml
 *.jpg
 *.bmp
 *.JFIF
+
+# schema.sql, data.sql
+*.sql
