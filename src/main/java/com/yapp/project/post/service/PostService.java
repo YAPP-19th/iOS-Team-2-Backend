@@ -43,20 +43,21 @@ public class PostService {
             Long ownerId,
             List<MultipartFile> postImages
     ) throws IOException {
-//        Member owner = memberRepository.findById(ownerId)   //TODO: 멤버 삽입후 주석 해제
-//                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        Member owner = new Member(1L, null);
+        Member owner = memberRepository.findById(ownerId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
         List<String> imageUrls = new ArrayList<>();
-        if(postImages != null && !postImages.isEmpty()) {
+        if (postImages != null && !postImages.isEmpty()) {  //TODO: 좀 더 깔끔하게 바꿔보기
             for (var image : postImages) {
+                if (image == null || image.isEmpty()) break;
+
                 String imageUrl = s3Uploader.upload(image, S3DIR);
                 imageUrls.add(imageUrl);
             }
         }
 
-        Post post = postConverter.toPostEntity(title, categoryCode, startDate, endDate, region, description, owner, String.join(" ", imageUrls));
+        Post post = postConverter.toPostEntity(title, categoryCode, startDate, endDate, region, description, String.join(" ", imageUrls), owner);
         Post postEntity = postRepository.save(post);
 
         return postConverter.toPostCreateResponse(postEntity.getId(), imageUrls, postEntity.getPostCategory(), postEntity.getCreatedDate());

@@ -20,8 +20,8 @@ public class PostConverter {
             LocalDateTime endDate,
             String region,
             String description,
-            Member owner,
-            String imageUrls
+            String imageUrls,
+            Member owner
     ) {
 
         return Post.builder()
