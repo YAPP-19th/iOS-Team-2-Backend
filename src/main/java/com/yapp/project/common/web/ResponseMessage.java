@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ResponseMessage {
-    MEMBER_INSERT_SUCCESS(HttpStatus.CREATED);
+    POST_INSERT_SUCCESS(HttpStatus.CREATED);
 
     private final HttpStatus status;
 

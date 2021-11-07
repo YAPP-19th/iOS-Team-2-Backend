@@ -13,7 +13,8 @@ public enum ExceptionMessage {
     NOT_EXIST_POST_STATUS(HttpStatus.NOT_FOUND),
     NOT_EXIST_POSITION_CODE(HttpStatus.NOT_FOUND),
     NOT_EXIST_SKILL_CODE(HttpStatus.NOT_FOUND),
-    NOT_EXIST_POST_CATEGORY_CODE(HttpStatus.NOT_FOUND);
+    NOT_EXIST_POST_CATEGORY_CODE(HttpStatus.NOT_FOUND),
+    NOT_EXIST_MEMBER_ID(HttpStatus.NOT_FOUND);
 
     private final HttpStatus status;
 
