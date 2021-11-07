@@ -16,10 +16,10 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.io.IOException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -39,7 +39,7 @@ public class PostController {
 
     @ApiOperation("게시글 생성")
     @PostMapping(consumes = {"multipart/form-data"})
-    public ApiResult insert(@Valid @ModelAttribute PostCreateRequest request) throws IOException {
+    public ResponseEntity<ApiResult> insert(@Valid @ModelAttribute PostCreateRequest request) throws IOException {
         var response = postService.create(
                 request.getTitle(),
                 request.getCategoryCode(),
@@ -60,15 +60,14 @@ public class PostController {
                 getLinkToAddress().slash(response.getPostId()).withRel(LinkType.DELETE_METHOD).withType(HttpMethod.DELETE.name())
         );
 
-        return ApiResult.of(
-                ResponseMessage.POST_INSERT_SUCCESS,
-                entityModel
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.POST_INSERT_SUCCESS, entityModel)
         );
     }
 
     @ApiOperation("게시글 단건 조회")
     @GetMapping(value = "/{postId}", consumes = MediaTypes.HAL_JSON_VALUE)
-    public ApiResult getOne(@Valid @PathVariable Long postId) {
+    public ResponseEntity<ApiResult> getOne(@Valid @PathVariable Long postId) {
         PostInfoResponse response = postService.findById(postId);
 
         EntityModel<PostInfoResponse> entityModel = EntityModel.of(
@@ -80,15 +79,14 @@ public class PostController {
                 getLinkToAddress().slash(response.getPostId()).withRel(LinkType.DELETE_METHOD).withType(HttpMethod.DELETE.name())
         );
 
-        return ApiResult.of(
-                ResponseMessage.POST_SEARCH_SUCCESS,
-                entityModel
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.POST_SEARCH_SUCCESS, entityModel)
         );
     }
 
     @ApiOperation("게시글 전체 조회")
     @GetMapping(consumes = MediaTypes.HAL_JSON_VALUE)
-    public ApiResult getAll(Pageable pageable) {
+    public ResponseEntity<ApiResult> getAll(Pageable pageable) {
         Page<PostInfoResponse> response = postService.findAllByPages(pageable);
 
         EntityModel<Page<PostInfoResponse>> entityModel = EntityModel.of(
@@ -97,9 +95,8 @@ public class PostController {
                 getLinkToAddress().withSelfRel().withType(HttpMethod.GET.name())
         );
 
-        return ApiResult.of(
-                ResponseMessage.POST_SEARCH_SUCCESS,
-                entityModel
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.POST_SEARCH_SUCCESS, entityModel)
         );
     }
 }
