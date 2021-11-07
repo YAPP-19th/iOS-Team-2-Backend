@@ -4,9 +4,6 @@ import com.yapp.project.common.entity.BaseEntity;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.entity.vo.PostStatus;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,46 +13,42 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@DynamicInsert
-@DynamicUpdate
 public class Post extends BaseEntity<Long> {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id", unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "post_id")
     private Long id;
 
     @Column(name = "post_image_urls", columnDefinition = "LONGTEXT")
     private String imageUrls;
 
-    @Column(name = "post_title", nullable = false)
+    @Column(name = "post_title")
     private String title;
 
     @Column(name = "post_category")
     private int postCategory;
 
-    @Column(name = "post_start_date", nullable = false)
+    @Column(name = "post_start_date")
     private LocalDateTime startDate;
 
-    @Column(name = "post_end_date", nullable = false)
+    @Column(name = "post_end_date")
     private LocalDateTime endDate;
 
     @Column(name = "post_region")
     private String region;
 
-    @Column(name = "post_description", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "post_description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "post_view_count", nullable = false)
-    @ColumnDefault("0")
+    @Column(name = "post_view_count")
     private Long viewCount;
 
-    @Column(name = "post_status", nullable = false)
+    @Column(name = "post_status")
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'RECRUITING'")
     private PostStatus postStatus;
 
     @ManyToOne
-    @JoinColumn(name = "post_owner_id", referencedColumnName = "member_id", nullable = false)
+    @JoinColumn(name = "post_owner_id", referencedColumnName = "member_id")
     private Member owner;
 
 }

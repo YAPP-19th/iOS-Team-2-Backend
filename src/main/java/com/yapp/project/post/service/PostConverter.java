@@ -5,6 +5,7 @@ import com.yapp.project.post.dto.response.PostCreateResponse;
 import com.yapp.project.post.dto.response.PostInfoResponse;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.vo.PostCategory;
+import com.yapp.project.post.entity.vo.PostStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,8 @@ public class PostConverter {
                 .region(region)
                 .description(description)
                 .owner(owner)
+                .postStatus(PostStatus.RECRUITING)
+                .viewCount(0L)
                 .imageUrls(imageUrls)
                 .build();
     }
