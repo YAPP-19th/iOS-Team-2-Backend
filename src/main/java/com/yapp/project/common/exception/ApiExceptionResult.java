@@ -10,7 +10,7 @@ public class ApiExceptionResult {
     private final int statusCode;
     private final String message;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime serverDateTime;
 
     private ApiExceptionResult(int statusCode, String message) {
@@ -21,5 +21,9 @@ public class ApiExceptionResult {
 
     public static ApiExceptionResult of(ExceptionMessage exceptionMessage) {
         return new ApiExceptionResult(exceptionMessage.getStatus().value(), exceptionMessage.name());
+    }
+
+    public static ApiExceptionResult of(int httpStatus, String message) {
+        return new ApiExceptionResult(httpStatus, message);
     }
 }
