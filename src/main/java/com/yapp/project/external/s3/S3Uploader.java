@@ -3,6 +3,8 @@ package com.yapp.project.external.s3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.FileUploadFailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +28,7 @@ public class S3Uploader {
 
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+                .orElseThrow(() -> new FileUploadFailException(ExceptionMessage.FILE_CONVERTION_FAIL_EXCEPTION));
 
         return upload(uploadFile, dirName);
     }
@@ -45,9 +47,9 @@ public class S3Uploader {
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
-            log.info("파일이 삭제되었습니다.");
+            log.info("FILE_DELETION_SUCCESS");
         } else {
-            log.info("파일이 삭제되지 못했습니다.");
+            log.info("FILE_DELETION_FAIL");
         }
     }
 
