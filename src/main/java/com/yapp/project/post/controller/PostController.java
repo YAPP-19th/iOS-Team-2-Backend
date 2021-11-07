@@ -85,7 +85,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 전체 조회")
-    @GetMapping(consumes = MediaTypes.HAL_JSON_VALUE)
+    @GetMapping(/*consumes = MediaTypes.HAL_JSON_VALUE*/)
     public ResponseEntity<ApiResult> getAll(Pageable pageable) {
         Page<PostInfoResponse> response = postService.findAllByPages(pageable);
 
