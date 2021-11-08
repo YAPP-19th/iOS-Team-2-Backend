@@ -1,7 +1,8 @@
-package com.yapp.project.post.entity;
+package com.yapp.project.joinedinfo.entity;
 
 import com.yapp.project.common.entity.BaseEntity;
 import com.yapp.project.member.entity.Member;
+import com.yapp.project.post.entity.RecruitingPosition;
 import lombok.*;
 
 import javax.persistence.*;
