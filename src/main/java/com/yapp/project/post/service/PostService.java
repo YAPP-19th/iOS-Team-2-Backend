@@ -5,10 +5,14 @@ import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.external.s3.S3Uploader;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
+import com.yapp.project.post.controller.bundle.RecruitingPositionBundle;
 import com.yapp.project.post.dto.response.PostCreateResponse;
 import com.yapp.project.post.dto.response.PostInfoResponse;
+import com.yapp.project.post.dto.response.RecruitingStatusResponse;
 import com.yapp.project.post.entity.Post;
+import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.repository.PostRepository;
+import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +33,8 @@ public class PostService {
     private final S3Uploader s3Uploader;
 
     private final MemberRepository memberRepository;
+    private final RecruitingPositionRepository recruitingPositionRepository;
+    private final RecruitingPositionConverter recruitingPositionConverter;
 
     private final String S3DIR = "post_image";
 
@@ -41,7 +47,8 @@ public class PostService {
             String region,
             String description,
             Long ownerId,
-            List<MultipartFile> postImages
+            List<MultipartFile> postImages,
+            List<RecruitingPositionBundle> positionDetails
     ) throws IOException {
 
         Member owner = memberRepository.findById(ownerId)
@@ -60,6 +67,12 @@ public class PostService {
         Post post = postConverter.toPostEntity(title, categoryCode, startDate, endDate, region, description, String.join(" ", imageUrls), owner);
         Post postEntity = postRepository.save(post);
 
+        for(var positionDetail : positionDetails){
+            var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(positionDetail.getPositionCode(), positionDetail.getSkillCode(), positionDetail.getRecruitingNumber());
+            recruitingPositionDetail.setPost(postEntity);
+            recruitingPositionRepository.save(recruitingPositionDetail);
+        }
+
         return postConverter.toPostCreateResponse(postEntity.getId(), imageUrls, postEntity.getPostCategory(), postEntity.getCreatedDate());
     }
 
@@ -67,7 +80,7 @@ public class PostService {
     public Page<PostInfoResponse> findAllByPages(Pageable pageable) {
         Page<Post> postPage = postRepository.findAll(pageable);
 
-        return postPage.map(postConverter::toPostInfoResponse);
+        return postPage.map(v -> createPostInfoResponse(v));
     }
 
     @Transactional(readOnly = true)
@@ -75,6 +88,23 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        return postConverter.toPostInfoResponse(post);
+        return createPostInfoResponse(post);
+    }
+
+    private PostInfoResponse createPostInfoResponse(Post post) {
+        List<RecruitingStatusResponse> recruitingStatusResponses = new ArrayList<>();
+
+        List<RecruitingPosition> positionDetailsByPost = recruitingPositionRepository.findAllByPostId(post.getId());
+        for(var positionDetail : positionDetailsByPost){
+            var recruitingStatusResponse = recruitingPositionConverter.toRecruitingStatus(
+                    positionDetail.getPositionCode(),
+                    positionDetail.getSkillCode(),
+                    "2/4"  // TODO: 팀원 현황 계산
+            );
+
+            recruitingStatusResponses.add(recruitingStatusResponse);
+        }
+
+        return postConverter.toPostInfoResponse(post, recruitingStatusResponses);
     }
 }

@@ -41,4 +41,7 @@ public class PostCreateRequest {
 
     @Size(min = 0, max = 5)
     private List<MultipartFile> postImages;
+
+    @Size(min = 0)
+    private List<RecruitingPositionRequest> recruitingPositionRequests;
 }

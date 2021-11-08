@@ -3,6 +3,7 @@ package com.yapp.project.post.service;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.dto.response.PostCreateResponse;
 import com.yapp.project.post.dto.response.PostInfoResponse;
+import com.yapp.project.post.dto.response.RecruitingStatusResponse;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.vo.PostCategory;
 import com.yapp.project.post.entity.vo.PostStatus;
@@ -48,7 +49,7 @@ public class PostConverter {
         return new PostCreateResponse(id, imageUrls, PostCategory.of(categoryCode).name(), createdAt);
     }
 
-    public PostInfoResponse toPostInfoResponse(Post postEntity) {
+    public PostInfoResponse toPostInfoResponse(Post postEntity, List<RecruitingStatusResponse> recruitingStatusResponses) {
 
         return PostInfoResponse.builder()
                 .postId(postEntity.getId())
@@ -64,6 +65,7 @@ public class PostConverter {
                 .ownerId(postEntity.getOwner().getId())
                 .createdAt(postEntity.getCreatedDate())
                 .modifiedAt(postEntity.getLastModifiedDate())
+                .recruitingStatusResponses(recruitingStatusResponses)
                 .build();
     }
 }

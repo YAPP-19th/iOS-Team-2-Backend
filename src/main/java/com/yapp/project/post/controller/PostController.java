@@ -3,6 +3,7 @@ package com.yapp.project.post.controller;
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.LinkType;
 import com.yapp.project.common.web.ResponseMessage;
+import com.yapp.project.post.controller.bundle.PostBundleConverter;
 import com.yapp.project.post.dto.request.PostCreateRequest;
 import com.yapp.project.post.dto.response.PostCreateResponse;
 import com.yapp.project.post.dto.response.PostInfoResponse;
@@ -30,6 +31,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @Api(tags = "Post (Project)")
 public class PostController {
     private final PostService postService;
+    private final PostBundleConverter postBundleConverter;
 
     private String linkWithPostId = "/{postId}";
 
@@ -48,7 +50,8 @@ public class PostController {
                 request.getRegion(),
                 request.getDescription(),
                 request.getOwnerId(),
-                request.getPostImages()
+                request.getPostImages(),
+                postBundleConverter.toTeamMemberRequestBundle(request.getRecruitingPositionRequests())
         );
 
         EntityModel<PostCreateResponse> entityModel = EntityModel.of(
