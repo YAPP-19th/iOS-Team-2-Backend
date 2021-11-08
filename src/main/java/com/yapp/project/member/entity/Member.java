@@ -40,8 +40,8 @@ public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_login_id")
     private String loginId;
 
-    @Column(name = "member_level")
-    private Integer level;
+    @Column(name = "member_score")
+    private Integer score;
 
     @Column(name = "member_skill_code")
     private Integer skillCode;
