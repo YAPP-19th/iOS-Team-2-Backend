@@ -27,7 +27,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/posts", produces = MediaTypes.HAL_JSON_VALUE)
-@Api(tags = "Post (Prodject)")
+@Api(tags = "Post (Project)")
 public class PostController {
     private final PostService postService;
 
@@ -66,7 +66,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 단건 조회")
-    @GetMapping(value = "/{postId}", consumes = MediaTypes.HAL_JSON_VALUE)
+    @GetMapping(value = "/{postId}")
     public ResponseEntity<ApiResult> getOne(@Valid @PathVariable Long postId) {
         PostInfoResponse response = postService.findById(postId);
 
@@ -85,7 +85,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 전체 조회")
-    @GetMapping(/*consumes = MediaTypes.HAL_JSON_VALUE*/)
+    @GetMapping()
     public ResponseEntity<ApiResult> getAll(Pageable pageable) {
         Page<PostInfoResponse> response = postService.findAllByPages(pageable);
 
