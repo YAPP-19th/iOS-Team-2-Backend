@@ -1,11 +1,8 @@
 package com.yapp.project.post.entity;
 
-import com.yapp.project.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -16,15 +13,18 @@ import java.util.List;
 public class TeamMember {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "team_member_id", unique = true)
+    @Column(name = "team_member_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_member_post_id", referencedColumnName = "post_id", nullable = false)
+    @JoinColumn(name = "team_member_post_id", referencedColumnName = "post_id")
     private Post post;
 
     @Column(name = "team_member_position_code")
     private int positionCode;
+
+    @Column(name = "team_member_skill_code")
+    private int skillCode;
 
     @Column(name = "team_member_recruiting_number")
     private int recruitingNumber;
