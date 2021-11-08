@@ -14,10 +14,10 @@ import javax.persistence.*;
 public class Member extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "member_id", unique = true)
+    @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "member_nick_name", nullable = false, length = 10)
+    @Column(name = "member_nick_name", length = 10)
     private String nickName;
 
     @ManyToOne(fetch = FetchType.LAZY)
