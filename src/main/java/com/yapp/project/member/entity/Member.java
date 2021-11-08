@@ -37,7 +37,7 @@ public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_token")
     private String token;
 
-    @Column(name = "member_ogin_id")
+    @Column(name = "member_login_id")
     private String loginId;
 
     @Column(name = "member_level")
