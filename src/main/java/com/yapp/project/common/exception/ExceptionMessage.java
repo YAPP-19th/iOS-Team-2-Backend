@@ -9,9 +9,17 @@ import java.util.Arrays;
 @Getter
 public enum ExceptionMessage {
     EXCEPTION_MESSAGE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR),
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND);
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND),
+    NOT_EXIST_POST_STATUS(HttpStatus.NOT_FOUND),
+    NOT_EXIST_POSITION_CODE(HttpStatus.NOT_FOUND),
+    NOT_EXIST_SKILL_CODE(HttpStatus.NOT_FOUND),
+    NOT_EXIST_POST_CATEGORY_CODE(HttpStatus.NOT_FOUND),
+    NOT_EXIST_MEMBER_ID(HttpStatus.NOT_FOUND),
+    FILE_CONVERTION_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST),
+    NOT_EXIST_POST_ID(HttpStatus.NOT_FOUND),
+    POST_ID_AND_RECRUITING_POSITION_MISMATCH(HttpStatus.NOT_FOUND);
 
-    private final HttpStatus status;
+    private final HttpStatus status; //TODO: statusCode 커스터마이징 할 지 회의
 
     ExceptionMessage(HttpStatus status) {
         this.status = status;

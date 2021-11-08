@@ -343,3 +343,14 @@ gradle-app.setting
 # AWS 접속 키 : 절대 GIT에 올리지 말 것
 src/main/resources/aws.yml
 *.yml
+
+# s3 upload fail image
+*.png
+*.jpeg
+*.gif
+*.jpg
+*.bmp
+*.JFIF
+
+# schema.sql, data.sql
+*.sql

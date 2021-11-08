@@ -22,4 +22,8 @@ public class ApiExceptionResult {
     public static ApiExceptionResult of(ExceptionMessage exceptionMessage) {
         return new ApiExceptionResult(exceptionMessage.getStatus().value(), exceptionMessage.name());
     }
+
+    public static ApiExceptionResult of(int httpStatus, String message) {
+        return new ApiExceptionResult(httpStatus, message);
+    }
 }
