@@ -26,7 +26,7 @@ public class Post extends BaseEntity<Long> {
     private String title;
 
     @Column(name = "post_category")
-    private int postCategory;
+    private Integer postCategory;
 
     @Column(name = "post_start_date")
     private LocalDateTime startDate;

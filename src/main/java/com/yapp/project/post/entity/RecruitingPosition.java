@@ -21,13 +21,13 @@ public class RecruitingPosition {
     private Post post;
 
     @Column(name = "recruiting_position_position_code")
-    private int positionCode;
+    private Integer positionCode;
 
     @Column(name = "recruiting_position_skill_code")
-    private int skillCode;
+    private Integer skillCode;
 
     @Column(name = "recruiting_position_recruiting_number")
-    private int recruitingNumber;
+    private Integer recruitingNumber;
 
     public void setPost(Post post) {
         this.post = post;
