@@ -17,7 +17,7 @@ import java.util.List;
 public class PostConverter {
     public Post toPostEntity(
             String title,
-            int categoryCode,
+            String categoryName,
             LocalDateTime startDate,
             LocalDateTime endDate,
             String region,
@@ -28,13 +28,13 @@ public class PostConverter {
 
         return Post.builder()
                 .title(title)
-                .postCategory(PostCategory.of(categoryCode).getCategoryCode())
+                .categoryCode(PostCategory.of(categoryName).getCategoryCode())
                 .startDate(startDate)
                 .endDate(endDate)
                 .region(region)
                 .description(description)
                 .owner(owner)
-                .postStatus(PostStatus.RECRUITING)
+                .statusCode(PostStatus.RECRUITING.getPostStatusCode())
                 .viewCount(0L)
                 .imageUrls(imageUrls)
                 .build();
@@ -46,7 +46,7 @@ public class PostConverter {
             int categoryCode,
             LocalDateTime createdAt) {
 
-        return new PostCreateResponse(id, imageUrls, PostCategory.of(categoryCode).name(), createdAt);
+        return new PostCreateResponse(id, imageUrls, PostCategory.of(categoryCode).getCategoryName(), createdAt);
     }
 
     public PostInfoResponse toPostInfoResponse(Post postEntity, List<RecruitingStatusResponse> recruitingStatusResponses) {
@@ -60,8 +60,8 @@ public class PostConverter {
                 .endDate(postEntity.getEndDate())
                 .region(postEntity.getRegion())
                 .viewCount(postEntity.getViewCount())
-                .postStatus(postEntity.getPostStatus().name())
-                .postCategory(PostCategory.of(postEntity.getPostCategory()).name())
+                .status(PostStatus.of(postEntity.getStatusCode()).getPostStatusName())
+                .category(PostCategory.of(postEntity.getCategoryCode()).getCategoryName())
                 .ownerId(postEntity.getOwner().getId())
                 .createdAt(postEntity.getCreatedDate())
                 .modifiedAt(postEntity.getLastModifiedDate())

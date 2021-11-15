@@ -26,7 +26,7 @@ public class Post extends BaseEntity<Long> {
     private String title;
 
     @Column(name = "post_category")
-    private Integer postCategory;
+    private Integer categoryCode;
 
     @Column(name = "post_start_date")
     private LocalDateTime startDate;
@@ -44,8 +44,7 @@ public class Post extends BaseEntity<Long> {
     private Long viewCount;
 
     @Column(name = "post_status")
-    @Enumerated(EnumType.STRING)
-    private PostStatus postStatus;
+    private Integer statusCode;
 
     @ManyToOne
     @JoinColumn(name = "post_owner_id", referencedColumnName = "member_id")

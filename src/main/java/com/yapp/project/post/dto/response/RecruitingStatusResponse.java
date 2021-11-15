@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class RecruitingStatusResponse {
-    private final int positionCode;
+    private final String  positionName;
 
-    private final int skillCode;
+    private final String skillName;
 
     private final String status;
 }

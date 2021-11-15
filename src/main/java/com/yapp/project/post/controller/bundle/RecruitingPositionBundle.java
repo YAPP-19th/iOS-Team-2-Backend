@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RecruitingPositionBundle {
-    private int positionCode;
+    private final String positionName;
 
-    private int skillCode;
+    private final String skillName;
 
-    private int recruitingNumber;
+    private final int recruitingNumber;
 }

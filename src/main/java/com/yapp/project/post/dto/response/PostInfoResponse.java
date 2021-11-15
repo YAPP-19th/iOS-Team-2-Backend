@@ -16,7 +16,7 @@ public class PostInfoResponse {
 
     private final String title;
 
-    private final String postCategory;
+    private final String category;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime startDate;
@@ -30,7 +30,7 @@ public class PostInfoResponse {
 
     private final Long viewCount;
 
-    private final String postStatus;
+    private final String status;
 
     private final Long ownerId;
 

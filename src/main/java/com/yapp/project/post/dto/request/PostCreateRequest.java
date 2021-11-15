@@ -1,7 +1,6 @@
 package com.yapp.project.post.dto.request;
 
 import com.yapp.project.common.exception.DtoValidationFailMessage;
-import io.swagger.annotations.ApiParam;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,11 +16,9 @@ public class PostCreateRequest {
     @Pattern(regexp = "^\\S{2,255}$", message = DtoValidationFailMessage.INVALID_POST_TITLE)
     private String title;
 
-    @PositiveOrZero(message = DtoValidationFailMessage.INVALID_CATEGORY_CODE)
-    @ApiParam(defaultValue = "0")
-    private Integer categoryCode;
+    @NotBlank(message = DtoValidationFailMessage.INVALID_CATEGORY)
+    private String categoryName;
 
-    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
 

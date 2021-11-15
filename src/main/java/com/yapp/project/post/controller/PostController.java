@@ -44,7 +44,7 @@ public class PostController {
     public ResponseEntity<ApiResult> insert(@Valid @ModelAttribute PostCreateRequest request) throws IOException {
         var response = postService.create(
                 request.getTitle(),
-                request.getCategoryCode(),
+                request.getCategoryName(),
                 request.getStartDate(),
                 request.getEndDate(),
                 request.getRegion(),
