@@ -17,7 +17,10 @@ public enum ExceptionMessage {
     NOT_EXIST_MEMBER_ID(HttpStatus.NOT_FOUND),
     FILE_CONVERTION_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST),
     NOT_EXIST_POST_ID(HttpStatus.NOT_FOUND),
-    POST_ID_AND_RECRUITING_POSITION_MISMATCH(HttpStatus.NOT_FOUND);
+    POST_ID_AND_RECRUITING_POSITION_MISMATCH(HttpStatus.NOT_FOUND),
+    NOT_EXIST_POST_CATEGORY_NAME(HttpStatus.NOT_FOUND),
+    NOT_EXIST_POSITION_NAME(HttpStatus.NOT_FOUND),
+    NOT_EXIST_SKILL_NAME(HttpStatus.NOT_FOUND);
 
     private final HttpStatus status; //TODO: statusCode 커스터마이징 할 지 회의
 
