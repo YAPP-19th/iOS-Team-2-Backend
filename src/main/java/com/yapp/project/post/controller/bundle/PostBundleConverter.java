@@ -12,7 +12,7 @@ public class PostBundleConverter {
         List<RecruitingPositionBundle> bundle = new ArrayList<>();
 
         for(var request : requests){
-            bundle.add(new RecruitingPositionBundle(request.getPositionCode(), request.getSkillCode(), request.getRecruitingNumber()));
+            bundle.add(new RecruitingPositionBundle(request.getPositionName(), request.getSkillName(), request.getRecruitingNumber()));
         }
 
         return bundle;

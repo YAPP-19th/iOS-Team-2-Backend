@@ -15,5 +15,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     <S extends Post> S save(S entity);
 
     @Override
-    Optional<Post> findById(Long aLong);
+    Optional<Post> findById(Long id);
 }

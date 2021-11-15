@@ -41,7 +41,7 @@ public class PostService {
     @Transactional
     public PostCreateResponse create(
             String title,
-            int categoryCode,
+            String categoryName,
             LocalDateTime startDate,
             LocalDateTime endDate,
             String region,
@@ -64,16 +64,16 @@ public class PostService {
             }
         }
 
-        Post post = postConverter.toPostEntity(title, categoryCode, startDate, endDate, region, description, String.join(" ", imageUrls), owner);
+        Post post = postConverter.toPostEntity(title, categoryName, startDate, endDate, region, description, String.join(" ", imageUrls), owner);
         Post postEntity = postRepository.save(post);
 
         for(var positionDetail : positionDetails){
-            var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(positionDetail.getPositionCode(), positionDetail.getSkillCode(), positionDetail.getRecruitingNumber());
+            var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(positionDetail.getPositionName(), positionDetail.getSkillName(), positionDetail.getRecruitingNumber());
             recruitingPositionDetail.setPost(postEntity);
             recruitingPositionRepository.save(recruitingPositionDetail);
         }
 
-        return postConverter.toPostCreateResponse(postEntity.getId(), imageUrls, postEntity.getPostCategory(), postEntity.getCreatedDate());
+        return postConverter.toPostCreateResponse(postEntity.getId(), imageUrls, postEntity.getCategoryCode(), postEntity.getCreatedDate());
     }
 
     @Transactional(readOnly = true)
