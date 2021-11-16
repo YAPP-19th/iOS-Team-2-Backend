@@ -97,6 +97,7 @@ public class PostService {
         List<RecruitingPosition> positionDetailsByPost = recruitingPositionRepository.findAllByPostId(post.getId());
         for(var positionDetail : positionDetailsByPost){
             var recruitingStatusResponse = recruitingPositionConverter.toRecruitingStatus(
+                    positionDetail.getId(),
                     positionDetail.getPositionCode(),
                     positionDetail.getSkillCode(),
                     "2/4"  // TODO: 팀원 현황 계산
