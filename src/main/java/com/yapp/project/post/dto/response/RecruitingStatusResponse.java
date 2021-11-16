@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class RecruitingStatusResponse {
+    private final Long recruitingPositionId;
+
     private final String  positionName;
 
     private final String skillName;
