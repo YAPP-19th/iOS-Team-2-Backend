@@ -2,7 +2,6 @@ package com.yapp.project.post.entity;
 
 import com.yapp.project.common.entity.BaseEntity;
 import com.yapp.project.member.entity.Member;
-import com.yapp.project.post.entity.vo.PostStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,6 +44,9 @@ public class Post extends BaseEntity<Long> {
 
     @Column(name = "post_status")
     private Integer statusCode;
+
+    @Column(name = "post_online_code")
+    private Integer onlineCode;
 
     @ManyToOne
     @JoinColumn(name = "post_owner_id", referencedColumnName = "member_id")
