@@ -1,14 +1,17 @@
 package com.yapp.project.post.dto.request;
 
 import com.yapp.project.common.exception.DtoValidationFailMessage;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RecruitingPositionRequest {
     @NotBlank(message = DtoValidationFailMessage.INVALID_POSITION_NAME)
     private String positionName;
