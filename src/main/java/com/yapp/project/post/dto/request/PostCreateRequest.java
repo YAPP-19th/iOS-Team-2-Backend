@@ -36,7 +36,7 @@ public class PostCreateRequest {
     @Positive(message = DtoValidationFailMessage.INVALID_OWNER_ID)
     private Long ownerId;
 
-    @Pattern(regexp = "^\\S[온라인 | 오프라인 | 온오프라인]$")
+    @Pattern(regexp = "^[가-힣]*$", message = DtoValidationFailMessage.INVALID_POST_ONLINE_INFO)
     private String onlineInfo;
 
     @Size(min = 0, max = 5)
