@@ -20,7 +20,9 @@ public class RecruitingPositionConverter {
         return new RecruitingStatusResponse(
                 recruitingPositionId,
                 Position.of(positionCode).getPositionName(),
+                Position.of(positionCode).getPositionCode(),
                 Skill.of(skillCode).getSkillName(),
+                Skill.of(skillCode).getSkillCode(),
                 status
         );
     }
