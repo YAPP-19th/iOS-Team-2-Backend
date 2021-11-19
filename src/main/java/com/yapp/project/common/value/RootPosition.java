@@ -8,9 +8,9 @@ import java.util.Arrays;
 
 @Getter
 public enum RootPosition {
-    DEVELOPER_DEFAULT(1, "개발"),
-    PLANNER_DEFAULT(2, "디자인"),
-    DESIGNER_DEFAULT(3, "기획");
+    DEVELOPER(1, "개발"),
+    PLANNER(2, "디자인"),
+    DESIGNER(3, "기획");
 
     private final int rootPositionCode;
     private final String rootPositionName;
