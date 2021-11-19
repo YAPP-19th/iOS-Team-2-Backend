@@ -6,6 +6,7 @@ import com.yapp.project.common.web.ResponseMessage;
 import com.yapp.project.post.controller.bundle.PostBundleConverter;
 import com.yapp.project.post.dto.request.PostCreateRequest;
 import com.yapp.project.post.dto.response.PostCreateResponse;
+import com.yapp.project.post.dto.response.PostDeleteResponse;
 import com.yapp.project.post.dto.response.PostInfoResponse;
 import com.yapp.project.post.service.PostService;
 import io.swagger.annotations.Api;
@@ -34,6 +35,7 @@ public class PostController {
     private final PostBundleConverter postBundleConverter;
 
     private String linkWithPostId = "/{postId}";
+    private String linkWithRootPositionName = "/positions/{rootPositionName}";
 
     private WebMvcLinkBuilder getLinkToAddress() {
         return linkTo(PostController.class);
@@ -59,6 +61,7 @@ public class PostController {
                 response,
                 getLinkToAddress().withSelfRel().withType(HttpMethod.POST.name()),
                 getLinkToAddress().slash(response.getPostId()).withRel(LinkType.READ_METHOD).withType(HttpMethod.GET.name()),
+                getLinkToAddress().slash(linkWithRootPositionName).withRel(LinkType.READ_METHOD).withType(HttpMethod.GET.name()),
                 getLinkToAddress().withRel(LinkType.READ_ALL_METHOD).withType(HttpMethod.GET.name()),
                 getLinkToAddress().slash(response.getPostId()).withRel(LinkType.UPDATE_METHOD).withType(HttpMethod.PATCH.name()),
                 getLinkToAddress().slash(response.getPostId()).withRel(LinkType.DELETE_METHOD).withType(HttpMethod.DELETE.name())
@@ -71,13 +74,14 @@ public class PostController {
 
     @ApiOperation("게시글 단건 조회")
     @GetMapping(value = "/{postId}")
-    public ResponseEntity<ApiResult> getOne(@Valid @PathVariable Long postId) {
+    public ResponseEntity<ApiResult> getOne(@PathVariable Long postId) {
         PostInfoResponse response = postService.findById(postId);
 
         EntityModel<PostInfoResponse> entityModel = EntityModel.of(
                 response,
                 getLinkToAddress().withRel(LinkType.CREATE_METHOD).withType(HttpMethod.POST.name()),
                 getLinkToAddress().slash(response.getPostId()).withSelfRel().withType(HttpMethod.GET.name()),
+                getLinkToAddress().slash(linkWithRootPositionName).withRel(LinkType.READ_METHOD).withType(HttpMethod.GET.name()),
                 getLinkToAddress().withRel(LinkType.READ_ALL_METHOD).withType(HttpMethod.GET.name()),
                 getLinkToAddress().slash(response.getPostId()).withRel(LinkType.UPDATE_METHOD).withType(HttpMethod.PATCH.name()),
                 getLinkToAddress().slash(response.getPostId()).withRel(LinkType.DELETE_METHOD).withType(HttpMethod.DELETE.name())
@@ -96,11 +100,44 @@ public class PostController {
         EntityModel<Page<PostInfoResponse>> entityModel = EntityModel.of(
                 response,
                 getLinkToAddress().slash(linkWithPostId).withRel(LinkType.READ_METHOD).withType(HttpMethod.GET.name()),
+                getLinkToAddress().slash(linkWithRootPositionName).withRel(LinkType.READ_METHOD).withType(HttpMethod.GET.name()),
                 getLinkToAddress().withSelfRel().withType(HttpMethod.GET.name())
         );
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.POST_SEARCH_SUCCESS, entityModel)
+        );
+    }
+
+    @ApiOperation("position으로 조회")
+    @GetMapping(value = "/positions/{rootPositionName}")
+    public ResponseEntity<ApiResult> getAllByPosition(@PathVariable String rootPositionName, Pageable pageable) {
+        Page<PostInfoResponse> response = postService.findAllByPosition(rootPositionName, pageable);
+
+        EntityModel<Page<PostInfoResponse>> entityModel = EntityModel.of(
+                response,
+                getLinkToAddress().slash(linkWithPostId).withRel(LinkType.READ_METHOD).withType(HttpMethod.GET.name()),
+                getLinkToAddress().withSelfRel().withType(HttpMethod.GET.name())
+        );
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.POST_SEARCH_SUCCESS, entityModel)
+        );
+    }
+
+    @ApiOperation("게시글 단건 삭제")
+    @DeleteMapping(value = "/{postId}")
+    public ResponseEntity<ApiResult> deleteOne(@PathVariable Long postId) {
+        PostDeleteResponse response = postService.deleteById(postId);
+
+        EntityModel<PostDeleteResponse> entityModel = EntityModel.of(
+                response,
+                getLinkToAddress().withRel(LinkType.CREATE_METHOD).withType(HttpMethod.POST.name()),
+                getLinkToAddress().withRel(LinkType.READ_ALL_METHOD).withType(HttpMethod.GET.name())
+        );
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.POST_DELETE_SUCCESS, entityModel)
         );
     }
 }

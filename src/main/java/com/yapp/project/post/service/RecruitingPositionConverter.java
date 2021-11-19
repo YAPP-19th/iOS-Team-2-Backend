@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class RecruitingPositionConverter {
     public RecruitingPosition toRecruitingPositionEntity(String positionName, String skillName, int recruitingNumber){
         return RecruitingPosition.builder()
+                .rootPositionCode(Position.getRootPosition(Position.of(positionName).getPositionCode()).getRootPositionCode())
                 .positionCode(Position.of(positionName).getPositionCode())
                 .skillCode(Skill.of(skillName).getSkillCode())
                 .recruitingNumber(recruitingNumber)
@@ -20,7 +21,9 @@ public class RecruitingPositionConverter {
         return new RecruitingStatusResponse(
                 recruitingPositionId,
                 Position.of(positionCode).getPositionName(),
+                Position.of(positionCode).getPositionCode(),
                 Skill.of(skillCode).getSkillName(),
+                Skill.of(skillCode).getSkillCode(),
                 status
         );
     }

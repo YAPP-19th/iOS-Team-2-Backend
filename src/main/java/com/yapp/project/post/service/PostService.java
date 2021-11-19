@@ -2,11 +2,13 @@ package com.yapp.project.post.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.common.value.RootPosition;
 import com.yapp.project.external.s3.S3Uploader;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.post.controller.bundle.RecruitingPositionBundle;
 import com.yapp.project.post.dto.response.PostCreateResponse;
+import com.yapp.project.post.dto.response.PostDeleteResponse;
 import com.yapp.project.post.dto.response.PostInfoResponse;
 import com.yapp.project.post.dto.response.RecruitingStatusResponse;
 import com.yapp.project.post.entity.Post;
@@ -69,7 +71,11 @@ public class PostService {
         Post postEntity = postRepository.save(post);
 
         for(var positionDetail : positionDetails){
-            var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(positionDetail.getPositionName(), positionDetail.getSkillName(), positionDetail.getRecruitingNumber());
+            var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(
+                    positionDetail.getPositionName(),
+                    positionDetail.getSkillName(),
+                    positionDetail.getRecruitingNumber()
+            );
             recruitingPositionDetail.setPost(postEntity);
             recruitingPositionRepository.save(recruitingPositionDetail);
         }
@@ -90,6 +96,23 @@ public class PostService {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
         return createPostInfoResponse(post);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostInfoResponse> findAllByPosition(String rootPositionName, Pageable pageable){
+        Page<RecruitingPosition> allByPositionCode = recruitingPositionRepository.findAllByRootPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
+
+        return allByPositionCode.map(rp -> postConverter.toPostInfoResponse(rp, "3/4"));
+    }
+
+    @Transactional
+    public PostDeleteResponse deleteById(Long postId){
+        if (postRepository.existsById(postId)) {  // TODO: CASCADE 설정하기
+            postRepository.deleteById(postId);
+            return postConverter.toPostDeleteResponse(postId);
+        }
+
+        throw new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID);
     }
 
     private PostInfoResponse createPostInfoResponse(Post post) {

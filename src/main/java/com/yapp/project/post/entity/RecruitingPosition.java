@@ -16,9 +16,12 @@ public class RecruitingPosition {
     @Column(name = "recruiting_position_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recruiting_position_post_id", referencedColumnName = "post_id")
     private Post post;
+
+    @Column(name = "recruiting_root_position_code")
+    private Integer rootPositionCode;
 
     @Column(name = "recruiting_position_position_code")
     private Integer positionCode;
