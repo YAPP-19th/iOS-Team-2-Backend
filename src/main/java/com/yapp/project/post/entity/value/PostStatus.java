@@ -8,10 +8,10 @@ import java.util.Arrays;
 
 @Getter
 public enum PostStatus {
-    RECRUITING(0, "모집중"),
-    RECRUITMENT_COMPLETED(1, "모집완료"),
-    PROJECT_IN_PROGRESS(2, "프로젝트_진행중"),
-    PROJECT_COMPLETED(3, "프로젝트_완료");
+    RECRUITING(0, "모집 진행중"),
+    RECRUITMENT_COMPLETED(1, "모집 완료"),
+    PROJECT_IN_PROGRESS(2, "프로젝트 진행중"),
+    PROJECT_COMPLETED(3, "프로젝트 완료");
 
     private final int postStatusCode;
     private final String postStatusName;
