@@ -71,7 +71,11 @@ public class PostService {
         Post postEntity = postRepository.save(post);
 
         for(var positionDetail : positionDetails){
-            var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(positionDetail.getPositionName(), positionDetail.getSkillName(), positionDetail.getRecruitingNumber());
+            var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(
+                    positionDetail.getPositionName(),
+                    positionDetail.getSkillName(),
+                    positionDetail.getRecruitingNumber()
+            );
             recruitingPositionDetail.setPost(postEntity);
             recruitingPositionRepository.save(recruitingPositionDetail);
         }
@@ -96,7 +100,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<PostInfoResponse> findAllByPosition(String rootPositionName, Pageable pageable){
-        Page<RecruitingPosition> allByPositionCode = recruitingPositionRepository.findAllByPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
+        Page<RecruitingPosition> allByPositionCode = recruitingPositionRepository.findAllByRootPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
 
         return allByPositionCode.map(rp -> postConverter.toPostInfoResponse(rp, "3/4"));
     }
