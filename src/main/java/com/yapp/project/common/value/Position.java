@@ -57,4 +57,17 @@ public enum Position {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POSITION_NAME));
     }
+
+    public static RootPosition getRootPosition(int positionCode){
+        String prefix = Position.of(positionCode).name().split("_")[0];
+
+        if(RootPosition.DESIGNER.toString().equals(prefix))
+            return RootPosition.DESIGNER;
+        else if(RootPosition.DEVELOPER.toString().equals(prefix))
+            return RootPosition.DEVELOPER;
+        else if (RootPosition.PLANNER.toString().equals(prefix))
+            return RootPosition.PLANNER;
+
+        throw new NotFoundException(ExceptionMessage.NOT_EXIST_ROOT_POSITION_NAME);
+    }
 }
