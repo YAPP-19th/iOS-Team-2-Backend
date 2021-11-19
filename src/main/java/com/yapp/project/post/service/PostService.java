@@ -47,6 +47,7 @@ public class PostService {
             String region,
             String description,
             Long ownerId,
+            String onlineInfo,
             List<MultipartFile> postImages,
             List<RecruitingPositionBundle> positionDetails
     ) throws IOException {
@@ -64,7 +65,7 @@ public class PostService {
             }
         }
 
-        Post post = postConverter.toPostEntity(title, categoryName, startDate, endDate, region, description, String.join(" ", imageUrls), owner);
+        Post post = postConverter.toPostEntity(title, categoryName, startDate, endDate, region, description, onlineInfo, String.join(" ", imageUrls), owner);
         Post postEntity = postRepository.save(post);
 
         for(var positionDetail : positionDetails){

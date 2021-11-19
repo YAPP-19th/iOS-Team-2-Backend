@@ -36,6 +36,9 @@ public class PostCreateRequest {
     @Positive(message = DtoValidationFailMessage.INVALID_OWNER_ID)
     private Long ownerId;
 
+    @Pattern(regexp = "^[가-힣]*$", message = DtoValidationFailMessage.INVALID_POST_ONLINE_INFO)
+    private String onlineInfo;
+
     @Size(min = 0, max = 5)
     private List<MultipartFile> postImages;
 

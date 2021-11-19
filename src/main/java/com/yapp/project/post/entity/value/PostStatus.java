@@ -1,4 +1,4 @@
-package com.yapp.project.post.entity.vo;
+package com.yapp.project.post.entity.value;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;

@@ -5,8 +5,9 @@ import com.yapp.project.post.dto.response.PostCreateResponse;
 import com.yapp.project.post.dto.response.PostInfoResponse;
 import com.yapp.project.post.dto.response.RecruitingStatusResponse;
 import com.yapp.project.post.entity.Post;
-import com.yapp.project.post.entity.vo.PostCategory;
-import com.yapp.project.post.entity.vo.PostStatus;
+import com.yapp.project.post.entity.value.OnlineStatus;
+import com.yapp.project.post.entity.value.PostCategory;
+import com.yapp.project.post.entity.value.PostStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class PostConverter {
             LocalDateTime endDate,
             String region,
             String description,
+            String onlineInfo,
             String imageUrls,
             Member owner
     ) {
@@ -36,6 +38,7 @@ public class PostConverter {
                 .owner(owner)
                 .statusCode(PostStatus.RECRUITING.getPostStatusCode())
                 .viewCount(0L)
+                .onlineCode(OnlineStatus.of(onlineInfo).getOnlineStatusCode())
                 .imageUrls(imageUrls)
                 .build();
     }
@@ -63,6 +66,7 @@ public class PostConverter {
                 .status(PostStatus.of(postEntity.getStatusCode()).getPostStatusName())
                 .category(PostCategory.of(postEntity.getCategoryCode()).getCategoryName())
                 .ownerId(postEntity.getOwner().getId())
+                .onlineInfo(OnlineStatus.of(postEntity.getOnlineCode()).getOnlineStatusName())
                 .createdAt(postEntity.getCreatedDate())
                 .modifiedAt(postEntity.getLastModifiedDate())
                 .recruitingStatusResponses(recruitingStatusResponses)

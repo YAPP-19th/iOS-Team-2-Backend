@@ -50,6 +50,7 @@ public class PostController {
                 request.getRegion(),
                 request.getDescription(),
                 request.getOwnerId(),
+                request.getOnlineInfo(),
                 request.getPostImages(),
                 postBundleConverter.toTeamMemberRequestBundle(request.getRecruitingPositionRequests())
         );

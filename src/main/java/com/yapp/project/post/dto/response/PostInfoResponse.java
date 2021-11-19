@@ -34,6 +34,8 @@ public class PostInfoResponse {
 
     private final Long ownerId;
 
+    private final String onlineInfo;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime createdAt;
 

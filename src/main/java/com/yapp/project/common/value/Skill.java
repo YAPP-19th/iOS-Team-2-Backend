@@ -1,4 +1,4 @@
-package com.yapp.project.common.vo;
+package com.yapp.project.common.value;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
