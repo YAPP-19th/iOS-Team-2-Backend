@@ -1,7 +1,7 @@
 package com.yapp.project.member.service;
 
 import com.yapp.project.member.dto.JwtValidationResult;
-import com.yapp.project.member.dto.TokenResponse;
+import com.yapp.project.member.dto.LoginResponse;
 import com.yapp.project.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -38,14 +38,14 @@ public class JwtService {
         jwtUtil = new JwtUtil(ISSUER, SECRET);
     }
 
-    public TokenResponse loginResponse(String loginId){
+    public LoginResponse loginResponse(String loginId){
         return issue(loginId);
     }
-    public TokenResponse issue(String loginId) {
+    public LoginResponse issue(String loginId) {
         String accessToken = jwtUtil.createToken(loginId, accessExpiredTime);
         String refreshToken = jwtUtil.createToken(loginId, refreshExpiredTime);
         updateToken(loginId, refreshToken);
-        return new TokenResponse(loginId, accessToken);
+        return new LoginResponse(loginId, accessToken);
     }
 
     @Transactional
