@@ -1,48 +1,42 @@
 package com.yapp.project.common.exception;
 
-import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.common.StatusCode;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
-
-import java.util.Arrays;
 
 @Getter
 public enum ExceptionMessage {
-    EXCEPTION_MESSAGE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR),
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND),
-    NOT_EXIST_POST_STATUS(HttpStatus.NOT_FOUND),
-    NOT_EXIST_POSITION_CODE(HttpStatus.NOT_FOUND),
-    NOT_EXIST_SKILL_CODE(HttpStatus.NOT_FOUND),
-    NOT_EXIST_POST_CATEGORY_CODE(HttpStatus.NOT_FOUND),
-    NOT_EXIST_MEMBER_ID(HttpStatus.NOT_FOUND),
-    FILE_CONVERTION_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST),
-    NOT_EXIST_POST_ID(HttpStatus.NOT_FOUND),
-    POST_ID_AND_RECRUITING_POSITION_MISMATCH(HttpStatus.NOT_FOUND),
-    NOT_EXIST_POST_CATEGORY_NAME(HttpStatus.NOT_FOUND),
-    NOT_EXIST_POSITION_NAME(HttpStatus.NOT_FOUND),
-    NOT_EXIST_SKILL_NAME(HttpStatus.NOT_FOUND),
-    NOT_EXIST_RECRUITING_POSITION_ID(HttpStatus.BAD_REQUEST),
-    NOT_EXIST_APPROVAL_STATUS_CODE(HttpStatus.NOT_FOUND),
-    NOT_EXIST_APPROVAL_STATUS_NAME(HttpStatus.NOT_FOUND),
-    NOT_EXIST_POST_ONLINE_STATUS_CODE(HttpStatus.NOT_FOUND),
-    NOT_EXIST_POST_ONLINE_STATUS_NAME(HttpStatus.NOT_FOUND),
-    DATA_BINDING_FAIL(HttpStatus.BAD_REQUEST),
-    HTTP_REQUEST_METHOD_NOT_SUPPORTED(HttpStatus.BAD_REQUEST),
-    DEFAULT_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR),
-    NOT_EXIST_POSITION_CODE_IN_DB(HttpStatus.NOT_FOUND),
-    NOT_EXIST_ROOT_POSITION_CODE(HttpStatus.NOT_FOUND),
-    NOT_EXIST_ROOT_POSITION_NAME(HttpStatus.NOT_FOUND);
+    // internal server error
+    FILE_CONVERTION_FAIL_EXCEPTION(StatusCode.FILE_CONVERTION_FAIL_EXCEPTION),
 
-    private final HttpStatus status; //TODO: statusCode 커스터마이징 할 지 회의
+    // bad request / not found
+    MEMBER_NOT_FOUND(StatusCode.MEMBER_NOT_FOUND),
+    NOT_EXIST_POST_STATUS(StatusCode.NOT_EXIST_POST_STATUS),
+    NOT_EXIST_POSITION_CODE(StatusCode.NOT_EXIST_POSITION_CODE),
+    NOT_EXIST_SKILL_CODE(StatusCode.NOT_EXIST_SKILL_CODE),
+    NOT_EXIST_POST_CATEGORY_CODE(StatusCode.NOT_EXIST_POST_CATEGORY_CODE),
+    NOT_EXIST_MEMBER_ID(StatusCode.NOT_EXIST_MEMBER_ID),
+    NOT_EXIST_POST_ID(StatusCode.NOT_EXIST_POST_ID),
+    POST_ID_AND_RECRUITING_POSITION_MISMATCH(StatusCode.POST_ID_AND_RECRUITING_POSITION_MISMATCH),
+    NOT_EXIST_POST_CATEGORY_NAME(StatusCode.NOT_EXIST_POST_CATEGORY_NAME),
+    NOT_EXIST_POSITION_NAME(StatusCode.NOT_EXIST_POSITION_NAME),
+    NOT_EXIST_SKILL_NAME(StatusCode.NOT_EXIST_SKILL_NAME),
+    NOT_EXIST_RECRUITING_POSITION_ID(StatusCode.NOT_EXIST_RECRUITING_POSITION_ID),
+    NOT_EXIST_APPROVAL_STATUS_CODE(StatusCode.NOT_EXIST_APPROVAL_STATUS_CODE),
+    NOT_EXIST_APPROVAL_STATUS_NAME(StatusCode.NOT_EXIST_APPROVAL_STATUS_NAME),
+    NOT_EXIST_POST_ONLINE_STATUS_CODE(StatusCode.NOT_EXIST_POST_ONLINE_STATUS_CODE),
+    NOT_EXIST_POST_ONLINE_STATUS_NAME(StatusCode.NOT_EXIST_POST_ONLINE_STATUS_NAME),
+    DATA_BINDING_FAIL(StatusCode.DATA_BINDING_FAIL),
+    HTTP_REQUEST_METHOD_NOT_SUPPORTED(StatusCode.HTTP_REQUEST_METHOD_NOT_SUPPORTED),
+    NOT_EXIST_POSITION_CODE_IN_DB(StatusCode.NOT_EXIST_POSITION_CODE_IN_DB),
+    NOT_EXIST_ROOT_POSITION_CODE(StatusCode.NOT_EXIST_ROOT_POSITION_CODE),
+    NOT_EXIST_ROOT_POSITION_NAME(StatusCode.NOT_EXIST_ROOT_POSITION_NAME),
 
-    ExceptionMessage(HttpStatus status) {
-        this.status = status;
-    }
+    // 그외 모든 예외
+    ALL_OTHER_EXCEPTIONS(StatusCode.ALL_OTHER_EXCEPTIONS);
 
-    public static ExceptionMessage of(String meeage) {
-        return Arrays.stream(values())
-                .filter(e -> e.name().equals(meeage))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.EXCEPTION_MESSAGE_NOT_FOUND));
+    private final StatusCode statusCode; //TODO: statusCode 커스터마이징 할 지 회의
+
+    ExceptionMessage(StatusCode statusCode) {
+        this.statusCode = statusCode;
     }
 }

@@ -1,5 +1,6 @@
 package com.yapp.project.common.exception;
 
+import com.yapp.project.common.StatusCode;
 import com.yapp.project.common.exception.type.NotFoundException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiExceptionResult handleMethodValidException(MethodArgumentNotValidException exception){
-        return createApiExceptionResult(4000, exception.getAllErrors().get(0).getDefaultMessage());
+        return createApiExceptionResult(StatusCode.DTO_VALIDATION_FAIL, exception.getAllErrors().get(0).getDefaultMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -25,8 +26,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     protected ApiExceptionResult handleBindException(BindException exception) {
-        //final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
-        return createApiExceptionResult(4321, ExceptionMessage.DATA_BINDING_FAIL.name());
+        return createApiExceptionResult(StatusCode.DATA_BINDING_FAIL, ExceptionMessage.DATA_BINDING_FAIL.name());
     }
 
     /**
@@ -34,12 +34,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return createApiExceptionResult(9999, ExceptionMessage.HTTP_REQUEST_METHOD_NOT_SUPPORTED.name());
+        return createApiExceptionResult(StatusCode.HTTP_REQUEST_METHOD_NOT_SUPPORTED, ExceptionMessage.HTTP_REQUEST_METHOD_NOT_SUPPORTED.name());
     }
 
     @ExceptionHandler(Exception.class)
     protected ApiExceptionResult handleException(Exception exception) {
-        return createApiExceptionResult(0000, ExceptionMessage.DEFAULT_EXCEPTION.name());
+        return createApiExceptionResult(StatusCode.ALL_OTHER_EXCEPTIONS, ExceptionMessage.ALL_OTHER_EXCEPTIONS.name());
     }
 
     private ApiExceptionResult createApiExceptionResult(Exception exception) {
@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
         return ApiExceptionResult.of(exceptionMessage);
     }
 
-    private ApiExceptionResult createApiExceptionResult(int httpStatus, String message) {
-        return ApiExceptionResult.of(httpStatus, message);
+    private ApiExceptionResult createApiExceptionResult(StatusCode statusCode, String message) {
+        return ApiExceptionResult.of(statusCode, message);
     }
 }

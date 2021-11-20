@@ -1,6 +1,7 @@
 package com.yapp.project.common.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.yapp.project.common.StatusCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -20,10 +21,10 @@ public class ApiExceptionResult {
     }
 
     public static ApiExceptionResult of(ExceptionMessage exceptionMessage) {
-        return new ApiExceptionResult(exceptionMessage.getStatus().value(), exceptionMessage.name());
+        return new ApiExceptionResult(exceptionMessage.getStatusCode().getStatusCode(), exceptionMessage.name());
     }
 
-    public static ApiExceptionResult of(int httpStatus, String message) {
-        return new ApiExceptionResult(httpStatus, message);
+    public static ApiExceptionResult of(StatusCode statusCode, String message) {
+        return new ApiExceptionResult(statusCode.getStatusCode(), message);
     }
 }

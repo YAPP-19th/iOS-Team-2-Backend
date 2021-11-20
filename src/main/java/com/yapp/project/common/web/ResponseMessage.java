@@ -1,17 +1,17 @@
 package com.yapp.project.common.web;
 
+import com.yapp.project.common.StatusCode;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ResponseMessage {
-    POST_INSERT_SUCCESS(HttpStatus.CREATED),
-    POST_SEARCH_SUCCESS(HttpStatus.OK),
-    POST_DELETE_SUCCESS(HttpStatus.OK);
+    POST_INSERT_SUCCESS(StatusCode.SUCCESS),
+    POST_SEARCH_SUCCESS(StatusCode.SUCCESS),
+    POST_DELETE_SUCCESS(StatusCode.SUCCESS);
 
-    private final HttpStatus status;
+    private final StatusCode statusCode;
 
-    ResponseMessage(HttpStatus status) {
-        this.status = status;
+    ResponseMessage(StatusCode statusCode) {
+        this.statusCode = statusCode;
     }
 }

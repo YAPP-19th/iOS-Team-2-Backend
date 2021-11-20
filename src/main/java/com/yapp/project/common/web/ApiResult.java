@@ -28,7 +28,7 @@ public class ApiResult<T> {
 
     public static <T> ApiResult<T> of(ResponseMessage responseMessage, EntityModel<T> entityModel) {
         return new ApiResult(
-                responseMessage.getStatus().value(),
+                responseMessage.getStatusCode().getStatusCode(),
                 responseMessage.name(),
                 entityModel.getContent(),
                 entityModel.getLinks()
