@@ -1,6 +1,8 @@
 package com.yapp.project.member.service;
+import com.yapp.project.member.dto.CheckNameResponse;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
+import com.yapp.project.post.service.PostConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+    private final MemberConverter memberConverter;
     private final MemberRepository memberRepository;
 
     public Optional<Member> findByLoginId(String loginId){
@@ -22,5 +25,9 @@ public class MemberService {
                 .email(email)
                 .build();
         memberRepository.save(member);
+    }
+
+    public CheckNameResponse checkDuplicateName(String name){
+        return memberConverter.toCheckNameResponse(memberRepository.existsByNickName(name));
     }
 }

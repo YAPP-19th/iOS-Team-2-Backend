@@ -7,6 +7,8 @@ import lombok.Getter;
 public enum ResponseMessage {
     SUCCESS_SIGN_UP(StatusCode.SUCCESS),
     LOGIN_SUCCESS(StatusCode.SUCCESS),
+    CHECK_AVAILABLE_NICKNAME(StatusCode.SUCCESS),
+    NOT_AVAILABLE_NICKNAME(StatusCode.NOT_AVAILABLE_NICKNAME),
 
     POST_INSERT_SUCCESS(StatusCode.SUCCESS),
     POST_SEARCH_SUCCESS(StatusCode.SUCCESS),

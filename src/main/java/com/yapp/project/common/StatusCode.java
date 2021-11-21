@@ -36,6 +36,7 @@ public enum StatusCode {
     DATA_BINDING_FAIL(4020),  // dto에 값 바인딩 실패
     HTTP_REQUEST_METHOD_NOT_SUPPORTED(4021),
     DTO_VALIDATION_FAIL(4022),
+    NOT_AVAILABLE_NICKNAME(4023),
 
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),

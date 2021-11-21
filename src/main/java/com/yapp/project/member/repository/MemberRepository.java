@@ -22,4 +22,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT m.token FROM Member m WHERE m.loginId = :loginId")
     String getTokenByLoginId(@Param("loginId") String loginId);
+
+    boolean existsByNickName(String nickName);
 }

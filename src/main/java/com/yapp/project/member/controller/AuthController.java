@@ -28,7 +28,7 @@ public class AuthController {
     private final JwtService jwtService;
     @ApiOperation(value = "로그인", notes = "login 정보를 받고 jwt 토큰 반환 / 유효기간 만료 시 MEMBER_NOT_FOUND")
     @PostMapping(value = "/login")
-    public ResponseEntity<ApiResult> authRequest(@Valid @ModelAttribute LoginRequest request) {
+    public ResponseEntity<ApiResult> authRequest(@Valid @RequestBody LoginRequest request) {
         Optional<Member> member = memberService.findByLoginId(request.getLoginId());
         LoginResponse response;
         if (!member.isEmpty()) {
