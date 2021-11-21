@@ -1,0 +1,15 @@
+package com.yapp.project.member.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.lang.Nullable;
+
+import javax.validation.constraints.NotNull;
+@Getter
+@AllArgsConstructor
+public class JwtValidationResult {
+    @Nullable
+    private Long userId;
+    @NotNull
+    private boolean validation;
+}
