@@ -66,9 +66,9 @@ public class JwtService {
             jws = jpb.build().parseClaimsJws(accessToken);
             String jwtUserId = jws.getBody().get("userId").toString();
             if(jwtUserId.equals(userId)){
-                result = new JwtValidationResult(Long.parseLong(jws.getBody().get("userId").toString()), true);
+                result = new JwtValidationResult(jws.getBody().get("userId").toString(), true);
             }else{
-                result = new JwtValidationResult(Long.parseLong(jws.getBody().get("userId").toString()), false);
+                result = new JwtValidationResult(jws.getBody().get("userId").toString(), false);
             }
         } catch (ExpiredJwtException e) {
             String token = memberRepository.getTokenByLoginId(userId);

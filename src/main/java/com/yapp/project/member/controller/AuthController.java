@@ -26,17 +26,17 @@ import java.util.Optional;
 public class AuthController {
     private final MemberService memberService;
     private final JwtService jwtService;
-    @ApiOperation(value = "로그인", notes = "login 정보를 받고 jwt 토큰 반환 / 유효기간 만료 시 MEMBER_NOT_FOUND")
+    @ApiOperation(value = "로그인", notes = "첫 로그인시(회원가입),accessToken 공백('') / 이후 로그인 시 accessToken 필 / 유효기간 만료 시 MEMBER_NOT_FOUND")
     @PostMapping(value = "/login")
-    public ResponseEntity<ApiResult> authRequest(@Valid @ModelAttribute LoginRequest request) {
-        Optional<Member> member = memberService.findByLoginId(request.getLoginId());
+    public ResponseEntity<ApiResult> authRequest(@Valid @RequestBody LoginRequest request) {
+        String memberId = memberService.findByLoginId(request.getLoginId());
         LoginResponse response;
-        if (!member.isEmpty()) {
+        if (!memberId.equals("")) {
             if(request.getAccessToken().isBlank()){
                 throw new NotFoundException(ExceptionMessage.DATA_BINDING_FAIL);
             }
             else if (jwtService.validate(request.getLoginId(), request.getAccessToken()).isValidation()) {
-                response = jwtService.loginResponse(member.get().getLoginId());
+                response = jwtService.loginResponse(memberId);
                 EntityModel<LoginResponse> entityModel = EntityModel.of(
                         response
                 );
