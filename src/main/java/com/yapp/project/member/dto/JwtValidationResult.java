@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class JwtValidationResult {
     @Nullable
-    private Long userId;
+    private String userId;
     @NotNull
     private boolean validation;
 }

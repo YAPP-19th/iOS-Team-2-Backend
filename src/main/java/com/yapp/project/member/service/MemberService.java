@@ -14,9 +14,13 @@ public class MemberService {
     private final MemberConverter memberConverter;
     private final MemberRepository memberRepository;
 
-    public Optional<Member> findByLoginId(String loginId){
+    public String findByLoginId(String loginId){
         Optional<Member> member = memberRepository.findMemberByLoginId(loginId);
-        return member;
+        String memberId = "";
+        if(!member.isEmpty()){
+            memberId = member.get().getLoginId();
+        }
+        return memberId;
     }
 
     public void create(String loginId, String email){
