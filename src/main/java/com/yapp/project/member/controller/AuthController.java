@@ -24,29 +24,17 @@ import java.util.Optional;
 public class AuthController {
     private final MemberService memberService;
     private final JwtService jwtService;
-    @ApiOperation(value = "로그인", notes = "첫 로그인시(회원가입),accessToken 공백('') / 이후 로그인 시 accessToken 필 / 유효기간 만료 시 MEMBER_NOT_FOUND")
+    @ApiOperation(value = "로그인", notes = "access Token Return (expiredTime : 1hour)")
     @PostMapping(value = "/login")
     public ResponseEntity<ApiResult> authRequest(@Valid @RequestBody LoginRequest request) {
-        String memberId = memberService.findByLoginId(request.getLoginId());
+        Long memberId = null;
+        String loginId = memberService.findByLoginId(request.getLoginId());
         LoginResponse response;
-        if (!memberId.equals("")) {
-            if(request.getAccessToken().isBlank()){
-                throw new NotFoundException(ExceptionMessage.DATA_BINDING_FAIL);
-            }
-            else if (jwtService.validate(request.getLoginId(), request.getAccessToken()).isValidation()) {
-                response = jwtService.loginResponse(memberId);
-                return ResponseEntity.ok(
-                        ApiResult.of(ResponseMessage.LOGIN_SUCCESS, response)
-                );
-            }
-        }
-        else if(request.getAccessToken().isEmpty()){
-            memberService.create(request.getLoginId(), request.getEmail());
-            response = jwtService.loginResponse(request.getLoginId());
-            return ResponseEntity.ok(
-                    ApiResult.of(ResponseMessage.SUCCESS_SIGN_UP, response)
-            );
-        }
-        throw new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND);
+        if (loginId.equals(""))
+            memberId = memberService.create(request.getLoginId());
+        response = jwtService.loginResponse(memberId, request.getLoginId());
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.LOGIN_SUCCESS, response)
+        );
     }
 }
