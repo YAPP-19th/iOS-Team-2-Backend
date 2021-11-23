@@ -2,7 +2,6 @@ package com.yapp.project.common.web;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import org.springframework.hateoas.EntityModel;
 
 import java.time.LocalDateTime;
 
@@ -15,23 +14,19 @@ public class ApiResult<T> {
     private final LocalDateTime serverDateTime;
 
     private final T data;
-    private final T link;
 
-
-    private ApiResult(int statusCode, String message, T data, T link) {
+    private ApiResult(int statusCode, String message, T data) {
         this.statusCode = statusCode;
         this.message = message;
         this.data = data;
-        this.link = link;
         this.serverDateTime = LocalDateTime.now();
     }
 
-    public static <T> ApiResult<T> of(ResponseMessage responseMessage, EntityModel<T> entityModel) {
+    public static <T> ApiResult<T> of(ResponseMessage responseMessage, T data) {
         return new ApiResult(
                 responseMessage.getStatusCode().getStatusCode(),
                 responseMessage.name(),
-                entityModel.getContent(),
-                entityModel.getLinks()
+                data
         );
     }
 }
