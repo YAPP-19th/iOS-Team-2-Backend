@@ -1,21 +1,14 @@
 package com.yapp.project.post.service;
 
-import com.yapp.project.common.value.Position;
-import com.yapp.project.common.value.Skill;
 import com.yapp.project.member.entity.Member;
-import com.yapp.project.post.dto.response.PostCreateResponse;
-import com.yapp.project.post.dto.response.PostDeleteResponse;
-import com.yapp.project.post.dto.response.PostInfoResponse;
-import com.yapp.project.post.dto.response.RecruitingStatusResponse;
+import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.entity.Post;
-import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.entity.value.OnlineStatus;
 import com.yapp.project.post.entity.value.PostCategory;
 import com.yapp.project.post.entity.value.PostStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,58 +50,44 @@ public class PostConverter {
         return new PostCreateResponse(id, imageUrls, PostCategory.of(categoryCode).getCategoryName(), createdAt);
     }
 
-    public PostInfoResponse toPostInfoResponse(Post postEntity, List<RecruitingStatusResponse> recruitingStatusResponses) {
-
-        return PostInfoResponse.builder()
-                .postId(postEntity.getId())
-                .imageUrls(Arrays.asList(postEntity.getImageUrls().split(" ")))
-                .title(postEntity.getTitle())
-                .description(postEntity.getDescription())
-                .startDate(postEntity.getStartDate())
-                .endDate(postEntity.getEndDate())
-                .region(postEntity.getRegion())
-                .viewCount(postEntity.getViewCount())
-                .status(PostStatus.of(postEntity.getStatusCode()).getPostStatusName())
-                .category(PostCategory.of(postEntity.getCategoryCode()).getCategoryName())
-                .ownerId(postEntity.getOwner().getId())
-                .onlineInfo(OnlineStatus.of(postEntity.getOnlineCode()).getOnlineStatusName())
-                .createdAt(postEntity.getCreatedDate())
-                .modifiedAt(postEntity.getLastModifiedDate())
-                .recruitingStatusResponses(recruitingStatusResponses)
+    // used
+    public PostDetailResponse toPostDetailResponse(Post post, Member leader){
+        return PostDetailResponse.builder()
+                .postId(post.getId())
+                .imageUrls(Arrays.asList(post.getImageUrls().split(" ")))
+                .title(post.getTitle())
+                .description(post.getDescription())
+                .startDate(post.getStartDate())
+                .endDate(post.getEndDate())
+                .region(post.getRegion())
+                .viewCount(post.getViewCount())
+                .status(PostStatus.of(post.getStatusCode()).getPostStatusName())
+                .category(PostCategory.of(post.getCategoryCode()).getCategoryName())
+                .leader(
+                        new PostDetailResponse.MemberDto(
+                                leader.getId(),
+                                leader.getNickName(),
+                                leader.getProfileImageUrl(),
+                                leader.getAddress()
+                        )
+                )
+                .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getOnlineStatusName())
+                .createdAt(post.getCreatedDate())
+                .modifiedAt(post.getLastModifiedDate())
                 .build();
     }
 
-    public PostInfoResponse toPostInfoResponse(RecruitingPosition recruitingPosition, String recruitiongStatus) {
-        Post postEntity = recruitingPosition.getPost();
-
-        var recruitingStatusResponses = new ArrayList<RecruitingStatusResponse>();
-        recruitingStatusResponses.add(
-                new RecruitingStatusResponse(
-                        recruitingPosition.getId(),
-                        Position.of(recruitingPosition.getPositionCode()).getPositionName(),
-                        Position.of(recruitingPosition.getPositionCode()).getPositionCode(),
-                        Skill.of(recruitingPosition.getSkillCode()).getSkillName(),
-                        Skill.of(recruitingPosition.getSkillCode()).getSkillCode(),
-                        recruitiongStatus
-                )
-        );
-
-        return PostInfoResponse.builder()
-                .postId(postEntity.getId())
-                .imageUrls(Arrays.asList(postEntity.getImageUrls().split(" ")))
-                .title(postEntity.getTitle())
-                .description(postEntity.getDescription())
-                .startDate(postEntity.getStartDate())
-                .endDate(postEntity.getEndDate())
-                .region(postEntity.getRegion())
-                .viewCount(postEntity.getViewCount())
-                .status(PostStatus.of(postEntity.getStatusCode()).getPostStatusName())
-                .category(PostCategory.of(postEntity.getCategoryCode()).getCategoryName())
-                .ownerId(postEntity.getOwner().getId())
-                .onlineInfo(OnlineStatus.of(postEntity.getOnlineCode()).getOnlineStatusName())
-                .createdAt(postEntity.getCreatedDate())
-                .modifiedAt(postEntity.getLastModifiedDate())
-                .recruitingStatusResponses(recruitingStatusResponses)
+    public PostSimpleResponse toPostSimpleResponse(Post post, List<String> positions) {
+        return PostSimpleResponse.builder()
+                .postId(post.getId())
+                .imageUrls(Arrays.asList(post.getImageUrls().split(" ")))
+                .title(post.getTitle())
+                .startDate(post.getStartDate())
+                .endDate(post.getEndDate())
+                .region(post.getRegion())
+                .createdAt(post.getCreatedDate())
+                .modifiedAt(post.getLastModifiedDate())
+                .positions(positions)
                 .build();
     }
 

@@ -2,10 +2,8 @@ package com.yapp.project.post.controller;
 
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
-import com.yapp.project.post.controller.bundle.PostBundleConverter;
 import com.yapp.project.post.dto.request.PostCreateRequest;
-import com.yapp.project.post.dto.response.PostDeleteResponse;
-import com.yapp.project.post.dto.response.PostInfoResponse;
+import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.service.PostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,66 +24,74 @@ import java.io.IOException;
 @Api(tags = "Post (Project)")
 public class PostController {
     private final PostService postService;
-    private final PostBundleConverter postBundleConverter;
 
     @ApiOperation("게시글 생성")
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = {"multipart/form-data"})// 변경 전 multipart/form-data
     public ResponseEntity<ApiResult> insert(@Valid @ModelAttribute PostCreateRequest request) throws IOException {
-        var response = postService.create(
-                request.getTitle(),
-                request.getCategoryName(),
-                request.getStartDate(),
-                request.getEndDate(),
-                request.getRegion(),
-                request.getDescription(),
-                request.getOwnerId(),
-                request.getOnlineInfo(),
-                request.getPostImages(),
-                postBundleConverter.toTeamMemberRequestBundle(request.getRecruitingPositionRequests())
-        );
+        var response = postService.create(request);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.POST_INSERT_SUCCESS, response)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
-    @ApiOperation("게시글 단건 조회")
+    @ApiOperation("게시글 단건 조회 (전체 틀)")
     @GetMapping(value = "/{postId}")
     public ResponseEntity<ApiResult> getOne(@PathVariable Long postId) {
-        PostInfoResponse response = postService.findById(postId);
+        PostDetailResponse response = postService.findById(postId);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.POST_SEARCH_SUCCESS, response)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation("게시글 단건 조회 (확정 멤버)")
+    @GetMapping(value = "/{postId}/members")
+    public ResponseEntity<ApiResult> getTeamMembers(@PathVariable Long postId) {
+        TeamMemberResponse response = postService.findTeamMembersById(postId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation("게시글 단건 조회 (지원 현황)")
+    @GetMapping(value = "/{postId}/recruitingStatus")
+    public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable Long postId) {
+        List<RecruitingStatusResponse> response = postService.findRecruitingStatusById(postId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
     @ApiOperation("게시글 전체 조회")
     @GetMapping()
     public ResponseEntity<ApiResult> getAll(Pageable pageable) {
-        Page<PostInfoResponse> response = postService.findAllByPages(pageable);
+        Page<PostSimpleResponse> response = postService.findAllByPages(pageable);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.POST_SEARCH_SUCCESS, response)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
     @ApiOperation("position으로 조회")
     @GetMapping(value = "/positions/{rootPositionName}")
     public ResponseEntity<ApiResult> getAllByPosition(@PathVariable String rootPositionName, Pageable pageable) {
-        Page<PostInfoResponse> response = postService.findAllByPosition(rootPositionName, pageable);
+        Page<PostSimpleResponse> response = postService.findAllByPosition(rootPositionName, pageable);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.POST_SEARCH_SUCCESS, response)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
     @ApiOperation("게시글 단건 삭제")
     @DeleteMapping(value = "/{postId}")
-    public ResponseEntity<ApiResult> deleteOne(@PathVariable Long postId) {
-        PostDeleteResponse response = postService.deleteById(postId);
+    public ResponseEntity<ApiResult> deleteOne(@RequestHeader("token") String token, @PathVariable Long postId) {
+        PostDeleteResponse response = postService.deleteById(token, postId);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.POST_DELETE_SUCCESS, response)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 }
