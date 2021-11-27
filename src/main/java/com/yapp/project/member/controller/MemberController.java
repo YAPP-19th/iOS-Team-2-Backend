@@ -7,14 +7,11 @@ import com.yapp.project.member.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.MediaTypes;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/members", produces = MediaTypes.HAL_JSON_VALUE)
+@RequestMapping(value = "/api/v1/members")
 @Api(tags = "Member")
 public class MemberController {
     private final MemberService memberService;

@@ -14,7 +14,7 @@ class JwtUtil {
         SECRET = secret;
     }
 
-    public String createToken(String userId, Long expiredTime){
+    public String createToken(Long memberId, String userId, Long expiredTime){
         Date ext = new Date(System.currentTimeMillis()); // 토큰 만료 시간
         ext.setTime(ext.getTime() + expiredTime);
 
@@ -27,6 +27,7 @@ class JwtUtil {
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("issuer", ISSUER);
         payloads.put("ExpiredPeriod", "3600");
+        payloads.put("memberId", memberId);
         payloads.put("userId",userId);
 
         // 토큰 Builder

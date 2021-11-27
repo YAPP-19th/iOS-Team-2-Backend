@@ -5,6 +5,7 @@ import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.post.service.PostConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,13 +23,13 @@ public class MemberService {
         }
         return memberId;
     }
-
-    public void create(String loginId, String email){
+    @Transactional
+    public Long create(String loginId){
         Member member = Member.builder()
                 .loginId(loginId)
-                .email(email)
                 .build();
-        memberRepository.save(member);
+        Member m = memberRepository.save(member);
+        return m.getId();
     }
 
     public CheckNameResponse checkDuplicateName(String name){

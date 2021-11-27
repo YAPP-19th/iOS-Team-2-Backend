@@ -38,12 +38,12 @@ public class JwtService {
         jwtUtil = new JwtUtil(ISSUER, SECRET);
     }
 
-    public LoginResponse loginResponse(String loginId){
-        return issue(loginId);
+    public LoginResponse loginResponse(Long memberId, String loginId){
+        return issue(memberId, loginId);
     }
-    public LoginResponse issue(String loginId) {
-        String accessToken = jwtUtil.createToken(loginId, accessExpiredTime);
-        String refreshToken = jwtUtil.createToken(loginId, refreshExpiredTime);
+    public LoginResponse issue(Long memberId, String loginId) {
+        String accessToken = jwtUtil.createToken(memberId, loginId, accessExpiredTime);
+        String refreshToken = jwtUtil.createToken(memberId, loginId, refreshExpiredTime);
         updateToken(loginId, refreshToken);
         return new LoginResponse(loginId, accessToken);
     }
@@ -83,5 +83,20 @@ public class JwtService {
             result = new JwtValidationResult(null, false);
         }
         return result;
+    }
+
+    public String getMemberId(String accessToken) {
+        /**
+         * methodName : getMemberId
+         * description : accesstoken을 넣으면 token내 포함되어 있는 memberId 반환
+         * @param accessToken : client로 부터 받은 accesstoken
+         */
+        Jws<Claims> jws;
+        SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(SECRET));
+        JwtParserBuilder jpb = Jwts.parserBuilder();
+        jpb.setSigningKey(secretKey);
+        jws = jpb.build().parseClaimsJws(accessToken);
+        String jwtMemberId = jws.getBody().get("memberId").toString();
+        return jwtMemberId;
     }
 }
