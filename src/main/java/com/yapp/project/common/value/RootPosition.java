@@ -10,7 +10,9 @@ import java.util.Arrays;
 public enum RootPosition {
     DEVELOPER(1, "개발"),
     PLANNER(2, "디자인"),
-    DESIGNER(3, "기획");
+    DESIGNER(3, "기획"),
+
+    ;
 
     private final int rootPositionCode;
     private final String rootPositionName;

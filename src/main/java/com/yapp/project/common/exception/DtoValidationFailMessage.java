@@ -10,4 +10,5 @@ public class DtoValidationFailMessage {  //TODO: 메모리 효율적인 방안�
     public final static String INVALID_POSITION_NAME = "INVALID_POSITION_NAME";
     public final static String INVALID_SKILL_NAME = "INVALID_SKILL_NAME";
     public final static String INVALID_POST_ONLINE_INFO = "INVALID_POST_ONLINE_INFO";
+    public final static String EMPTY_ACCESS_TOKEN = "EMPTY_ACCESS_TOKEN";
 }

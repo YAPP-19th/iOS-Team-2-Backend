@@ -34,7 +34,9 @@ public enum Position {
     DESIGNER_WEB(17, "웹 디자인"),
     DESIGNER_MOBILE(18, "모바일 디자인"),
     DESIGNER_ILLUSTRATOR(19, "일러스트레이터"),
-    DESIGNER_UX(20, "UX 디자인");
+    DESIGNER_UX(20, "UX 디자인"),
+
+    ;
 
     private final int positionCode;
     private final String positionName;
