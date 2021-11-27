@@ -1,6 +1,7 @@
 package com.yapp.project.post.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,8 @@ import java.util.List;
 
 @Getter
 @Builder
-public class PostInfoResponse {
+@RequiredArgsConstructor
+public class PostDetailResponse {
     private final Long postId;
 
     private final List<String> imageUrls;
@@ -43,6 +45,7 @@ public class PostInfoResponse {
 
     private final MemberDto leader;
 
+    @Getter
     @RequiredArgsConstructor
     public static class MemberDto{
         private final Long leaderId;
