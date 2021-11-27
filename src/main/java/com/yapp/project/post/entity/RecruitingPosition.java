@@ -1,5 +1,6 @@
 package com.yapp.project.post.entity;
 
+import com.yapp.project.common.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "recruiting_position")
-public class RecruitingPosition {
+public class RecruitingPosition extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "recruiting_position_id")
