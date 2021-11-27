@@ -5,6 +5,9 @@ import com.yapp.project.common.exception.type.NotFoundException;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 public enum Position {
@@ -69,5 +72,13 @@ public enum Position {
             return RootPosition.PLANNER;
 
         throw new NotFoundException(ExceptionMessage.NOT_EXIST_ROOT_POSITION_NAME);
+    }
+
+    public static List<String> listOf(String rootPosition) {
+            return Stream.of(Position.values())
+                    .filter(v->v.getPositionName().contains(rootPosition))
+                    .map(v->Position.of(Position.of(v.getPositionName()).getPositionCode()).getPositionName())
+                    .collect(Collectors.toList());
+
     }
 }

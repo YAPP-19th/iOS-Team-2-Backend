@@ -1,4 +1,4 @@
-package com.yapp.project.member.dto;
+package com.yapp.project.member.dto.response;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -9,5 +9,5 @@ import lombok.Getter;
 @Builder
 public class CheckNameResponse {
     @ApiModelProperty(name = "name", example = "nickName1")
-    boolean available;
+    private boolean available;
 }

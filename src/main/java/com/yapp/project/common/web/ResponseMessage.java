@@ -5,6 +5,8 @@ import lombok.Getter;
 
 @Getter
 public enum ResponseMessage {
+    SUCCESS(StatusCode.SUCCESS),
+
     SUCCESS_SIGN_UP(StatusCode.SUCCESS),
     LOGIN_SUCCESS(StatusCode.SUCCESS),
     CHECK_AVAILABLE_NICKNAME(StatusCode.SUCCESS),

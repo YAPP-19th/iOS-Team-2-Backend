@@ -1,7 +1,7 @@
 package com.yapp.project.member.service;
 
-import com.yapp.project.member.dto.JwtValidationResult;
-import com.yapp.project.member.dto.LoginResponse;
+import com.yapp.project.member.dto.response.JwtValidationResult;
+import com.yapp.project.member.dto.response.LoginResponse;
 import com.yapp.project.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -85,7 +85,7 @@ public class JwtService {
         return result;
     }
 
-    public String getMemberId(String accessToken) {
+    public Long getMemberId(String accessToken) {
         /**
          * methodName : getMemberId
          * description : accesstoken을 넣으면 token내 포함되어 있는 memberId 반환
@@ -96,7 +96,7 @@ public class JwtService {
         JwtParserBuilder jpb = Jwts.parserBuilder();
         jpb.setSigningKey(secretKey);
         jws = jpb.build().parseClaimsJws(accessToken);
-        String jwtMemberId = jws.getBody().get("memberId").toString();
+        Long jwtMemberId = Long.parseLong(jws.getBody().get("memberId").toString());
         return jwtMemberId;
     }
 }

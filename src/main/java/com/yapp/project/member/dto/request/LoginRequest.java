@@ -1,4 +1,4 @@
-package com.yapp.project.member.dto;
+package com.yapp.project.member.dto.request;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
