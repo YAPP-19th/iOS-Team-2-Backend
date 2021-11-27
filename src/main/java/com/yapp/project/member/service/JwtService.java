@@ -85,7 +85,7 @@ public class JwtService {
         return result;
     }
 
-    public String getMemberId(String accessToken) {
+    public Long getMemberId(String accessToken) {
         /**
          * methodName : getMemberId
          * description : accesstoken을 넣으면 token내 포함되어 있는 memberId 반환
@@ -96,7 +96,7 @@ public class JwtService {
         JwtParserBuilder jpb = Jwts.parserBuilder();
         jpb.setSigningKey(secretKey);
         jws = jpb.build().parseClaimsJws(accessToken);
-        String jwtMemberId = jws.getBody().get("memberId").toString();
+        Long jwtMemberId = Long.parseLong(jws.getBody().get("memberId").toString());
         return jwtMemberId;
     }
 }
