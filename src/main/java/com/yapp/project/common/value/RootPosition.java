@@ -9,8 +9,8 @@ import java.util.Arrays;
 @Getter
 public enum RootPosition {
     DEVELOPER(1, "개발"),
-    PLANNER(2, "디자인"),
-    DESIGNER(3, "기획"),
+    PLANNER(2, "기획"),
+    DESIGNER(3, "디자인"),
 
     ;
 
