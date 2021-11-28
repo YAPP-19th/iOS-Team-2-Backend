@@ -27,8 +27,8 @@ public class PostController {
 
     @ApiOperation("게시글 생성")
     @PostMapping(consumes = {"multipart/form-data"})// 변경 전 multipart/form-data
-    public ResponseEntity<ApiResult> insert(@Valid @ModelAttribute PostCreateRequest request) throws IOException {
-        var response = postService.create(request);
+    public ResponseEntity<ApiResult> insert(@Valid @ModelAttribute PostCreateRequest request, @RequestHeader("accessToken") String accessToken) throws IOException {
+        var response = postService.create(request, accessToken);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
@@ -87,8 +87,8 @@ public class PostController {
 
     @ApiOperation("게시글 단건 삭제")
     @DeleteMapping(value = "/{postId}")
-    public ResponseEntity<ApiResult> deleteOne(@RequestHeader("token") String token, @PathVariable Long postId) {
-        PostDeleteResponse response = postService.deleteById(token, postId);
+    public ResponseEntity<ApiResult> deleteOne(@RequestHeader("accessToken") String accessToken, @PathVariable Long postId) {
+        PostDeleteResponse response = postService.deleteById(accessToken, postId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

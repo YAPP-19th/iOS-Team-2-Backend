@@ -14,9 +14,9 @@ import java.util.List;
 @Getter
 @Setter  //@ModelAttribute를 이용해 파라미터 값을 DTO에 한 번에 바인딩 하기 위함
 public class PostCreateRequest {
-    @ApiModelProperty(example = "작성자 토큰 값", required = true)
-    @NotBlank(message = DtoValidationFailMessage.EMPTY_ACCESS_TOKEN)
-    private String accessToken;
+//    @ApiModelProperty(example = "작성자 토큰 값", required = true)
+//    @NotBlank(message = DtoValidationFailMessage.EMPTY_ACCESS_TOKEN)
+//    private String accessToken;
 
     @Pattern(regexp = "^\\S{2,255}$", message = DtoValidationFailMessage.INVALID_POST_TITLE)
     private String title;

@@ -39,8 +39,8 @@ public class PostService {
     private final String S3DIR = "post_image";
 
     @Transactional
-    public PostCreateResponse create(PostCreateRequest request) throws IOException {
-        Long leaderId = jwtService.getMemberId(request.getAccessToken());
+    public PostCreateResponse create(PostCreateRequest request, String accessToken) throws IOException {
+        Long leaderId = jwtService.getMemberId(accessToken);
 
         Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
@@ -122,8 +122,8 @@ public class PostService {
     }
 
     @Transactional
-    public PostDeleteResponse deleteById(String token, Long postId){
-        Long memberId = jwtService.getMemberId(token);
+    public PostDeleteResponse deleteById(String accessToken, Long postId){
+        Long memberId = jwtService.getMemberId(accessToken);
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
