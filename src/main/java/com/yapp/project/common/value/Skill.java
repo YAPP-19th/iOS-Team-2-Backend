@@ -51,7 +51,9 @@ public enum Skill {
     DESIGNER_PROTOIO(34, "Proto.io"),
     DESIGNER_FIGMA(35, "Figma"),
     DESIGNER_PHOTOSHOP(36, "포토샵"),
-    DESIGNER_ILLUSTRATOR(37, "일러스트레이터");
+    DESIGNER_ILLUSTRATOR(37, "일러스트레이터"),
+
+    ;
 
     private final int skillCode;
     private final String skillName;

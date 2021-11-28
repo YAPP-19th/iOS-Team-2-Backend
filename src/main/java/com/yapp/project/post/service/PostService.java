@@ -2,15 +2,14 @@ package com.yapp.project.post.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.common.value.Position;
 import com.yapp.project.common.value.RootPosition;
 import com.yapp.project.external.s3.S3Uploader;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
-import com.yapp.project.post.controller.bundle.RecruitingPositionBundle;
-import com.yapp.project.post.dto.response.PostCreateResponse;
-import com.yapp.project.post.dto.response.PostDeleteResponse;
-import com.yapp.project.post.dto.response.PostInfoResponse;
-import com.yapp.project.post.dto.response.RecruitingStatusResponse;
+import com.yapp.project.member.service.JwtService;
+import com.yapp.project.post.dto.request.PostCreateRequest;
+import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.repository.PostRepository;
@@ -20,10 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +30,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostConverter postConverter;
     private final S3Uploader s3Uploader;
+    private final JwtService jwtService;
 
     private final MemberRepository memberRepository;
     private final RecruitingPositionRepository recruitingPositionRepository;
@@ -41,22 +39,13 @@ public class PostService {
     private final String S3DIR = "post_image";
 
     @Transactional
-    public PostCreateResponse create(
-            String title,
-            String categoryName,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            String region,
-            String description,
-            Long ownerId,
-            String onlineInfo,
-            List<MultipartFile> postImages,
-            List<RecruitingPositionBundle> positionDetails
-    ) throws IOException {
+    public PostCreateResponse create(PostCreateRequest request, String accessToken) throws IOException {
+        Long leaderId = jwtService.getMemberId(accessToken);
 
-        Member owner = memberRepository.findById(ownerId)
+        Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
+        var postImages = request.getPostImages();
         List<String> imageUrls = new ArrayList<>();
         if (postImages != null && !postImages.isEmpty()) {  //TODO: 좀 더 깔끔하게 바꿔보기
             for (var image : postImages) {
@@ -67,10 +56,20 @@ public class PostService {
             }
         }
 
-        Post post = postConverter.toPostEntity(title, categoryName, startDate, endDate, region, description, onlineInfo, String.join(" ", imageUrls), owner);
+        Post post = postConverter.toPostEntity(
+                request.getTitle(),
+                request.getCategoryName(),
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getRegion(),
+                request.getDescription(),
+                request.getOnlineInfo(),
+                String.join(" ", imageUrls),
+                leader
+        );
         Post postEntity = postRepository.save(post);
 
-        for(var positionDetail : positionDetails){
+        for(var positionDetail : request.getRecruitingPositions()){
             var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(
                     positionDetail.getPositionName(),
                     positionDetail.getSkillName(),
@@ -84,30 +83,52 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostInfoResponse> findAllByPages(Pageable pageable) {
+    public Page<PostSimpleResponse> findAllByPages(Pageable pageable) {
         Page<Post> postPage = postRepository.findAll(pageable);
 
-        return postPage.map(v -> createPostInfoResponse(v));
+        return postPage.map(v -> makePostSimpleResponse(v));
     }
 
     @Transactional(readOnly = true)
-    public PostInfoResponse findById(Long postId) {
+    public PostDetailResponse findById(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        return createPostInfoResponse(post);
+        return postConverter.toPostDetailResponse(post, post.getOwner());
     }
 
-    @Transactional(readOnly = true)
-    public Page<PostInfoResponse> findAllByPosition(String rootPositionName, Pageable pageable){
-        Page<RecruitingPosition> allByPositionCode = recruitingPositionRepository.findAllByRootPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
+    public TeamMemberResponse findTeamMembersById(Long postId) {
+        // TODO: apply에서 status가 참여 확정인 멤버들 가져오기
 
-        return allByPositionCode.map(rp -> postConverter.toPostInfoResponse(rp, "3/4"));
+        return null;
+    }
+
+    public List<RecruitingStatusResponse> findRecruitingStatusById(Long postId) {
+        var responses = new ArrayList<RecruitingStatusResponse>();
+
+        List<RecruitingPosition> positions = recruitingPositionRepository.findAllByPostId(postId);
+        for(var position : positions){
+            var response = recruitingPositionConverter.toRecruitingStatus(
+                    position.getId(),
+                    position.getPositionCode(),
+                    position.getSkillCode(),
+                    "3/4"  // TODO: 확정 팀원 현황 계산
+            );
+
+            responses.add(response);
+        }
+
+        return responses;
     }
 
     @Transactional
-    public PostDeleteResponse deleteById(Long postId){
-        if (postRepository.existsById(postId)) {  // TODO: CASCADE 설정하기
+    public PostDeleteResponse deleteById(String accessToken, Long postId){
+        Long memberId = jwtService.getMemberId(accessToken);
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        if (post.getOwner().getId().equals(memberId)) {  // TODO: CASCADE 설정하기
             postRepository.deleteById(postId);
             return postConverter.toPostDeleteResponse(postId);
         }
@@ -115,21 +136,21 @@ public class PostService {
         throw new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID);
     }
 
-    private PostInfoResponse createPostInfoResponse(Post post) {
-        List<RecruitingStatusResponse> recruitingStatusResponses = new ArrayList<>();
+    @Transactional(readOnly = true)
+    public Page<PostSimpleResponse> findAllByPosition(String rootPositionName, Pageable pageable){
+        Page<RecruitingPosition> allByPositionCode = recruitingPositionRepository.findAllByRootPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
+
+        return allByPositionCode.map(rp -> makePostSimpleResponse(rp.getPost()));
+    }
+
+    private PostSimpleResponse makePostSimpleResponse(Post post) {
+        List<String> positions = new ArrayList<>();
 
         List<RecruitingPosition> positionDetailsByPost = recruitingPositionRepository.findAllByPostId(post.getId());
         for(var positionDetail : positionDetailsByPost){
-            var recruitingStatusResponse = recruitingPositionConverter.toRecruitingStatus(
-                    positionDetail.getId(),
-                    positionDetail.getPositionCode(),
-                    positionDetail.getSkillCode(),
-                    "2/4"  // TODO: 팀원 현황 계산
-            );
-
-            recruitingStatusResponses.add(recruitingStatusResponse);
+            positions.add(Position.of(positionDetail.getPositionCode()).getPositionName());
         }
 
-        return postConverter.toPostInfoResponse(post, recruitingStatusResponses);
+        return postConverter.toPostSimpleResponse(post, positions);
     }
 }
