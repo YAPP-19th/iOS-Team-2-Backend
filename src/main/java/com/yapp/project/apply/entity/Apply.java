@@ -28,4 +28,8 @@ public class Apply extends BaseEntity<Long> {
 
     @Column(name = "apply_status_code")
     private Integer applyStatusCode;
+
+    public void updateApplyStatusCode(int applyStatusCode){
+        this.applyStatusCode = applyStatusCode;
+    }
 }
