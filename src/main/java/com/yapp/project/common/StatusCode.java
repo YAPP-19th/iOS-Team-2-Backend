@@ -38,6 +38,8 @@ public enum StatusCode {
     DTO_VALIDATION_FAIL(4022),
 
     POST_ID_AND_MEMBER_ID_MISMATCH(4024),
+    NOT_EXIST_REVIEW_CODE(4028),
+    NOT_EXIST_REVIEW_NAME(4029),
 
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),
