@@ -103,6 +103,7 @@ public class PostService {
         return null;
     }
 
+    @Transactional
     public List<RecruitingStatusResponse> findRecruitingStatusById(Long postId) {
         var responses = new ArrayList<RecruitingStatusResponse>();
 
