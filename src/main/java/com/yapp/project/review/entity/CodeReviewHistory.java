@@ -17,9 +17,6 @@ public class CodeReviewHistory extends BaseEntity<Long> {
     @Column(name = "code_review_history_id")
     private Long id;
 
-    @Column(name = "code_review_history_is_positive", columnDefinition = "TINYINT", length = 1)
-    private boolean isPositive;
-
     @Column(name = "code_review_history_code")
     private Integer reviewCode;
 
