@@ -39,7 +39,7 @@ public class ApplyService {
     }
 
     @Transactional
-    public void approveApplication(Long applyId){
+    public void approveApplication(Long applyId) {
         Apply apply = applyRepository.findById(applyId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_APPLY_ID));
 
@@ -47,8 +47,8 @@ public class ApplyService {
     }
 
     @Transactional
-    public void cancelApplication(Long applyId){
-        if(applyRepository.existsById(applyId))
+    public void cancelApplication(Long applyId, Long applicantId) {
+        if (applyRepository.existsById(applyId))
             throw new NotFoundException(ExceptionMessage.NOT_EXIST_APPLY_ID);
 
         applyRepository.deleteById(applyId);
