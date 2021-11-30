@@ -2,6 +2,7 @@ package com.yapp.project.review.entity;
 
 import com.yapp.project.common.entity.BaseEntity;
 import com.yapp.project.member.entity.Member;
+import com.yapp.project.post.entity.Post;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,10 @@ public class TextReviewHistory extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "text_review_history_target_member_id", referencedColumnName = "member_id")
     private Member targetMember;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "text_review_history_post_id", referencedColumnName = "post_id")
+    private Post post;
 
     @Column(name = "text_review_history_content", length = 1000)
     private String content;
