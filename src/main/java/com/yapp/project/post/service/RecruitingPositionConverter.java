@@ -17,8 +17,8 @@ public class RecruitingPositionConverter {
                 .build();
     }
 
-    public RecruitingStatusResponse toRecruitingStatus(Long recruitingPositionId, int positionCode, int skillCode, String status) {
-        return new RecruitingStatusResponse(
+    public RecruitingStatusResponse.RecruitingStatus toRecruitingStatus(Long recruitingPositionId, int positionCode, int skillCode, String status) {
+        return new RecruitingStatusResponse.RecruitingStatus(
                 recruitingPositionId,
                 Position.of(positionCode).getPositionName(),
                 Position.of(positionCode).getPositionCode(),

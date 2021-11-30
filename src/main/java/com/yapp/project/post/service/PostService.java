@@ -1,5 +1,8 @@
 package com.yapp.project.post.service;
 
+import com.yapp.project.apply.entity.Apply;
+import com.yapp.project.apply.entity.value.ApplyStatus;
+import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
@@ -28,6 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final ApplyRepository applyRepository;
     private final PostConverter postConverter;
     private final S3Uploader s3Uploader;
     private final JwtService jwtService;
@@ -97,28 +101,42 @@ public class PostService {
         return postConverter.toPostDetailResponse(post, post.getOwner());
     }
 
+    @Transactional
     public TeamMemberResponse findTeamMembersById(Long postId) {
-        // TODO: apply에서 status가 참여 확정인 멤버들 가져오기
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        return null;
+        List<Apply> applies = applyRepository.findAllByPost(post);
+        var response = new TeamMemberResponse();
+        for(var apply : applies){
+            Member member = apply.getMember();
+            response.getTeamMembers().add(
+                    new TeamMemberResponse.TeamMember(
+                            member.getId(),
+                            member.getNickName(),
+                            member.getProfileImageUrl(),
+                            member.getAddress()
+                    )
+            );
+        }
+
+        return response;
     }
 
-    public List<RecruitingStatusResponse> findRecruitingStatusById(Long postId) {
-        var responses = new ArrayList<RecruitingStatusResponse>();
-
+    @Transactional
+    public RecruitingStatusResponse findRecruitingStatusById(Long postId) {
+        var response = new RecruitingStatusResponse();
         List<RecruitingPosition> positions = recruitingPositionRepository.findAllByPostId(postId);
         for(var position : positions){
-            var response = recruitingPositionConverter.toRecruitingStatus(
+            response.getRecruitingStatuses().add(recruitingPositionConverter.toRecruitingStatus(
                     position.getId(),
                     position.getPositionCode(),
                     position.getSkillCode(),
-                    "3/4"  // TODO: 확정 팀원 현황 계산
-            );
-
-            responses.add(response);
+                    Long.toString(applyRepository.countByRecruitingPositionAAndApplyStatusCode(position, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode()))
+            ));
         }
 
-        return responses;
+        return response;
     }
 
     @Transactional
