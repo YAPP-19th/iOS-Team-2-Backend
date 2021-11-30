@@ -19,5 +19,5 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
 
     long countByRecruitingPosition(RecruitingPosition recruitingPosition);
 
-    long countByRecruitingPositionAAndApplyStatusCode(RecruitingPosition recruitingPosition, int applyStatusCode);
+    long countByRecruitingPositionAndApplyStatusCode(RecruitingPosition recruitingPosition, int applyStatusCode);
 }
