@@ -35,6 +35,8 @@ public class CodeReviewHistoryService {
         Member targetMember = memberRepository.findById(targetMemberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
+        // TODO: apply의 status를 비교해 참여 확정된 인원인지 알아보가
+
         List<String> selectedReviews = request.getSelectedReviews();
         for(var selectedReview : selectedReviews){
             var codeReviewHistory = converter.toEntity(reviewer, targetMember, selectedReview);
