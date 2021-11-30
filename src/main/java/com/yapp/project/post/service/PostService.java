@@ -132,7 +132,7 @@ public class PostService {
                     position.getId(),
                     position.getPositionCode(),
                     position.getSkillCode(),
-                    Long.toString(applyRepository.countByRecruitingPositionAAndApplyStatusCode(position, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode()))
+                    Long.toString(applyRepository.countByRecruitingPositionAndApplyStatusCode(position, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode()))
             ));
         }
 
