@@ -38,11 +38,15 @@ public enum StatusCode {
     DTO_VALIDATION_FAIL(4022),
     NOT_AVAILABLE_NICKNAME(4023),
 
+    POST_ID_AND_MEMBER_ID_MISMATCH(4024),
+
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),
 
     // 그외 모든 예외
-    ALL_OTHER_EXCEPTIONS(9999);
+    ALL_OTHER_EXCEPTIONS(9999),
+
+    ;
 
     private final int statusCode;
 

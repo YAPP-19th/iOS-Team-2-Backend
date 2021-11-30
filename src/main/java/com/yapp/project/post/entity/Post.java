@@ -42,7 +42,7 @@ public class Post extends BaseEntity<Long> {
     @Column(name = "post_view_count")
     private Long viewCount;
 
-    @Column(name = "post_status")
+    @Column(name = "post_status_code")
     private Integer statusCode;
 
     @Column(name = "post_online_code")

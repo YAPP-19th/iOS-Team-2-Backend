@@ -61,13 +61,13 @@ public class SwaggerConfig {
     @Getter
     @ApiModel
     static class Page {
-        @ApiModelProperty(value = "페이지 번호(0부터 시작)")
+        @ApiModelProperty(value = "페이지 번호(0부터 시작)", example = "0")
         private Integer page;
 
-        @ApiModelProperty(value = "한 페이지 당 요소 개수(최대 100)", allowableValues="range[0, 100]")
+        @ApiModelProperty(value = "한 페이지 당 요소 개수(최대 100)", allowableValues="range[0, 100]", example = "10")
         private Integer size;
 
-        @ApiModelProperty(value = "정렬기준(사용법: entity필드명,ASC|DESC, 예시: createdDate,DESC (최신순))")
+        @ApiModelProperty(value = "정렬기준(사용법: entity필드명,ASC|DESC, 예시: createdDate,DESC (최신순))", example = "createdDate,DESC")
         private List<String> sort;
     }
 

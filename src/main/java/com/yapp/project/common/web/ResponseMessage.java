@@ -12,9 +12,7 @@ public enum ResponseMessage {
     CHECK_AVAILABLE_NICKNAME(StatusCode.SUCCESS),
     NOT_AVAILABLE_NICKNAME(StatusCode.NOT_AVAILABLE_NICKNAME),
 
-    POST_INSERT_SUCCESS(StatusCode.SUCCESS),
-    POST_SEARCH_SUCCESS(StatusCode.SUCCESS),
-    POST_DELETE_SUCCESS(StatusCode.SUCCESS);
+    ;
 
     private final StatusCode statusCode;
 
