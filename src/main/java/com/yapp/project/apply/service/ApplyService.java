@@ -35,7 +35,8 @@ public class ApplyService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
 
-        applyConverter.toEntity(member, recruitingPosition, ApplyStatus.DONE_APPLYING.getApplyStatusCode());
+        Apply apply = applyConverter.toEntity(member, recruitingPosition, ApplyStatus.DONE_APPLYING.getApplyStatusCode());
+        applyRepository.save(apply);
     }
 
     @Transactional
