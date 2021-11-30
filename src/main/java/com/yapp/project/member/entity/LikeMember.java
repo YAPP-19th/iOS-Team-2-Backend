@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class LikeMember {
@@ -22,4 +21,9 @@ public class LikeMember {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "like_member_to_member_id", referencedColumnName = "member_id")
     private Member toMember;
+
+    public LikeMember(Member fromMember, Member toMember){
+        this.fromMember = fromMember;
+        this.toMember = toMember;
+    }
 }
