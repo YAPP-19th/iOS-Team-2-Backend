@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,7 +57,7 @@ public class PostController {
     @ApiOperation("게시글 단건 조회 (지원 현황)")
     @GetMapping(value = "/{postId}/recruitingStatus")
     public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable Long postId) {
-        List<RecruitingStatusResponse> response = postService.findRecruitingStatusById(postId);
+        var response = postService.findRecruitingStatusById(postId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

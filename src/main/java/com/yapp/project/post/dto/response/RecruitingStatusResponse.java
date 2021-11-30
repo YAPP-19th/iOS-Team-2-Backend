@@ -3,18 +3,26 @@ package com.yapp.project.post.dto.response;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @RequiredArgsConstructor
 public class RecruitingStatusResponse {
-    private final Long recruitingPositionId;
+    List<RecruitingStatus> RecruitingStatuses;
 
-    private final String  positionName;
+    @Getter
+    @RequiredArgsConstructor
+    public static class RecruitingStatus{
+        private final Long recruitingPositionId;
 
-    private final int  positionCode;
+        private final String  positionName;
 
-    private final String skillName;
+        private final int  positionCode;
 
-    private final int skillCode;
+        private final String skillName;
 
-    private final String status;
+        private final int skillCode;
+
+        private final String status;
+    }
 }
