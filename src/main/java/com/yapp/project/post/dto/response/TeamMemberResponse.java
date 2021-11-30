@@ -3,14 +3,22 @@ package com.yapp.project.post.dto.response;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @RequiredArgsConstructor
 public class TeamMemberResponse {
-    private final Long leaderId;
+    List<TeamMember> teamMembers;
 
-    private final String nickName;
+    @Getter
+    @RequiredArgsConstructor
+    public static class TeamMember{
+        private final Long memberId;
 
-    private final String profileImageUrl;
+        private final String nickName;
 
-    private final String address;
+        private final String profileImageUrl;
+
+        private final String address;
+    }
 }
