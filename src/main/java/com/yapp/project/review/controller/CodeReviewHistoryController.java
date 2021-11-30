@@ -34,13 +34,13 @@ public class CodeReviewHistoryController {
     @PostMapping(value = "/members/{memberId}/select-reviews")
     public ResponseEntity<ApiResult> insert(
             @RequestHeader("accessToken") String accessToken,
-            @PathVariable Long targetMemberId,
+            @PathVariable Long memberId,
             @RequestBody CodeReviewInsertRequest request
     ) {
 
         Long fromMemberId = jwtService.getMemberId(accessToken);
 
-        codeReviewHistoryService.create(fromMemberId, targetMemberId, request);
+        codeReviewHistoryService.create(fromMemberId, memberId, request);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
