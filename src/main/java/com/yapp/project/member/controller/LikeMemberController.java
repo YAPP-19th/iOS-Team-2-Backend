@@ -37,7 +37,7 @@ public class LikeMemberController {
         likeMemberService.cancelLike(fromMemberId, memberId);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCESS)
+                ApiResult.of(ResponseMessage.SUCCESS)
         );
     }
 
