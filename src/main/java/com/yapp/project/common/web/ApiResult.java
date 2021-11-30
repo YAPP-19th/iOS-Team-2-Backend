@@ -29,4 +29,13 @@ public class ApiResult<T> {
                 data
         );
     }
+
+    public static <T> ApiResult<T> of(ResponseMessage responseMessage) {
+        return new ApiResult(
+                responseMessage.getStatusCode().getStatusCode(),
+                responseMessage.name(),
+                null
+        );
+    }
+
 }
