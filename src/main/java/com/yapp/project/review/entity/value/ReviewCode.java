@@ -5,7 +5,9 @@ import com.yapp.project.common.exception.type.NotFoundException;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Getter
 public enum ReviewCode {
@@ -57,5 +59,25 @@ public enum ReviewCode {
                 .filter(v -> v.reviewName.equals(reviewName))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_REVIEW_NAME));
+    }
+
+    public static List<String> getAllPositiveReviewNames() {
+        final List<String> result = new ArrayList<>();
+
+        Arrays.stream(ReviewCode.values())
+                .filter(v -> v.reviewCode > 0)
+                .map(v -> result.add(v.getReviewName()));
+
+        return result;
+    }
+
+    public static List<String> getAllNegativeReviewNames() {
+        final List<String> result = new ArrayList<>();
+
+        Arrays.stream(ReviewCode.values())
+                .filter(v -> v.reviewCode < 0)
+                .map(v -> result.add(v.getReviewName()));
+
+        return result;
     }
 }
