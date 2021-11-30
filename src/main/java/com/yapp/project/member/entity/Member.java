@@ -4,6 +4,8 @@ import com.yapp.project.common.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,8 +30,11 @@ public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_introduce")
     private String introduce;
 
+    @Column(name = "member_base_position_code")
+    private Integer basePositionCode;
+
     @Column(name = "member_position_code")
-    private Integer positionCode;
+    private String positionCode;
 
     @Column(name = "member_email")
     private String email;
@@ -43,6 +48,9 @@ public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_score")
     private Integer score;
 
-    @Column(name = "member_skill_code")
-    private Integer skillCode;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Project> projects = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Career> careers = new ArrayList<>();
 }
