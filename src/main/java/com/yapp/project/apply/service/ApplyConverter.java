@@ -12,6 +12,7 @@ public class ApplyConverter {
                 .member(member)
                 .recruitingPosition(recruitingPosition)
                 .applyStatusCode(applyStatusCode)
+                .post(recruitingPosition.getPost())
                 .build();
     }
 }
