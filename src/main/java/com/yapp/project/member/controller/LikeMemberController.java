@@ -2,6 +2,7 @@ package com.yapp.project.member.controller;
 
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
+import com.yapp.project.member.dto.LikeMemberResponse;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.member.service.LikeMemberService;
 import io.swagger.annotations.Api;
@@ -36,7 +37,7 @@ public class LikeMemberController {
         likeMemberService.cancelLike(fromMemberId, memberId);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS)
+                ApiResult.of(ResponseMessage.SUCESS)
         );
     }
 
@@ -44,10 +45,10 @@ public class LikeMemberController {
     @GetMapping(value = "/like-members")
     public ResponseEntity<ApiResult> getAll(@RequestHeader("accessToken") String accessToken) {
         Long fromMemberId = jwtService.getMemberId(accessToken);
-        likeMemberService.findAll(fromMemberId);
+        LikeMemberResponse response = likeMemberService.findAll(fromMemberId);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 }
