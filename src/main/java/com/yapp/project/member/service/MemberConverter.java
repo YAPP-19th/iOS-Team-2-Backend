@@ -26,12 +26,10 @@ public class MemberConverter {
     }
 
     public CheckNameResponse toCheckNameResponse(boolean available) {
-        return CheckNameResponse.builder()
-                .available(!available)
-                .build();
+        return new CheckNameResponse(available);
     }
 
-    public Member toSignUpResponseMember(Optional<Member> member, CreateInfoRequest request) {
+    public Member toMemberEntity(Optional<Member> member, CreateInfoRequest request, int score) {
         List<String> positionList = request.getPositionList()
                                             .stream()
                                             .map(v->Position.of(v).getPositionCode())
@@ -41,7 +39,7 @@ public class MemberConverter {
         return Member.builder()
                 .id(member.get().getId())
                 .token(member.get().getToken())
-                .score(member.get().getScore())
+                .score(score)
                 .email(member.get().getEmail())
                 .loginId(member.get().getLoginId())
                 .profileImageUrl(member.get().getProfileImageUrl())
@@ -53,7 +51,7 @@ public class MemberConverter {
                 .build();
     }
 
-    public Project toSignUpResponseProject(Member m, ProjectRequest request) {
+    public Project toProjectEntity(Member m, ProjectRequest request) {
             return Project.builder()
                     .name(request.getName())
                     .startDate(request.getStartDate())
@@ -64,19 +62,18 @@ public class MemberConverter {
 
     }
 
-    public Career toSignUpResponseCareer(Member m, CareerRequest request) {
+    public Career toCareerEntity(Member m, CareerRequest request) {
             return Career.builder()
                     .companyName(request.getCompanyName())
                     .startDate(request.getStartDate())
                     .endDate(request.getEndDate())
                     .nowWorks(request.getNowWorks())
                     .teamName(request.getTeamName())
-//                    .works(toSignUpResponseWork(request.getWorkRequestList()))
                     .member(m)
                     .build();
     }
 
-    public Work toSignUpResponseWork(Career c, ProjectRequest request) {
+    public Work toWorkEntity(Career c, ProjectRequest request) {
             return Work.builder()
                     .name(request.getName())
                     .startDate(request.getStartDate())

@@ -1,7 +1,6 @@
 package com.yapp.project.member.dto.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +13,7 @@ public class LoginRequest {
     @NotNull
     private String loginId;
 
-    @Builder
     public LoginRequest(String loginId){
-        this.loginId = loginId;
+        this.loginId = getLoginId();
     }
-
 }
-

@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Career extends BaseEntity<Long> {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "career_id")
     private Long id;
 

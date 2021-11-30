@@ -30,6 +30,6 @@ public class Work extends BaseEntity<Long> {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "career_id")
+    @JoinColumn(name = "work_career_id")
     private Career career;
 }

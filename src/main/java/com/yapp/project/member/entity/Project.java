@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Project {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id")
     private Long id;
 
@@ -29,6 +29,6 @@ public class Project {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "project_member_id", referencedColumnName = "member_id")
     private Member member;
 }

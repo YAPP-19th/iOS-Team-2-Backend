@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,18 +49,34 @@ public class MemberService {
     @Transactional
     public Long createInfo(CreateInfoRequest request){
         Optional<Member> member = memberRepository.findById(jwtService.getMemberId(request.getAccessToken()));
-        //TODO: 사용자 레벨
-        Member m = memberRepository.save(memberConverter.toSignUpResponseMember(member, request));
+        int score = getMemberScore(request.getProjectList(), request.getCareerList());
+        Member m = memberRepository.save(memberConverter.toMemberEntity(member, request, score));
         for(ProjectRequest req : request.getProjectList())
-            projectRepository.save(memberConverter.toSignUpResponseProject(member.get(), req));
+            projectRepository.save(memberConverter.toProjectEntity(member.get(), req));
         for(CareerRequest req : request.getCareerList()) {
-            Career c = careerRepository.save(memberConverter.toSignUpResponseCareer(member.get(), req));
+            Career c = careerRepository.save(memberConverter.toCareerEntity(member.get(), req));
             for(ProjectRequest reqProject : req.getWorkRequestList())
-                workRepository.save(memberConverter.toSignUpResponseWork(c, reqProject));
+                workRepository.save(memberConverter.toWorkEntity(c, reqProject));
         }
 
         return m.getId();
     }
 
+    public int getMemberScore(List<ProjectRequest> projectRequest, List<CareerRequest> careerRequest){
+        int projectPeriod = 0;
+        int careerPeriod = 0;
+        for(ProjectRequest p: projectRequest){
+            LocalDate startDate = p.getStartDate();
+            LocalDate endDate = p.getEndDate();
+            projectPeriod += (Math.round((float)ChronoUnit.DAYS.between(startDate, endDate)/30));
+
+        }
+        for(CareerRequest p: careerRequest){
+            LocalDate startDate = p.getStartDate();
+            LocalDate endDate = p.getEndDate();
+            careerPeriod += Math.round((float)ChronoUnit.DAYS.between(startDate, endDate)/30);
+        }
+        return (projectPeriod)*2 + (careerPeriod)*2;
+    }
 
 }

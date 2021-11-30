@@ -10,4 +10,8 @@ import lombok.Getter;
 public class CheckNameResponse {
     @ApiModelProperty(name = "name", example = "nickName1")
     private boolean available;
+
+    public CheckNameResponse(boolean available) {
+        this.available = available;
+    }
 }

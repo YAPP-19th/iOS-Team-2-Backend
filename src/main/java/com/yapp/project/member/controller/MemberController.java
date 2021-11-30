@@ -24,7 +24,7 @@ public class MemberController {
         CheckNameResponse response = memberService.checkDuplicateName(name);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.CHECK_AVAILABLE_NICKNAME, response)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
