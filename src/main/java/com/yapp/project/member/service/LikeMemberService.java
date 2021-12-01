@@ -47,7 +47,7 @@ public class LikeMemberService {
         if(!likeMemberRepositroy.existsByFromMemberAndToMember(fromMember, toMember))
             throw new IllegalRequestException(ExceptionMessage.LIKE_MEMBER_YET);
 
-        LikeMember likeMember = new LikeMember(fromMember, toMember);
+        LikeMember likeMember= likeMemberRepositroy.findByFromMemberAndToMember(fromMember, toMember);
         likeMemberRepositroy.delete(likeMember);
     }
 

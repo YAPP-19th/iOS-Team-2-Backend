@@ -16,4 +16,6 @@ public interface LikeMemberRepositroy extends JpaRepository<LikeMember, Long> {
     boolean existsByFromMemberAndToMember(Member fromMember, Member toMember);
 
     List<LikeMember> findAllByFromMember(Member fromMember);
+
+    LikeMember findByFromMemberAndToMember(Member fromMember, Member toMember);
 }
