@@ -1,14 +1,17 @@
 package com.yapp.project.member.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class LikeMemberResponse {
-    List<LikedMember> likedMembers;
+    private List<LikedMember> likedMembers;
 
     @Getter
     @RequiredArgsConstructor
