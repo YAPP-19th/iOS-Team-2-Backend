@@ -44,8 +44,8 @@ public class LikePostController {
     @ApiOperation("내가 좋아한 모든 게시글(프로젝트)")
     @GetMapping(value = "/like-posts")
     public ResponseEntity<ApiResult> getAll(@RequestHeader("accessToken") String accessToken) {
-        Long fromMemberId = jwtService.getMemberId(accessToken);
-        LikePostResponse response = likePostService.findAll(fromMemberId);
+        Long memberId = jwtService.getMemberId(accessToken);
+        LikePostResponse response = likePostService.findAll(memberId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
