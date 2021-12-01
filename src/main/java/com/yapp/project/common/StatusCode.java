@@ -43,6 +43,8 @@ public enum StatusCode {
     NOT_EXIST_APPLY_STATUS_CODE(4025),
     NOT_EXIST_APPLY_STATUS_NAME(4026),
     NOT_EXIST_APPLY_ID(4027),
+    ALREADY_LIKE_POST(4028),
+    LIKE_POST_YET(4029),
 
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),
