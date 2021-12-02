@@ -57,13 +57,14 @@ public class LikePostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        LikePost likePost = likePostRepository.findByMemberAndPost(member, post)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.LIKE_POST_YET));
-
         if (likePostRepository.existsByMemberAndPost(member, post)) {
+            LikePost likePost = likePostRepository.findByMemberAndPost(member, post)
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.LIKE_POST_YET));
+
             likePostRepository.delete(likePost);
         }
         else{
+            LikePost likePost = new LikePost(member, post);
             likePostRepository.save(likePost);
         }
     }
