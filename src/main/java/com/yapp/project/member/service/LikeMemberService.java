@@ -21,6 +21,7 @@ public class LikeMemberService {
     private final LikeMemberRepositroy likeMemberRepositroy;
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public LikeMemberResponse findAll(Long fromMemberId) {
         Member fromMember = memberRepository.findById(fromMemberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
