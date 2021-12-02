@@ -24,38 +24,6 @@ public class LikePostService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
-    @Transactional
-    public void like(Long memberId, Long postId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
-
-        if (likePostRepository.existsByMemberAndPost(member, post))
-            throw new IllegalRequestException(ExceptionMessage.ALREADY_LIKE_POST);
-
-        LikePost likePost = new LikePost(member, post);
-        likePostRepository.save(likePost);
-    }
-
-    @Transactional
-    public void cancelLike(Long memberId, Long postId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
-
-        if (!likePostRepository.existsByMemberAndPost(member, post))
-            throw new IllegalRequestException(ExceptionMessage.LIKE_POST_YET);
-
-        LikePost likePost = likePostRepository.findByMemberAndPost(member, post)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.LIKE_POST_YET));
-
-        likePostRepository.delete(likePost);
-    }
-
     public LikePostResponse findAll(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
@@ -79,5 +47,23 @@ public class LikePostService {
         }
 
         return response;
+    }
+
+    public void switchLikeStatus(Long memberId, Long postId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        LikePost likePost = likePostRepository.findByMemberAndPost(member, post)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.LIKE_POST_YET));
+
+        if (likePostRepository.existsByMemberAndPost(member, post)) {
+            likePostRepository.delete(likePost);
+        }
+        else{
+            likePostRepository.save(likePost);
+        }
     }
 }
