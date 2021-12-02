@@ -49,6 +49,7 @@ public class LikePostService {
         return response;
     }
 
+    @Transactional
     public void switchLikeStatus(Long memberId, Long postId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
