@@ -59,7 +59,7 @@ public class LikePostService {
 
         if (likePostRepository.existsByMemberAndPost(member, post)) {
             LikePost likePost = likePostRepository.findByMemberAndPost(member, post)
-                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.LIKE_POST_YET));
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.ALL_OTHER_EXCEPTIONS));
 
             likePostRepository.delete(likePost);
         }

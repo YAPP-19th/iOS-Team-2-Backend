@@ -53,7 +53,9 @@ public class LikeMemberService {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
         if(likeMemberRepositroy.existsByFromMemberAndToMember(fromMember, toMember)) {
-            LikeMember likeMember= likeMemberRepositroy.findByFromMemberAndToMember(fromMember, toMember);
+            LikeMember likeMember= likeMemberRepositroy.findByFromMemberAndToMember(fromMember, toMember)
+                            .orElseThrow(() -> new NotFoundException(ExceptionMessage.ALL_OTHER_EXCEPTIONS));
+
             likeMemberRepositroy.delete(likeMember);
         }
         else{
