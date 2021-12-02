@@ -1,7 +1,7 @@
 package com.yapp.project.member.service;
 
-import com.yapp.project.member.dto.JwtValidationResult;
-import com.yapp.project.member.dto.LoginResponse;
+import com.yapp.project.member.dto.response.JwtValidationResult;
+import com.yapp.project.member.dto.response.LoginResponse;
 import com.yapp.project.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
