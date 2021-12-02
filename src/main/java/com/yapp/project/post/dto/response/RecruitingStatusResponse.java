@@ -1,14 +1,17 @@
 package com.yapp.project.post.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class RecruitingStatusResponse {
-    List<RecruitingStatus> RecruitingStatuses;
+    private List<RecruitingStatus> RecruitingStatuses = new ArrayList<>();
 
     @Getter
     @RequiredArgsConstructor
