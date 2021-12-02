@@ -47,6 +47,7 @@ public enum StatusCode {
     NOT_EXIST_APPLY_ID(4031),
     ALREADY_LIKE_MEMBER(4032),
     LIKE_MEMBER_YET(4033),
+    NOT_AVAILABLE_NICKNAME(4034),
   
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),
