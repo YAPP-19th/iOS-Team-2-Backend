@@ -1,7 +1,6 @@
 package com.yapp.project.member.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
-import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.dto.LikeMemberResponse;
@@ -21,36 +20,7 @@ public class LikeMemberService {
     private final LikeMemberRepositroy likeMemberRepositroy;
     private final MemberRepository memberRepository;
 
-    @Transactional
-    public void like(Long fromMemberId, Long toMemberId){
-        Member fromMember = memberRepository.findById(fromMemberId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-        Member toMember = memberRepository.findById(toMemberId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-        if(likeMemberRepositroy.existsByFromMemberAndToMember(fromMember, toMember))
-            throw new IllegalRequestException(ExceptionMessage.ALREADY_LIKE_MEMBER);
-
-        LikeMember likeMember = new LikeMember(fromMember, toMember);
-        likeMemberRepositroy.save(likeMember);
-    }
-
-    @Transactional
-    public void cancelLike(Long fromMemberId, Long toMemberId){
-        Member fromMember = memberRepository.findById(fromMemberId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-        Member toMember = memberRepository.findById(toMemberId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-        if(!likeMemberRepositroy.existsByFromMemberAndToMember(fromMember, toMember))
-            throw new IllegalRequestException(ExceptionMessage.LIKE_MEMBER_YET);
-
-        LikeMember likeMember= likeMemberRepositroy.findByFromMemberAndToMember(fromMember, toMember);
-        likeMemberRepositroy.delete(likeMember);
-    }
-
+    @Transactional(readOnly = true)
     public LikeMemberResponse findAll(Long fromMemberId) {
         Member fromMember = memberRepository.findById(fromMemberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
@@ -72,5 +42,25 @@ public class LikeMemberService {
         }
 
         return response;
+    }
+
+    @Transactional
+    public void switchLikeMemberStatus(Long fromMemberId, Long memberId) {
+        Member fromMember = memberRepository.findById(fromMemberId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+
+        Member toMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+
+        if(likeMemberRepositroy.existsByFromMemberAndToMember(fromMember, toMember)) {
+            LikeMember likeMember= likeMemberRepositroy.findByFromMemberAndToMember(fromMember, toMember)
+                            .orElseThrow(() -> new NotFoundException(ExceptionMessage.ALL_OTHER_EXCEPTIONS));
+
+            likeMemberRepositroy.delete(likeMember);
+        }
+        else{
+            LikeMember likeMember = new LikeMember(fromMember, toMember);
+            likeMemberRepositroy.save(likeMember);
+        }
     }
 }

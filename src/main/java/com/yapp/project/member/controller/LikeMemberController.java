@@ -19,22 +19,11 @@ public class LikeMemberController {
     private final LikeMemberService likeMemberService;
     private final JwtService jwtService;
 
-    @ApiOperation("사용자 좋아요 누르기")
-    @PostMapping(value = "/{memberId}/like-members")
-    public ResponseEntity<ApiResult> insert(@PathVariable Long memberId, @RequestHeader("accessToken") String accessToken) {
+    @ApiOperation("사용자 좋아요 상태 변경")
+    @PutMapping(value = "/{memberId}/like-members")
+    public ResponseEntity<ApiResult> switchLikeMemberStatus(@PathVariable Long memberId, @RequestHeader("accessToken") String accessToken) {
         Long fromMemberId = jwtService.getMemberId(accessToken);
-        likeMemberService.like(fromMemberId, memberId);
-
-        return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS)
-        );
-    }
-
-    @ApiOperation("사용자 좋아요 취소")
-    @DeleteMapping(value = "/{memberId}/like-members")
-    public ResponseEntity<ApiResult> delete(@PathVariable Long memberId, @RequestHeader("accessToken") String accessToken) {
-        Long fromMemberId = jwtService.getMemberId(accessToken);
-        likeMemberService.cancelLike(fromMemberId, memberId);
+        likeMemberService.switchLikeMemberStatus(fromMemberId, memberId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
