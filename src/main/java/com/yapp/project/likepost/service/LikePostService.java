@@ -1,7 +1,6 @@
 package com.yapp.project.likepost.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
-import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.likepost.dto.LikePostResponse;
 import com.yapp.project.likepost.entity.LikePost;
@@ -24,6 +23,7 @@ public class LikePostService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
+    @Transactional(readOnly = true)
     public LikePostResponse findAll(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
