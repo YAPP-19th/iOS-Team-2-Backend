@@ -64,9 +64,10 @@ public enum ReviewCode {
     public static List<String> getAllPositiveReviewNames() {
         final List<String> result = new ArrayList<>();
 
-        Arrays.stream(ReviewCode.values())
-                .filter(v -> v.reviewCode > 0)
-                .map(v -> result.add(v.getReviewName()));
+        for(var value : ReviewCode.values()){
+            if(value.getReviewCode() > 0)
+                result.add(value.getReviewName());
+        }
 
         return result;
     }
@@ -74,10 +75,10 @@ public enum ReviewCode {
     public static List<String> getAllNegativeReviewNames() {
         final List<String> result = new ArrayList<>();
 
-        Arrays.stream(ReviewCode.values())
-                .filter(v -> v.reviewCode < 0)
-                .map(v -> result.add(v.getReviewName()));
-
+        for(var value : ReviewCode.values()){
+            if(value.getReviewCode() < 0)
+                result.add(value.getReviewName());
+        }
         return result;
     }
 }
