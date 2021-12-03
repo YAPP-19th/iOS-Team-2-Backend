@@ -58,9 +58,13 @@ public class S3Uploader {
     private Optional<File> convert(MultipartFile file) throws IOException {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmSS");
-        String fileName = dateFormat.format(cal.getTime());  // 현재 시간으로 파일명 등록 -> 파일명 중복 방지
 
-        File convertFile = new File(fileName);
+        String originFileName = file.getOriginalFilename();
+        String ext = originFileName.substring(originFileName.lastIndexOf(".") + 1);
+
+        String newFileName = dateFormat.format(cal.getTime()) + "." + ext;  // 현재 시간으로 파일명 등록 -> 파일명 중복 방지
+
+        File convertFile = new File(newFileName);
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
