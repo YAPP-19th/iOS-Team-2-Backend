@@ -27,7 +27,7 @@ public class InfoController {
         );
     }
 
-    @ApiOperation(value = "기본 게시글 이미지 URL", notes = "모든 게시글 디폴트 이미지 URL")
+    @ApiOperation(value = "기본 게시글 이미지 URL", notes = "모든 게시글 기본 이미지 URL")
     @GetMapping(value = "/postDefaultImageUrls")
     public ResponseEntity<ApiResult> getAllPostDefaultImageUrls() {
         var response = PostDefaultImage.getAllUrls();

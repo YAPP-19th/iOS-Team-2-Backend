@@ -1,6 +1,5 @@
 package com.yapp.project.common.value;
 
-import com.yapp.project.review.entity.value.ReviewCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
