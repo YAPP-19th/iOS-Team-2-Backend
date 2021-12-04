@@ -3,6 +3,7 @@ package com.yapp.project.post.controller;
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
 import com.yapp.project.post.dto.request.PostCreateRequest;
+import com.yapp.project.post.dto.request.PostUpdateRequest;
 import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.service.PostService;
 import io.swagger.annotations.Api;
@@ -17,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +38,21 @@ public class PostController {
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation("게시글 수정 (참여정보 수정 포함)")
+    @PatchMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResult> update(
+            @PathVariable Long postId,
+            @Valid PostUpdateRequest request,
+            @RequestHeader("accessToken") String accessToken
+    ) {
+
+        postService.update(postId, request, accessToken);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS)
         );
     }
 
