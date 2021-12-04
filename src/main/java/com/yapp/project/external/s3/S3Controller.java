@@ -1,5 +1,7 @@
 package com.yapp.project.external.s3;
 
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
 import io.swagger.annotations.Api;
@@ -28,6 +30,10 @@ public class S3Controller {
     @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResult> uploadPostImage(@ModelAttribute MultipartFile image) throws IOException {
 
+        if(image == null || image.isEmpty()){
+            throw new IllegalRequestException(ExceptionMessage.INVALID_IMAGE_EXCEPTION);
+        }
+        
         String uploadedImageUrl = s3Uploader.upload(image, POST_IMAGE_DIR);
 
         Map response = new HashMap<String, String>();
@@ -41,6 +47,10 @@ public class S3Controller {
     @ApiOperation("단건 이미지 URL로 변환(사용자 이미지)")
     @PostMapping(value = "/members", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResult> uploadMemberImages(@ModelAttribute MultipartFile image) throws IOException {
+
+        if(image == null || image.isEmpty()){
+            throw new IllegalRequestException(ExceptionMessage.INVALID_IMAGE_EXCEPTION);
+        }
 
         String uploadedImageUrl = s3Uploader.upload(image, USER_IMAGE_DIR);
 
