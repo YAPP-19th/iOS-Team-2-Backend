@@ -13,6 +13,9 @@ import java.util.List;
 @Getter
 @Setter  //@ModelAttribute를 이용해 파라미터 값을 DTO에 한 번에 바인딩 하기 위함
 public class PostCreateRequest {
+    @NotBlank(message = DtoValidationFailMessage.EMPTY_POST_IMAGE_URL)
+    private String imageUrl;
+
     @ApiModelProperty(example = "title example")
     @NotBlank(message = DtoValidationFailMessage.INVALID_POST_TITLE)  //regexp = "^\\S{2,255}$",
     private String title;
