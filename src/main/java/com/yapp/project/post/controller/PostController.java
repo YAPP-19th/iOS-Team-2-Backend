@@ -45,7 +45,7 @@ public class PostController {
     @PatchMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult> update(
             @PathVariable Long postId,
-            @Valid PostUpdateRequest request,
+            @Valid @RequestBody PostUpdateRequest request,
             @RequestHeader("accessToken") String accessToken
     ) {
 
