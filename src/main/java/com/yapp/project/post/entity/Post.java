@@ -55,4 +55,29 @@ public class Post extends BaseEntity<Long> {
     public void addViewCount(){
         this.viewCount++;
     }
+
+    public void updateInfos(
+            String imageUrl,
+            String title,
+            int categoryCode,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            String region,
+            String description,
+            int onlineCode
+    ){
+
+        this.imageUrl = imageUrl;
+        this.title = title;
+        this.categoryCode = categoryCode;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.region = region;
+        this.description = description;
+        this.onlineCode = onlineCode;
+    }
+
+    public void updateStatusCode(int statusCode){
+        this.statusCode = statusCode;
+    }
 }
