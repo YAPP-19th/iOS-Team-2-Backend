@@ -52,4 +52,7 @@ public class Post extends BaseEntity<Long> {
     @JoinColumn(name = "post_owner_id", referencedColumnName = "member_id")
     private Member owner;
 
+    public void addViewCount(){
+        this.viewCount++;
+    }
 }

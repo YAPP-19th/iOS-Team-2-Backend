@@ -92,6 +92,8 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
+        post.addViewCount();
+
         return postConverter.toPostDetailResponse(post, post.getOwner());
     }
 
