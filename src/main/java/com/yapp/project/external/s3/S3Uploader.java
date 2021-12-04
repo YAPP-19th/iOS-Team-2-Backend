@@ -74,4 +74,8 @@ public class S3Uploader {
 
         return Optional.empty();
     }
+
+    public void deleteObject(String prevFileDir) {
+        amazonS3Client.deleteObject(bucket, prevFileDir);
+    }
 }
