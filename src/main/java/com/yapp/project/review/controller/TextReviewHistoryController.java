@@ -8,6 +8,7 @@ import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import com.yapp.project.review.service.TextReviewHistoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +42,7 @@ public class TextReviewHistoryController {
 
     @ApiOperation("특정 사용자의 텍스트리뷰 모두 조회")
     @GetMapping(value = "/members/{memberId}/text-reviews")
-    public ResponseEntity<ApiResult> getAll(@PathVariable Long memberId, Pageable pageable) {
+    public ResponseEntity<ApiResult> getAll(@PathVariable @Parameter(description = "100 입력하세요") Long memberId, Pageable pageable) {
         Page<TextReviewSimpleResponse> response = textReviewHistoryService.findAllByPages(memberId, pageable);
 
         return ResponseEntity.ok(

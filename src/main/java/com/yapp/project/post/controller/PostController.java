@@ -13,9 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,9 +27,14 @@ public class PostController {
     private final PostService postService;
 
     @ApiOperation("게시글 생성")
-    @PostMapping(consumes = {"multipart/form-data"})// 변경 전 multipart/form-data
-    public ResponseEntity<ApiResult> insert(@Valid @ModelAttribute PostCreateRequest request, @RequestHeader("accessToken") String accessToken) throws IOException {
-        var response = postService.create(request, accessToken);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)// 명시안해도 기본적으로 multipart/form-data
+    public ResponseEntity<ApiResult> insert(
+            @Valid PostCreateRequest request,
+            @ModelAttribute List<MultipartFile> images,
+            @RequestHeader("accessToken") String accessToken
+    ) throws IOException {
+
+        var response = postService.create(request, images, accessToken);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

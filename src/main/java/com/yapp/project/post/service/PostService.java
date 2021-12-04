@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,21 +44,18 @@ public class PostService {
     private final String S3DIR = "post_image";
 
     @Transactional
-    public PostCreateResponse create(PostCreateRequest request, String accessToken) throws IOException {
+    public PostCreateResponse create(PostCreateRequest request, List<MultipartFile> images, String accessToken) throws IOException {
         Long leaderId = jwtService.getMemberId(accessToken);
 
         Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        var postImages = request.getPostImages();
         List<String> imageUrls = new ArrayList<>();
-        if (postImages != null && !postImages.isEmpty()) {  //TODO: 좀 더 깔끔하게 바꿔보기
-            for (var image : postImages) {
-                if (image == null || image.isEmpty()) break;
+        for (var image : images) {
+            if (image == null || image.isEmpty()) break;
 
-                String imageUrl = s3Uploader.upload(image, S3DIR);
-                imageUrls.add(imageUrl);
-            }
+            String imageUrl = s3Uploader.upload(image, S3DIR);
+            imageUrls.add(imageUrl);
         }
 
         Post post = postConverter.toPostEntity(
@@ -76,7 +74,6 @@ public class PostService {
         for(var positionDetail : request.getRecruitingPositions()){
             var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(
                     positionDetail.getPositionName(),
-                    positionDetail.getSkillName(),
                     positionDetail.getRecruitingNumber()
             );
             recruitingPositionDetail.setPost(postEntity);
@@ -131,7 +128,6 @@ public class PostService {
             response.getRecruitingStatuses().add(recruitingPositionConverter.toRecruitingStatus(
                     position.getId(),
                     position.getPositionCode(),
-                    position.getSkillCode(),
                     Long.toString(applyRepository.countByRecruitingPositionAndApplyStatusCode(position, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode()))
             ));
         }

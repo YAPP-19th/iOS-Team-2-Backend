@@ -1,14 +1,16 @@
 package com.yapp.project.post.dto.response;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class TeamMemberResponse {
-    List<TeamMember> teamMembers;
+    private List<TeamMember> teamMembers = new ArrayList<>();
 
     @Getter
     @RequiredArgsConstructor
