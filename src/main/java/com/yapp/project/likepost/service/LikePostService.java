@@ -35,7 +35,7 @@ public class LikePostService {
             var post = likePost.getPost();
             var postInfo = new LikePostResponse.LikedPost(
                     post.getId(),
-                    post.getImageUrls().split(" ")[0],
+                    post.getImageUrl(),
                     post.getTitle(),
                     post.getStartDate(),
                     post.getEndDate(),
