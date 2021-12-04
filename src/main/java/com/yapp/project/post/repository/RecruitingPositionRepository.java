@@ -20,4 +20,6 @@ public interface RecruitingPositionRepository extends JpaRepository<RecruitingPo
 //    Page<RecruitingPosition> findAllByPositionCode(@Param("positionCode") int positionCode, Pageable pageable);
 
     Page<RecruitingPosition> findAllByRootPositionCode(int rootPositionCode, Pageable pageable);
+
+    void deleteAllByPost(Post post);
 }
