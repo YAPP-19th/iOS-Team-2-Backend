@@ -44,18 +44,15 @@ public class PostService {
     private final String S3DIR = "post_image";
 
     @Transactional
-    public PostCreateResponse create(PostCreateRequest request, List<MultipartFile> images, String accessToken) throws IOException {
+    public PostCreateResponse create(PostCreateRequest request, MultipartFile image, String accessToken) throws IOException {
         Long leaderId = jwtService.getMemberId(accessToken);
 
         Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        List<String> imageUrls = new ArrayList<>();
-        for (var image : images) {
-            if (image == null || image.isEmpty()) break;
-
-            String imageUrl = s3Uploader.upload(image, S3DIR);
-            imageUrls.add(imageUrl);
+        String savedImageUrl = "";
+        if (image != null && !image.isEmpty()) {
+            savedImageUrl = s3Uploader.upload(image, S3DIR);
         }
 
         Post post = postConverter.toPostEntity(
@@ -66,7 +63,7 @@ public class PostService {
                 request.getRegion(),
                 request.getDescription(),
                 request.getOnlineInfo(),
-                String.join(" ", imageUrls),
+                savedImageUrl,
                 leader
         );
         Post postEntity = postRepository.save(post);
@@ -80,7 +77,7 @@ public class PostService {
             recruitingPositionRepository.save(recruitingPositionDetail);
         }
 
-        return postConverter.toPostCreateResponse(postEntity.getId(), imageUrls, postEntity.getCategoryCode(), postEntity.getCreatedDate());
+        return postConverter.toPostCreateResponse(postEntity.getId(), savedImageUrl, postEntity.getCategoryCode(), postEntity.getCreatedDate());
     }
 
     @Transactional(readOnly = true)

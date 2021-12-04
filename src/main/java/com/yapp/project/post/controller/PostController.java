@@ -30,11 +30,11 @@ public class PostController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)// 명시안해도 기본적으로 multipart/form-data
     public ResponseEntity<ApiResult> insert(
             @Valid PostCreateRequest request,
-            @ModelAttribute List<MultipartFile> images,
+            @ModelAttribute MultipartFile image,
             @RequestHeader("accessToken") String accessToken
     ) throws IOException {
 
-        var response = postService.create(request, images, accessToken);
+        var response = postService.create(request, image, accessToken);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

@@ -19,7 +19,7 @@ public class Post extends BaseEntity<Long> {
     private Long id;
 
     @Column(name = "post_image_urls", columnDefinition = "LONGTEXT")
-    private String imageUrls;
+    private String imageUrl;
 
     @Column(name = "post_title")
     private String title;

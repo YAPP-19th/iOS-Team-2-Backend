@@ -15,7 +15,7 @@ import java.util.List;
 public class PostDetailResponse {
     private final Long postId;
 
-    private final List<String> imageUrls;
+    private final String imageUrl;
 
     private final String title;
 
