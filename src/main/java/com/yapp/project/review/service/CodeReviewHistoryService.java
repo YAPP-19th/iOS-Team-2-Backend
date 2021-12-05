@@ -54,6 +54,10 @@ public class CodeReviewHistoryService {
             throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
         }
 
+        if(targetMember.isSameMember(reviewer)){
+            throw new IllegalRequestException(ExceptionMessage.NO_SELF_REVIEW);
+        }
+
         List<String> selectedReviews = request.getSelectedReviews();
         for(var selectedReview : selectedReviews){
             var codeReviewHistory = converter.toEntity(reviewer, targetMember, selectedReview);

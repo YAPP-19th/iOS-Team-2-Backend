@@ -1,6 +1,8 @@
 package com.yapp.project.review.service;
 
+import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
@@ -23,6 +25,7 @@ public class TextReviewHistoryService {
     private final TextReviewHistoryConverter converter;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final ApplyRepository applyRepository;
 
     @Transactional
     public void create(Long reviewerId, TextReviewCreateRequest request){
@@ -34,6 +37,18 @@ public class TextReviewHistoryService {
 
         Post post = postRepository.findById(request.getPostId())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        if(!post.validateLeader(targetMember)){
+            throw new IllegalRequestException(ExceptionMessage.POST_ID_AND_MEMBER_ID_MISMATCH);
+        }
+
+        if(applyRepository.existsByMemberAndPost(reviewer, post)){
+            throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
+        }
+
+        if(targetMember.isSameMember(reviewer)){
+            throw new IllegalRequestException(ExceptionMessage.NO_SELF_REVIEW);
+        }
 
         var textReviewHistory = converter.toEntity(reviewer, targetMember, post, request.getTitle(), request.getContent());
         textReviewHistoryRepository.save(textReviewHistory);

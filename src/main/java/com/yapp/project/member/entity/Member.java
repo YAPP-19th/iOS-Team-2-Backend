@@ -53,4 +53,8 @@ public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세�
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Career> careers = new ArrayList<>();
+
+    public boolean isSameMember(Member member){
+        return this.id.longValue() == member.getId().longValue() ? true : false;
+    }
 }
