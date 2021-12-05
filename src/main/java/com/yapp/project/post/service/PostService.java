@@ -12,9 +12,12 @@ import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.post.dto.request.PostCreateRequest;
+import com.yapp.project.post.dto.request.PostUpdateRequest;
 import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.RecruitingPosition;
+import com.yapp.project.post.entity.value.OnlineStatus;
+import com.yapp.project.post.entity.value.PostCategory;
 import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,19 +47,11 @@ public class PostService {
     private final String S3DIR = "post_image";
 
     @Transactional
-    public PostCreateResponse create(PostCreateRequest request, List<MultipartFile> images, String accessToken) throws IOException {
+    public PostCreateResponse create(PostCreateRequest request, String accessToken) throws IOException {
         Long leaderId = jwtService.getMemberId(accessToken);
 
         Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-        List<String> imageUrls = new ArrayList<>();
-        for (var image : images) {
-            if (image == null || image.isEmpty()) break;
-
-            String imageUrl = s3Uploader.upload(image, S3DIR);
-            imageUrls.add(imageUrl);
-        }
 
         Post post = postConverter.toPostEntity(
                 request.getTitle(),
@@ -66,21 +61,49 @@ public class PostService {
                 request.getRegion(),
                 request.getDescription(),
                 request.getOnlineInfo(),
-                String.join(" ", imageUrls),
+                request.getImageUrl(),
                 leader
         );
         Post postEntity = postRepository.save(post);
 
-        for(var positionDetail : request.getRecruitingPositions()){
-            var recruitingPositionDetail = recruitingPositionConverter.toRecruitingPositionEntity(
+        for (var positionDetail : request.getRecruitingPositions()) {
+            var recruitingPosition = recruitingPositionConverter.toRecruitingPositionEntity(
                     positionDetail.getPositionName(),
                     positionDetail.getRecruitingNumber()
             );
-            recruitingPositionDetail.setPost(postEntity);
-            recruitingPositionRepository.save(recruitingPositionDetail);
+            recruitingPosition.setPost(postEntity);
+            recruitingPositionRepository.save(recruitingPosition);
         }
 
-        return postConverter.toPostCreateResponse(postEntity.getId(), imageUrls, postEntity.getCategoryCode(), postEntity.getCreatedDate());
+        return postConverter.toPostCreateResponse(postEntity.getId(), postEntity.getImageUrl(), postEntity.getCategoryCode(), postEntity.getCreatedDate());
+    }
+
+    @Transactional
+    public void update(Long postId, PostUpdateRequest request, String accessToken) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        post.updateInfos(
+                request.getImageUrl(),
+                request.getTitle(),
+                PostCategory.of(request.getCategoryName()).getCategoryCode(),
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getRegion(),
+                request.getDescription(),
+                OnlineStatus.of(request.getOnlineInfo()).getOnlineStatusCode()
+        );
+
+        recruitingPositionRepository.deleteAllByPost(post);
+
+        for (var positionDetail : request.getRecruitingPositions()) {
+            var recruitingPosition = recruitingPositionConverter.toRecruitingPositionEntity(
+                    positionDetail.getPositionName(),
+                    positionDetail.getRecruitingNumber()
+            );
+            recruitingPosition.setPost(post);
+            recruitingPositionRepository.save(recruitingPosition);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -95,6 +118,8 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
+        post.addViewCount();
+
         return postConverter.toPostDetailResponse(post, post.getOwner());
     }
 
@@ -105,7 +130,7 @@ public class PostService {
 
         List<Apply> applies = applyRepository.findAllByPost(post);
         var response = new TeamMemberResponse();
-        for(var apply : applies){
+        for (var apply : applies) {
             Member member = apply.getMember();
             response.getTeamMembers().add(
                     new TeamMemberResponse.TeamMember(
@@ -124,7 +149,7 @@ public class PostService {
     public RecruitingStatusResponse findRecruitingStatusById(Long postId) {
         var response = new RecruitingStatusResponse();
         List<RecruitingPosition> positions = recruitingPositionRepository.findAllByPostId(postId);
-        for(var position : positions){
+        for (var position : positions) {
             response.getRecruitingStatuses().add(recruitingPositionConverter.toRecruitingStatus(
                     position.getId(),
                     position.getPositionCode(),
@@ -136,7 +161,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostDeleteResponse deleteById(String accessToken, Long postId){
+    public PostDeleteResponse deleteById(String accessToken, Long postId) {
         Long memberId = jwtService.getMemberId(accessToken);
 
         Post post = postRepository.findById(postId)
@@ -151,7 +176,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostSimpleResponse> findAllByPosition(String rootPositionName, Pageable pageable){
+    public Page<PostSimpleResponse> findAllByPosition(String rootPositionName, Pageable pageable) {
         Page<RecruitingPosition> allByPositionCode = recruitingPositionRepository.findAllByRootPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
 
         return allByPositionCode.map(rp -> makePostSimpleResponse(rp.getPost()));
@@ -161,10 +186,16 @@ public class PostService {
         List<String> positions = new ArrayList<>();
 
         List<RecruitingPosition> positionDetailsByPost = recruitingPositionRepository.findAllByPostId(post.getId());
-        for(var positionDetail : positionDetailsByPost){
+        for (var positionDetail : positionDetailsByPost) {
             positions.add(Position.of(positionDetail.getPositionCode()).getPositionName());
         }
 
         return postConverter.toPostSimpleResponse(post, positions);
+    }
+
+    private String getFileNameFromS3Url(String imageUrl) {
+        String filname = imageUrl.substring(imageUrl.lastIndexOf("/"));
+
+        return "/" + S3DIR + "/" + filname;
     }
 }

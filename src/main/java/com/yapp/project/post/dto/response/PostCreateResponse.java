@@ -5,14 +5,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
 public class PostCreateResponse {
     private final Long postId;
 
-    private final List<String> imageUrls;
+    private final String savedImageUrl;
 
     private final String category;
 

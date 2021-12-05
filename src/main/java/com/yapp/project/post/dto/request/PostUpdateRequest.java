@@ -11,13 +11,12 @@ import java.util.List;
 
 @Builder
 @Getter
-@Setter  //@ModelAttribute를 이용해 파라미터 값을 DTO에 한 번에 바인딩 하기 위함
-public class PostCreateRequest {
+public class PostUpdateRequest {
     @NotBlank(message = DtoValidationFailMessage.EMPTY_POST_IMAGE_URL)
     private String imageUrl;
 
     @ApiModelProperty(example = "title example")
-    @NotBlank(message = DtoValidationFailMessage.INVALID_POST_TITLE)  //regexp = "^\\S{2,255}$",
+    @NotBlank(message = DtoValidationFailMessage.INVALID_POST_TITLE)
     private String title;
 
     @ApiModelProperty(example = "여행")
@@ -39,25 +38,24 @@ public class PostCreateRequest {
     private String region;
 
     @ApiModelProperty(example = "description detail example")
-    @NotBlank(message = DtoValidationFailMessage.INVALID_DESCRIPTION)  //regexp = "^\\S{2,21844}$",
+    @NotBlank(message = DtoValidationFailMessage.INVALID_DESCRIPTION)
     private String description;
 
     @ApiModelProperty(example = "'{미정|온라인|오프라인|온오프라인} 넷 중 택1'")
     @Pattern(regexp = "^[가-힣]*$", message = DtoValidationFailMessage.INVALID_POST_ONLINE_INFO)
     private String onlineInfo;
 
-    private List<RecruitingPositionRequest> recruitingPositions;
+    private List<PostCreateRequest.RecruitingPositionRequest> recruitingPositions;
 
     @Getter
-    @Setter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class RecruitingPositionRequest {
-        @ApiModelProperty(example = "iOS 개발")
+        @ApiModelProperty(example = "AI 개발")
         @NotBlank(message = DtoValidationFailMessage.INVALID_POSITION_NAME)
         private String positionName;
 
-        @ApiModelProperty(example = "2")
+        @ApiModelProperty(example = "3")
         @Min(value = 1, message = DtoValidationFailMessage.INVALID_RECRUITING_NUMBER_NUMBER)
         private int recruitingNumber;
     }
