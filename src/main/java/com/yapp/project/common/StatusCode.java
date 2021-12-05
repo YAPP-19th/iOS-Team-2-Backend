@@ -51,6 +51,7 @@ public enum StatusCode {
     INVALID_IMAGE_EXCEPTION(4035),
     INVALID_JWT_STRINGS(4036),
     ALREADY_REVIEWED(4037),
+    NO_SELF_REVIEW(4038),
   
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),
