@@ -21,7 +21,7 @@ public class CodeReviewHistoryConverter {
     public CodeReviewCountResponse toCodeReviewCountResponse(List<CodeReviewHistory> codeReviews) {
         CodeReviewCountResponse response = new CodeReviewCountResponse();
         var positiveMap = response.getPositives();
-        var negativeMap = response.getPositives();
+        var negativeMap = response.getNegatives();
 
         for(var codeReview : codeReviews){
             int reviewCode = codeReview.getReviewCode();
