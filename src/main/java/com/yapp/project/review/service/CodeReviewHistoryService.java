@@ -1,11 +1,17 @@
 package com.yapp.project.review.service;
 
+import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
+import com.yapp.project.post.entity.Post;
+import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.review.dto.request.CodeReviewInsertRequest;
+import com.yapp.project.review.dto.response.CodeReviewCountResponse;
 import com.yapp.project.review.dto.response.CodeReviewListResponse;
+import com.yapp.project.review.entity.CodeReviewHistory;
 import com.yapp.project.review.entity.value.ReviewCode;
 import com.yapp.project.review.repository.CodeReviewHistoryRepossitory;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +25,8 @@ import java.util.List;
 public class CodeReviewHistoryService {
     private final CodeReviewHistoryRepossitory codeReviewHistoryRepossitory;
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
+    private final ApplyRepository applyRepository;
     private final CodeReviewHistoryConverter converter;
 
     public CodeReviewListResponse findAllReviews(){
@@ -35,7 +43,16 @@ public class CodeReviewHistoryService {
         Member targetMember = memberRepository.findById(targetMemberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        // TODO: apply의 status를 비교해 참여 확정된 인원인지 알아보가
+        Post post = postRepository.findById(request.getPostId())
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        if(!post.validateLeader(targetMember)){
+            throw new IllegalRequestException(ExceptionMessage.POST_ID_AND_MEMBER_ID_MISMATCH);
+        }
+
+        if(applyRepository.existsByMemberAndPost(reviewer, post)){
+            throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
+        }
 
         List<String> selectedReviews = request.getSelectedReviews();
         for(var selectedReview : selectedReviews){
@@ -43,4 +60,15 @@ public class CodeReviewHistoryService {
             codeReviewHistoryRepossitory.save(codeReviewHistory);
         }
     }
+
+    @Transactional(readOnly = true)
+    public CodeReviewCountResponse findAllByMember(Long targetMemberId) {
+        memberRepository.findById(targetMemberId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+
+        List<CodeReviewHistory> codeReviews = codeReviewHistoryRepossitory.findAllByTargetMemberId(targetMemberId);
+
+        return converter.toCodeReviewCountResponse(codeReviews);
+    }
 }
+

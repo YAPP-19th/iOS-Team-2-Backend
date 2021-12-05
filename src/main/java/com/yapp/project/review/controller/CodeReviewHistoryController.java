@@ -4,6 +4,7 @@ import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.review.dto.request.CodeReviewInsertRequest;
+import com.yapp.project.review.dto.response.CodeReviewCountResponse;
 import com.yapp.project.review.service.CodeReviewHistoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +23,7 @@ public class CodeReviewHistoryController {
 
     @ApiOperation("리뷰 '목록' 전체 조회")
     @GetMapping(value = "/select-reviews")
-    public ResponseEntity<ApiResult> getAll() {
+    public ResponseEntity<ApiResult> getAllSelectReviewList() {
         var response = codeReviewHistoryService.findAllReviews();
 
         return ResponseEntity.ok(
@@ -44,6 +45,16 @@ public class CodeReviewHistoryController {
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
+        );
+    }
+
+    @ApiOperation("특정 사용자가 받은 '선택하는 리뷰' 개수")
+    @GetMapping(value = "/members/{memberId}/select-reviews")
+    public ResponseEntity<ApiResult> getAll(@PathVariable Long memberId) {
+        CodeReviewCountResponse response = codeReviewHistoryService.findAllByMember(memberId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 }
