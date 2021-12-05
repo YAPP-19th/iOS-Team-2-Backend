@@ -27,7 +27,7 @@ public class PostController {
     private final PostService postService;
 
     @ApiOperation("게시글 생성")
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)// 명시안해도 기본적으로 multipart/form-data
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult> insert(
             @Valid @RequestBody PostCreateRequest request,
             @RequestHeader("accessToken") String accessToken
