@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Optional;
 
 @Slf4j
@@ -54,7 +56,15 @@ public class S3Uploader {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmSS");
+
+        String originFileName = file.getOriginalFilename();
+        String ext = originFileName.substring(originFileName.lastIndexOf(".") + 1);
+
+        String newFileName = dateFormat.format(cal.getTime()) + "." + ext;  // 현재 시간으로 파일명 등록 -> 파일명 중복 방지
+
+        File convertFile = new File(newFileName);
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
@@ -63,5 +73,9 @@ public class S3Uploader {
         }
 
         return Optional.empty();
+    }
+
+    public void deleteObject(String prevFileDir) {
+        amazonS3Client.deleteObject(bucket, prevFileDir);
     }
 }

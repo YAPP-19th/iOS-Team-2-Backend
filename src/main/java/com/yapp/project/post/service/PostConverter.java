@@ -22,7 +22,7 @@ public class PostConverter {
             String region,
             String description,
             String onlineInfo,
-            String imageUrls,
+            String imageUrl,
             Member owner
     ) {
 
@@ -37,24 +37,24 @@ public class PostConverter {
                 .statusCode(PostStatus.RECRUITING.getPostStatusCode())
                 .viewCount(0L)
                 .onlineCode(OnlineStatus.of(onlineInfo).getOnlineStatusCode())
-                .imageUrls(imageUrls)
+                .imageUrl(imageUrl)
                 .build();
     }
 
     public PostCreateResponse toPostCreateResponse(
             Long id,
-            List<String> imageUrls,
+            String imageUrl,
             int categoryCode,
             LocalDateTime createdAt) {
 
-        return new PostCreateResponse(id, imageUrls, PostCategory.of(categoryCode).getCategoryName(), createdAt);
+        return new PostCreateResponse(id, imageUrl, PostCategory.of(categoryCode).getCategoryName(), createdAt);
     }
 
     // used
     public PostDetailResponse toPostDetailResponse(Post post, Member leader){
         return PostDetailResponse.builder()
                 .postId(post.getId())
-                .imageUrls(Arrays.asList(post.getImageUrls().split(" ")))
+                .imageUrl(post.getImageUrl())
                 .title(post.getTitle())
                 .description(post.getDescription())
                 .startDate(post.getStartDate())
@@ -80,7 +80,7 @@ public class PostConverter {
     public PostSimpleResponse toPostSimpleResponse(Post post, List<String> positions) {
         return PostSimpleResponse.builder()
                 .postId(post.getId())
-                .imageUrls(Arrays.asList(post.getImageUrls().split(" ")))
+                .imageUrl(post.getImageUrl())
                 .title(post.getTitle())
                 .startDate(post.getStartDate())
                 .endDate(post.getEndDate())

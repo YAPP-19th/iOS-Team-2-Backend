@@ -12,7 +12,7 @@ import java.util.List;
 public class PostSimpleResponse {
     private final Long postId;
 
-    private final List<String> imageUrls;
+    private final String imageUrl;
 
     private final String title;
 

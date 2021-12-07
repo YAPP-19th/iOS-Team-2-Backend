@@ -1,20 +1,21 @@
-package com.yapp.project.post.dto.response;
+package com.yapp.project.member.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class TeamMemberResponse {
-    private List<TeamMember> teamMembers = new ArrayList<>();
+@AllArgsConstructor
+public class LikeMemberResponse {
+    private List<LikedMember> likedMembers;
 
     @Getter
     @RequiredArgsConstructor
-    public static class TeamMember{
+    public static class LikedMember{
         private final Long memberId;
 
         private final String nickName;
@@ -22,5 +23,7 @@ public class TeamMemberResponse {
         private final String profileImageUrl;
 
         private final String address;
+
+        private final String position;
     }
 }

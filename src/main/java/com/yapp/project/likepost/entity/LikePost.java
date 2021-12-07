@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class LikePost {
@@ -24,4 +23,9 @@ public class LikePost {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "like_post_post_id", referencedColumnName = "post_id")
     private Post post;
+
+    public LikePost(Member member, Post post) {
+        this.member = member;
+        this.post = post;
+    }
 }
