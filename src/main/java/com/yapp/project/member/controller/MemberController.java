@@ -30,8 +30,8 @@ public class MemberController {
 
     @ApiOperation("회원 정보 입력")
     @PostMapping(value = "/createInfo")
-    public ResponseEntity<ApiResult> createInfo(@RequestBody CreateInfoRequest request) {
-        Long response = memberService.createInfo(request);
+    public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") String accessToken, @RequestBody CreateInfoRequest request) {
+        Long response = memberService.createInfo(accessToken, request);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
