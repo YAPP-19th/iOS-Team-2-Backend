@@ -2,6 +2,7 @@ package com.yapp.project.common.exception;
 
 import com.yapp.project.common.StatusCode;
 import com.yapp.project.common.exception.type.NotFoundException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     public ApiExceptionResult handleBindException(BindException exception){
         return createApiExceptionResult(StatusCode.DTO_VALIDATION_FAIL, exception.getAllErrors().get(0).getDefaultMessage());
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    protected ApiExceptionResult handleMalformedJwtException(MalformedJwtException exception) {
+        return createApiExceptionResult(ExceptionMessage.INVALID_JWT_STRINGS);
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -39,7 +45,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return createApiExceptionResult(StatusCode.HTTP_REQUEST_METHOD_NOT_SUPPORTED, ExceptionMessage.HTTP_REQUEST_METHOD_NOT_SUPPORTED.name());
+        return createApiExceptionResult(ExceptionMessage.HTTP_REQUEST_METHOD_NOT_SUPPORTED);
     }
 
 //    @ExceptionHandler(Exception.class)
@@ -54,5 +60,9 @@ public class GlobalExceptionHandler {
 
     private ApiExceptionResult createApiExceptionResult(StatusCode statusCode, String message) {
         return ApiExceptionResult.of(statusCode, message);
+    }
+
+    private ApiExceptionResult createApiExceptionResult(ExceptionMessage exceptionMessage) {
+        return ApiExceptionResult.of(exceptionMessage);
     }
 }

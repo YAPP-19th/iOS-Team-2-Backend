@@ -80,4 +80,8 @@ public class Post extends BaseEntity<Long> {
     public void updateStatusCode(int statusCode){
         this.statusCode = statusCode;
     }
+
+    public boolean validateLeader(Member targetMember){
+        return this.owner.getId().longValue() == targetMember.getId().longValue() ? true : false;
+    }
 }

@@ -1,6 +1,7 @@
 package com.yapp.project.apply.repository;
 
 import com.yapp.project.apply.entity.Apply;
+import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.RecruitingPosition;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,6 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
     long countByRecruitingPosition(RecruitingPosition recruitingPosition);
 
     long countByRecruitingPositionAndApplyStatusCode(RecruitingPosition recruitingPosition, int applyStatusCode);
+
+    boolean existsByMemberAndPost(Member member, Post post);
 }
