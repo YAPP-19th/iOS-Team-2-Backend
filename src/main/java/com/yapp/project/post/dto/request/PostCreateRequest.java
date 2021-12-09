@@ -11,7 +11,6 @@ import java.util.List;
 
 @Builder
 @Getter
-@Setter  //@ModelAttribute를 이용해 파라미터 값을 DTO에 한 번에 바인딩 하기 위함
 public class PostCreateRequest {
     @NotBlank(message = DtoValidationFailMessage.EMPTY_POST_IMAGE_URL)
     private String imageUrl;
@@ -24,11 +23,11 @@ public class PostCreateRequest {
     @NotBlank(message = DtoValidationFailMessage.INVALID_CATEGORY)
     private String categoryName;
 
-    @ApiModelProperty(example = "'2021-12-31 23:59:59'")
+    @ApiModelProperty(example = "'2021-12-31T23:59:59'")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
 
-    @ApiModelProperty(example = "'2022-12-31 23:59:59'")
+    @ApiModelProperty(example = "'2022-12-31T23:59:59'")
     @NotNull
     @FutureOrPresent
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

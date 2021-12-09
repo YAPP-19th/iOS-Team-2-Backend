@@ -26,7 +26,7 @@ public class PostController {
     private final PostService postService;
 
     @ApiOperation("게시글 생성")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<ApiResult> insert(
             @Valid @RequestBody PostCreateRequest request,
             @RequestHeader("accessToken") String accessToken
