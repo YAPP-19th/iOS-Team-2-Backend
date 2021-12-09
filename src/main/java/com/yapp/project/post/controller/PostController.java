@@ -40,7 +40,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 수정 (참여정보 수정 포함)")
-    @PatchMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult> update(
             @PathVariable Long postId,
             @Valid @RequestBody PostUpdateRequest request,
