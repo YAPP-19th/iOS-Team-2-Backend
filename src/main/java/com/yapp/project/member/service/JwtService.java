@@ -1,5 +1,7 @@
 package com.yapp.project.member.service;
 
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.member.dto.response.JwtValidationResult;
 import com.yapp.project.member.dto.response.LoginResponse;
 import com.yapp.project.member.repository.MemberRepository;
@@ -91,6 +93,10 @@ public class JwtService {
          * description : accesstoken을 넣으면 token내 포함되어 있는 memberId 반환
          * @param accessToken : client로 부터 받은 accesstoken
          */
+
+        if(accessToken == null || accessToken.isEmpty()){
+            throw  new IllegalRequestException(ExceptionMessage.ACCESS_TOKEN_IS_EMPTY);
+        }
         Jws<Claims> jws;
         SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(SECRET));
         JwtParserBuilder jpb = Jwts.parserBuilder();
