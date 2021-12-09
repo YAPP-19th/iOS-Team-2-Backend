@@ -48,6 +48,10 @@ public class MemberConverter {
                 .introduce(request.getDescription())
                 .basePositionCode(request.getBasePosition())
                 .positionCode(positionListString)
+                .portfolioLink(request.getPortfolioLink()
+                        .stream()
+                        .map(n-> String.valueOf(n))
+                        .collect(Collectors.joining(" ")))
                 .build();
     }
 

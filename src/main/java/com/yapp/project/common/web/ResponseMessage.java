@@ -10,7 +10,6 @@ public enum ResponseMessage {
     SUCCESS_SIGN_UP(StatusCode.SUCCESS),
     LOGIN_SUCCESS(StatusCode.SUCCESS),
     CHECK_AVAILABLE_NICKNAME(StatusCode.SUCCESS),
-
     ;
 
     private final StatusCode statusCode;
