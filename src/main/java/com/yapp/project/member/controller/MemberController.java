@@ -2,6 +2,7 @@ package com.yapp.project.member.controller;
 
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
+import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.service.MemberService;
@@ -10,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +35,15 @@ public class MemberController {
     @PostMapping(value = "/createInfo")
     public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") String accessToken, @RequestBody CreateInfoRequest request) {
         Long response = memberService.createInfo(accessToken, request);
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation(value = "버디 찾기", notes = "developer / designer / planner 중 하나로 요청해주세요.")
+    @GetMapping(value = "/getBudiList/{position}")
+    public ResponseEntity<ApiResult> getBudiList(@PathVariable String position) {
+        List<BudiMemberResponse> response = memberService.getBudiList(position);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );

@@ -2,6 +2,7 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.dto.request.CareerRequest;
+import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
@@ -12,8 +13,7 @@ import com.yapp.project.member.entity.Work;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,7 +35,7 @@ public class MemberConverter {
                                             .map(v->Position.of(v).getPositionCode())
                                             .map(v->v.toString())
                                             .collect(Collectors.toList());
-        String positionListString = StringUtils.join(positionList,'|');
+        String positionListString = StringUtils.join(positionList,' ');
         return Member.builder()
                 .id(member.get().getId())
                 .token(member.get().getToken())
@@ -85,5 +85,18 @@ public class MemberConverter {
                     .description(request.getDescription())
                     .career(c)
                     .build();
+    }
+
+    public List<BudiMemberResponse> toBudiMemberResponse(List<Member> members) {
+        List<BudiMemberResponse> responses = new LinkedList<>();
+        for(Member m : members){
+            List<String> positionList = new LinkedList<>();
+            String[] codeList = m.getPositionCode().split(" ");
+            for(String code : codeList){
+                positionList.add(Position.of(Integer.parseInt(code)).getPositionName());
+            }
+            responses.add(new BudiMemberResponse(m.getProfileImageUrl(), m.getNickName(), m.getAddress(), m.getIntroduce(), positionList));
+        }
+        return responses;
     }
 }
