@@ -39,6 +39,8 @@ public class CodeReviewHistoryController {
             @RequestBody CodeReviewInsertRequest request
     ) {
 
+        jwtService.validateTokenForm(accessToken);
+
         Long fromMemberId = jwtService.getMemberId(accessToken);
 
         codeReviewHistoryService.create(fromMemberId, memberId, request);

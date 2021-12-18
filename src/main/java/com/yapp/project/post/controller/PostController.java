@@ -2,6 +2,7 @@ package com.yapp.project.post.controller;
 
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
+import com.yapp.project.member.service.JwtService;
 import com.yapp.project.post.dto.request.PostCreateRequest;
 import com.yapp.project.post.dto.request.PostUpdateRequest;
 import com.yapp.project.post.dto.response.*;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,12 +25,16 @@ import java.io.IOException;
 public class PostController {
     private final PostService postService;
 
+    private final JwtService jwtService;
+
     @ApiOperation("게시글 생성")
     @PostMapping()
     public ResponseEntity<ApiResult> insert(
             @Valid @RequestBody PostCreateRequest request,
             @RequestHeader("accessToken") String accessToken
-    ) throws IOException {
+    ) {
+
+        jwtService.validateTokenForm(accessToken);
 
         var response = postService.create(request, accessToken);
 
@@ -46,6 +50,8 @@ public class PostController {
             @Valid @RequestBody PostUpdateRequest request,
             @RequestHeader("accessToken") String accessToken
     ) {
+
+        jwtService.validateTokenForm(accessToken);
 
         postService.update(postId, request, accessToken);
 
@@ -107,6 +113,8 @@ public class PostController {
     @ApiOperation("게시글 단건 삭제")
     @DeleteMapping(value = "/{postId}")
     public ResponseEntity<ApiResult> deleteOne(@RequestHeader("accessToken") String accessToken, @PathVariable Long postId) {
+        jwtService.validateTokenForm(accessToken);
+
         PostDeleteResponse response = postService.deleteById(accessToken, postId);
 
         return ResponseEntity.ok(
