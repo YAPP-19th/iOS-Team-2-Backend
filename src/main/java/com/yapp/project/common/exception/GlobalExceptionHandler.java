@@ -1,13 +1,17 @@
 package com.yapp.project.common.exception;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.yapp.project.common.StatusCode;
 import com.yapp.project.common.exception.type.NotFoundException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -46,6 +50,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
         return createApiExceptionResult(ExceptionMessage.HTTP_REQUEST_METHOD_NOT_SUPPORTED);
+    }
+
+    @ExceptionHandler(AmazonS3Exception.class)
+    public ApiExceptionResult handleAmazonS3Exception(AmazonS3Exception exception) {
+        return createApiExceptionResult(ExceptionMessage.CLOUD_FAIL);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ApiExceptionResult handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+        return createApiExceptionResult(ExceptionMessage.INVALID_REQUEST_ARGUMENT_TYPE);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ApiExceptionResult handleMissingServletRequestParameterException(MissingServletRequestParameterException exception) {
+        return createApiExceptionResult(ExceptionMessage.MISSING_PARAMETER);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ApiExceptionResult handleFileSizeLimitExceededException(MaxUploadSizeExceededException exception) {
+        return createApiExceptionResult(ExceptionMessage.FILE_SIZE_LIMIT_EXCEEDED);
     }
 
 //    @ExceptionHandler(Exception.class)

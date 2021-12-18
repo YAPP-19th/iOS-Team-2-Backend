@@ -3,7 +3,7 @@ package com.yapp.project.member.service;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
-import com.yapp.project.member.dto.LikeMemberResponse;
+import com.yapp.project.member.dto.response.LikeMemberResponse;
 import com.yapp.project.member.entity.LikeMember;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.LikeMemberRepositroy;

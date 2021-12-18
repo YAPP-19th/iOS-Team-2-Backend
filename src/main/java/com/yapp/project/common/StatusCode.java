@@ -10,6 +10,7 @@ public enum StatusCode {
     // internal server error
     INTERNAL_SERVER_ERROR(5000),
     FILE_CONVERTION_FAIL_EXCEPTION(5001),
+    CLOUD_FAIL(5555),
 
     // bad request / not found
     BAD_REQUEST(4000),
@@ -53,6 +54,9 @@ public enum StatusCode {
     ALREADY_REVIEWED(4037),
     NO_SELF_REVIEW(4038),
     ACCESS_TOKEN_IS_EMPTY(4039),
+    INVALID_REQUEST_ARGUMENT_TYPE(4040),
+    MISSING_PARAMETER(4041),
+    FILE_SIZE_LIMIT_EXCEEDED(4042),
   
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),

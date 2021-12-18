@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
+
 @Getter
 @AllArgsConstructor
 public class JwtValidationResult {

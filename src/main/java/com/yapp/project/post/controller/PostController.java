@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,8 +63,8 @@ public class PostController {
 
     @ApiOperation("게시글 단건 조회 (전체 틀)")
     @GetMapping(value = "/{postId}")
-    public ResponseEntity<ApiResult> getOne(@PathVariable Long postId) {
-        PostDetailResponse response = postService.findById(postId);
+    public ResponseEntity<ApiResult> getOne(@PathVariable Long postId, @RequestHeader("accessToken") String accessToken) {
+        PostDetailResponse response = postService.findById(postId, Optional.ofNullable(accessToken));
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
