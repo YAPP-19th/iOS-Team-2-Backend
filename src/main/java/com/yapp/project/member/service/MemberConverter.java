@@ -1,5 +1,6 @@
 package com.yapp.project.member.service;
 
+import com.yapp.project.common.value.Level;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.dto.request.CareerRequest;
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
@@ -114,7 +115,7 @@ public class MemberConverter {
                 .id(m.getId())
                 .imgUrl(m.getProfileImageUrl())
                 .nickName(m.getNickName())
-                .level(m.getScore())
+                .level(Level.of(m.getScore()))
                 .position(positionList)
                 .projectList(projectResponses)
                 .portfolioList(portfolioList)
