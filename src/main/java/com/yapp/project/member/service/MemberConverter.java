@@ -2,10 +2,12 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.dto.request.CareerRequest;
+import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
+import com.yapp.project.member.dto.response.ProjectResponse;
 import com.yapp.project.member.entity.Career;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.entity.Project;
@@ -98,5 +100,33 @@ public class MemberConverter {
             responses.add(new BudiMemberResponse(m.getId(), m.getProfileImageUrl(), m.getNickName(), m.getAddress(), m.getIntroduce(), positionList));
         }
         return responses;
+    }
+
+    public BudiMemberInfoResponse toBudiMemberInfoResponse(Member m, List<Project> projectList) {
+        List<String> positionList = new LinkedList<>();
+        String[] codeList = m.getPositionCode().split(" ");
+        String[] portfolioList = m.getPortfolioLink().split(" ");
+        for(String code : codeList){
+            positionList.add(Position.of(Integer.parseInt(code)).getPositionName());
+        }
+        List<ProjectResponse> projectResponses = toProjectResponse(projectList);
+        BudiMemberInfoResponse response = BudiMemberInfoResponse.builder()
+                .id(m.getId())
+                .imgUrl(m.getProfileImageUrl())
+                .nickName(m.getNickName())
+                .level(m.getScore())
+                .position(positionList)
+                .projectList(projectResponses)
+                .portfolioList(portfolioList)
+                .build();
+        return response;
+    }
+
+    public List<ProjectResponse> toProjectResponse(List<Project> projects) {
+        List<ProjectResponse> projectList = new LinkedList<>();
+        for(Project project : projects){
+            projectList.add(new ProjectResponse(project.getId(), project.getName(), project.getStartDate(), project.getEndDate(), project.getDescription()));
+        }
+        return projectList;
     }
 }

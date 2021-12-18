@@ -2,6 +2,7 @@ package com.yapp.project.member.controller;
 
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
+import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
@@ -44,6 +45,15 @@ public class MemberController {
     @GetMapping(value = "/getBudiList/{position}")
     public ResponseEntity<ApiResult> getBudiList(@PathVariable String position) {
         List<BudiMemberResponse> response = memberService.getBudiList(position);
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation(value = "버디 상세조회", notes = "member id를 요청해주세요.")
+    @GetMapping(value = "/getBudiDetail/{id}")
+    public ResponseEntity<ApiResult> getBudiDetail(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
+        BudiMemberInfoResponse response = memberService.getBudiInfo(id);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );

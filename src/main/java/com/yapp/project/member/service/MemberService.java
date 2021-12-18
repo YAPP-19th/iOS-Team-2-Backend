@@ -2,10 +2,12 @@ package com.yapp.project.member.service;
 import com.yapp.project.member.dto.request.CareerRequest;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
+import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.entity.Career;
 import com.yapp.project.member.entity.Member;
+import com.yapp.project.member.entity.Project;
 import com.yapp.project.member.repository.CareerRepository;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.member.repository.ProjectRepository;
@@ -95,6 +97,12 @@ public class MemberService {
         List<Member> m = memberRepository.getMemberBybasePositionCode(positionCode);
         List<BudiMemberResponse> responses = memberConverter.toBudiMemberResponse(m);
         return responses;
+    }
 
+    public BudiMemberInfoResponse getBudiInfo(Long id) {
+        Optional<Member> m = memberRepository.findById(id);
+        List<Project> projectList = projectRepository.getAllByMemberId(id);
+        BudiMemberInfoResponse responses = memberConverter.toBudiMemberInfoResponse(m.get(), projectList);
+        return responses;
     }
 }
