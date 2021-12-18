@@ -175,9 +175,9 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<PostSimpleResponse> findAllByPosition(String rootPositionName, Pageable pageable) {
-        Page<RecruitingPosition> allByPositionCode = recruitingPositionRepository.findAllByRootPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
+        Page<Post> allByPositionCode = recruitingPositionRepository.findDistinctPostByPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
 
-        return allByPositionCode.map(rp -> makePostSimpleResponse(rp.getPost()));
+        return allByPositionCode.map(p -> makePostSimpleResponse(p));
     }
 
     private PostSimpleResponse makePostSimpleResponse(Post post) {
