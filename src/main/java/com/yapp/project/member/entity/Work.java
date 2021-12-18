@@ -2,6 +2,8 @@ package com.yapp.project.member.entity;
 
 import com.yapp.project.common.entity.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -30,6 +32,7 @@ public class Work extends BaseEntity<Long> {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "work_career_id")
     private Career career;
 }

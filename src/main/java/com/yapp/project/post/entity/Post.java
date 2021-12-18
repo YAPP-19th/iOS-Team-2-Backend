@@ -3,6 +3,8 @@ package com.yapp.project.post.entity;
 import com.yapp.project.common.entity.BaseEntity;
 import com.yapp.project.member.entity.Member;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -49,6 +51,7 @@ public class Post extends BaseEntity<Long> {
     private Integer onlineCode;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "post_owner_id", referencedColumnName = "member_id")
     private Member owner;
 

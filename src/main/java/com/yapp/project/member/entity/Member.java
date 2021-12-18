@@ -51,10 +51,10 @@ public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_portfolio_link", columnDefinition = "TEXT")
     private String portfolioLink;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Career> careers = new ArrayList<>();
 
     public boolean isSameMember(Member member){

@@ -31,6 +31,8 @@ public class TextReviewHistoryController {
             @RequestBody TextReviewCreateRequest request
     ) {
 
+        jwtService.validateTokenForm(accessToken);
+
         Long reviewerId = jwtService.getMemberId(accessToken);
 
         textReviewHistoryService.create(reviewerId, request);

@@ -55,5 +55,7 @@ public class PostDetailResponse {
         private final String profileImageUrl;
 
         private final String address;
+
+        private final String position;
     }
 }
