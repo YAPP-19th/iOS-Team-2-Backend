@@ -45,6 +45,8 @@ public class PostDetailResponse {
 
     private final MemberDto leader;
 
+    private final Boolean isLiked;
+
     @Getter
     @RequiredArgsConstructor
     public static class MemberDto{
