@@ -2,15 +2,16 @@ package com.yapp.project.review.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TextReviewSimpleResponse {
-    private Long postId;
+    private final Long postId;
 
-    private Long reviewerId;
+    private final Long reviewerId;
 
-    private String title;
+    private final String title;
 
-    private String content;
+    private final String content;
 }
