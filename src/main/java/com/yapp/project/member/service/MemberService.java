@@ -2,7 +2,10 @@ package com.yapp.project.member.service;
 import com.yapp.project.member.dto.request.CareerRequest;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
+<<<<<<< HEAD
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
+=======
+>>>>>>> 35fe70eae9e2493a61f1676738d7245c3682f1c0
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.entity.Career;
