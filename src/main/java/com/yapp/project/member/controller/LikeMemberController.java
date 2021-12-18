@@ -2,7 +2,7 @@ package com.yapp.project.member.controller;
 
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
-import com.yapp.project.member.dto.LikeMemberResponse;
+import com.yapp.project.member.dto.response.LikeMemberResponse;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.member.service.LikeMemberService;
 import io.swagger.annotations.Api;

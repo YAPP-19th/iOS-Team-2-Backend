@@ -8,6 +8,7 @@ import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.common.value.RootPosition;
 import com.yapp.project.external.s3.S3Uploader;
+import com.yapp.project.likepost.repository.LikePostRepository;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.member.service.JwtService;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +43,7 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final RecruitingPositionRepository recruitingPositionRepository;
     private final RecruitingPositionConverter recruitingPositionConverter;
+    private final LikePostRepository likePostRepository;
 
     private final String S3DIR = "post_image";
 
@@ -112,13 +115,23 @@ public class PostService {
     }
 
     @Transactional
-    public PostDetailResponse findById(Long postId) {
+    public PostDetailResponse findById(Long postId, Optional<String> accessTokenOptional) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
         post.addViewCount();
 
-        return postConverter.toPostDetailResponse(post, post.getOwner());
+        boolean isLiked = false;
+        if (accessTokenOptional.isPresent()) { // 로그인 사용자
+            Long currentMemberId = jwtService.getMemberId(accessTokenOptional.get());
+
+            Member currentMember = memberRepository.findById(currentMemberId)
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+
+            isLiked = likePostRepository.existsByMemberAndPost(currentMember, post);
+        }
+
+        return postConverter.toPostDetailResponse(post, post.getOwner(), isLiked);
     }
 
     @Transactional
@@ -175,17 +188,22 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<PostSimpleResponse> findAllByPosition(String rootPositionName, Pageable pageable) {
-        Page<RecruitingPosition> allByPositionCode = recruitingPositionRepository.findAllByRootPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
+        Page<Post> allByPositionCode = recruitingPositionRepository.findDistinctPostByPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
 
-        return allByPositionCode.map(rp -> makePostSimpleResponse(rp.getPost()));
+        return allByPositionCode.map(p -> makePostSimpleResponse(p));
     }
 
     private PostSimpleResponse makePostSimpleResponse(Post post) {
-        List<String> positions = new ArrayList<>();
+        List<PositionAndColor> positions = new ArrayList<>();
 
         List<RecruitingPosition> positionDetailsByPost = recruitingPositionRepository.findAllByPostId(post.getId());
         for (var positionDetail : positionDetailsByPost) {
-            positions.add(Position.of(positionDetail.getPositionCode()).getPositionName());
+            positions.add(
+                    new PositionAndColor(
+                            Position.of(positionDetail.getPositionCode()).getPositionName(),
+                            Position.getRootPosition(positionDetail.getPositionCode()).getRootPositionCode()
+                    )
+            );
         }
 
         return postConverter.toPostSimpleResponse(post, positions);

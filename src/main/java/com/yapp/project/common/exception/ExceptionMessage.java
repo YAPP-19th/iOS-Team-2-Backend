@@ -7,6 +7,7 @@ import lombok.Getter;
 public enum ExceptionMessage {
     // internal server error
     FILE_CONVERTION_FAIL_EXCEPTION(StatusCode.FILE_CONVERTION_FAIL_EXCEPTION),
+    CLOUD_FAIL(StatusCode.CLOUD_FAIL),
 
     // bad request / not found
     MEMBER_NOT_FOUND(StatusCode.MEMBER_NOT_FOUND),
@@ -47,6 +48,9 @@ public enum ExceptionMessage {
     ALREADY_REVIEWED(StatusCode.ALREADY_REVIEWED),
     NO_SELF_REVIEW(StatusCode.NO_SELF_REVIEW),
     ACCESS_TOKEN_IS_EMPTY(StatusCode.ACCESS_TOKEN_IS_EMPTY),
+    INVALID_REQUEST_ARGUMENT_TYPE(StatusCode.INVALID_REQUEST_ARGUMENT_TYPE),
+    MISSING_PARAMETER(StatusCode.MISSING_PARAMETER),
+    FILE_SIZE_LIMIT_EXCEEDED(StatusCode.FILE_SIZE_LIMIT_EXCEEDED),
 
     // 그외 모든 예외
     ALL_OTHER_EXCEPTIONS(StatusCode.ALL_OTHER_EXCEPTIONS),
