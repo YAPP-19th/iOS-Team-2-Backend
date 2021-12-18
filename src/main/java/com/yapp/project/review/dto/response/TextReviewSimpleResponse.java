@@ -1,6 +1,5 @@
 package com.yapp.project.review.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

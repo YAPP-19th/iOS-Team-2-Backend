@@ -1,7 +1,6 @@
 package com.yapp.project.member.dto.response;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 

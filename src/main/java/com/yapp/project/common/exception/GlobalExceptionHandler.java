@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.yapp.project.common.StatusCode;
 import com.yapp.project.common.exception.type.NotFoundException;
 import io.jsonwebtoken.MalformedJwtException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;

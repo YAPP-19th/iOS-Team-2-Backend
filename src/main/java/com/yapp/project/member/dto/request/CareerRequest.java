@@ -1,6 +1,5 @@
 package com.yapp.project.member.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;

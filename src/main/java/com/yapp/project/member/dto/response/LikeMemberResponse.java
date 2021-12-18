@@ -1,4 +1,4 @@
-package com.yapp.project.member.dto;
+package com.yapp.project.member.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
