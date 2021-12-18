@@ -52,6 +52,7 @@ public enum StatusCode {
     INVALID_JWT_STRINGS(4036),
     ALREADY_REVIEWED(4037),
     NO_SELF_REVIEW(4038),
+    ACCESS_TOKEN_IS_EMPTY(4039),
   
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),
