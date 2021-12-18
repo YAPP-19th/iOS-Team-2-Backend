@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -24,4 +25,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     String getTokenByLoginId(@Param("loginId") String loginId);
 
     boolean existsByNickName(String nickName);
+
+    List<Member> getMemberBybasePositionCode(int basePositionCode);
 }

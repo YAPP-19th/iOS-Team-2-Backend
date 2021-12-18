@@ -2,6 +2,7 @@ package com.yapp.project.member.service;
 import com.yapp.project.member.dto.request.CareerRequest;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
+import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.entity.Career;
 import com.yapp.project.member.entity.Member;
@@ -79,4 +80,21 @@ public class MemberService {
         return (projectPeriod)*2 + (careerPeriod)*2;
     }
 
+    public List<BudiMemberResponse> getBudiList(String position) {
+        int positionCode = 0;
+        if(position.equals("developer")){
+            positionCode = 1;
+        }
+        else if(position.equals("planner")){
+            positionCode = 2;
+        }
+        else if(position.equals("designer")){
+            positionCode = 3;
+        }
+
+        List<Member> m = memberRepository.getMemberBybasePositionCode(positionCode);
+        List<BudiMemberResponse> responses = memberConverter.toBudiMemberResponse(m);
+        return responses;
+
+    }
 }
