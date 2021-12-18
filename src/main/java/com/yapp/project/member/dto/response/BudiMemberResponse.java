@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class BudiMemberResponse {
+    private Long id;
     private String imgUrl;
     private String nickName;
     private String address;

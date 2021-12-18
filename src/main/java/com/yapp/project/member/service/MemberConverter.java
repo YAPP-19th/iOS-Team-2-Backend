@@ -95,7 +95,7 @@ public class MemberConverter {
             for(String code : codeList){
                 positionList.add(Position.of(Integer.parseInt(code)).getPositionName());
             }
-            responses.add(new BudiMemberResponse(m.getProfileImageUrl(), m.getNickName(), m.getAddress(), m.getIntroduce(), positionList));
+            responses.add(new BudiMemberResponse(m.getId(), m.getProfileImageUrl(), m.getNickName(), m.getAddress(), m.getIntroduce(), positionList));
         }
         return responses;
     }
