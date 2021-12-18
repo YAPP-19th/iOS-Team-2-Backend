@@ -52,7 +52,7 @@ public class PostConverter {
     }
 
     // used
-    public PostDetailResponse toPostDetailResponse(Post post, Member leader){
+    public PostDetailResponse toPostDetailResponse(Post post, Member leader, boolean isLiked){
         return PostDetailResponse.builder()
                 .postId(post.getId())
                 .imageUrl(post.getImageUrl())
@@ -76,10 +76,11 @@ public class PostConverter {
                 .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getOnlineStatusName())
                 .createdAt(post.getCreatedDate())
                 .modifiedAt(post.getLastModifiedDate())
+                .isLiked(isLiked)
                 .build();
     }
 
-    public PostSimpleResponse toPostSimpleResponse(Post post, List<String> positions) {
+    public PostSimpleResponse toPostSimpleResponse(Post post, List<PositionAndColor> positions) {
         return PostSimpleResponse.builder()
                 .postId(post.getId())
                 .imageUrl(post.getImageUrl())

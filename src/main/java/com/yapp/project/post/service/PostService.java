@@ -194,11 +194,16 @@ public class PostService {
     }
 
     private PostSimpleResponse makePostSimpleResponse(Post post) {
-        List<String> positions = new ArrayList<>();
+        List<PositionAndColor> positions = new ArrayList<>();
 
         List<RecruitingPosition> positionDetailsByPost = recruitingPositionRepository.findAllByPostId(post.getId());
         for (var positionDetail : positionDetailsByPost) {
-            positions.add(Position.of(positionDetail.getPositionCode()).getPositionName());
+            positions.add(
+                    new PositionAndColor(
+                            Position.of(positionDetail.getPositionCode()).getPositionName(),
+                            Position.getRootPosition(positionDetail.getPositionCode()).getRootPositionCode()
+                    )
+            );
         }
 
         return postConverter.toPostSimpleResponse(post, positions);

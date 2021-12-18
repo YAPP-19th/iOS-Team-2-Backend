@@ -1,7 +1,7 @@
 package com.yapp.project.post.service;
 
 import com.yapp.project.common.value.Position;
-import com.yapp.project.common.value.Skill;
+import com.yapp.project.post.dto.response.PositionAndColor;
 import com.yapp.project.post.dto.response.RecruitingStatusResponse;
 import com.yapp.project.post.entity.RecruitingPosition;
 import org.springframework.stereotype.Component;
@@ -19,8 +19,10 @@ public class RecruitingPositionConverter {
     public RecruitingStatusResponse.RecruitingStatus toRecruitingStatus(Long recruitingPositionId, int positionCode, String status) {
         return new RecruitingStatusResponse.RecruitingStatus(
                 recruitingPositionId,
-                Position.of(positionCode).getPositionName(),
-                Position.of(positionCode).getPositionCode(),
+                new PositionAndColor(
+                        Position.of(positionCode).getPositionName(),
+                        Position.getRootPosition(positionCode).getRootPositionCode()
+                ),
                 status
         );
     }

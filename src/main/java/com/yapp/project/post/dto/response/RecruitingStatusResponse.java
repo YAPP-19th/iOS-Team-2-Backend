@@ -17,9 +17,7 @@ public class RecruitingStatusResponse {
     public static class RecruitingStatus{
         private final Long recruitingPositionId;
 
-        private final String  positionName;
-
-        private final int  positionCode;
+        private final PositionAndColor positions;
 
         private final String status;
     }
