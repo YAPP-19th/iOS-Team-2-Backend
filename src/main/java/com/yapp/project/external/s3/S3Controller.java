@@ -23,36 +23,17 @@ import java.util.Map;
 public class S3Controller {
     private final S3Uploader s3Uploader;
 
-    private final String POST_IMAGE_DIR = "post_image";
-    private final String USER_IMAGE_DIR = "user_profile_image";
+    private final String IMAGE_DIR = "images";
 
-    @ApiOperation("단건 이미지 URL로 변환(게시글 이미지)")
-    @PostMapping(value = "/posts", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation("단건 이미지 URL로 변환(프로젝트 이미지, 사용자 프로필 이미지 통합)")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResult> uploadPostImage(@ModelAttribute MultipartFile image) throws IOException {
 
         if(image == null || image.isEmpty()){
             throw new IllegalRequestException(ExceptionMessage.INVALID_IMAGE_EXCEPTION);
         }
         
-        String uploadedImageUrl = s3Uploader.upload(image, POST_IMAGE_DIR);
-
-        Map response = new HashMap<String, String>();
-        response.put("imageUrl", uploadedImageUrl);
-
-        return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS, response)
-        );
-    }
-
-    @ApiOperation("단건 이미지 URL로 변환(사용자 이미지)")
-    @PostMapping(value = "/members", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResult> uploadMemberImages(@ModelAttribute MultipartFile image) throws IOException {
-
-        if(image == null || image.isEmpty()){
-            throw new IllegalRequestException(ExceptionMessage.INVALID_IMAGE_EXCEPTION);
-        }
-
-        String uploadedImageUrl = s3Uploader.upload(image, USER_IMAGE_DIR);
+        String uploadedImageUrl = s3Uploader.upload(image, IMAGE_DIR);
 
         Map response = new HashMap<String, String>();
         response.put("imageUrl", uploadedImageUrl);

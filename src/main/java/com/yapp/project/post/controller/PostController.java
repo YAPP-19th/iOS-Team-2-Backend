@@ -26,7 +26,7 @@ public class PostController {
     private final PostService postService;
 
     @ApiOperation("게시글 생성")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<ApiResult> insert(
             @Valid @RequestBody PostCreateRequest request,
             @RequestHeader("accessToken") String accessToken
@@ -40,7 +40,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 수정 (참여정보 수정 포함)")
-    @PatchMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult> update(
             @PathVariable Long postId,
             @Valid @RequestBody PostUpdateRequest request,
