@@ -25,6 +25,8 @@ public class Applycontroller {
     @ApiOperation("지원하기")
     @PostMapping()
     public ResponseEntity<ApiResult> insert(@Valid @RequestBody ApplyRequest request, @RequestHeader("accessToken") String accessToken) {
+        jwtService.validateTokenForm(accessToken);
+
         Long memberId = jwtService.getMemberId(accessToken);
 
         applyService.apply(memberId, request);
@@ -37,6 +39,8 @@ public class Applycontroller {
     @ApiOperation("지원 승인하기")
     @PatchMapping(value = "/{applyId}")
     public ResponseEntity<ApiResult> approveApplication(@PathVariable Long applyId, @RequestHeader("accessToken") String accessToken) {
+        jwtService.validateTokenForm(accessToken);
+
         Long memberId = jwtService.getMemberId(accessToken); // TODO: 예외처리
 
         applyService.approveApplication(applyId);
@@ -49,6 +53,8 @@ public class Applycontroller {
     @ApiOperation("지원 취소하기")
     @DeleteMapping(value = "/{applyId}")
     public ResponseEntity<ApiResult> cancelApplication(@PathVariable Long applyId, @RequestHeader("accessToken") String accessToken) {
+        jwtService.validateTokenForm(accessToken);
+
         Long memberId = jwtService.getMemberId(accessToken);
 
         applyService.cancelApplication(applyId, memberId);

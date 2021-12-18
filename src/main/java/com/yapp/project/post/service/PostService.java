@@ -25,9 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +45,7 @@ public class PostService {
     private final String S3DIR = "post_image";
 
     @Transactional
-    public PostCreateResponse create(PostCreateRequest request, String accessToken) throws IOException {
+    public PostCreateResponse create(PostCreateRequest request, String accessToken) {
         Long leaderId = jwtService.getMemberId(accessToken);
 
         Member leader = memberRepository.findById(leaderId)
@@ -113,7 +111,7 @@ public class PostService {
         return postPage.map(v -> makePostSimpleResponse(v));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public PostDetailResponse findById(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));

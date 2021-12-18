@@ -28,8 +28,8 @@ public class PostUpdateRequest {
     private LocalDateTime startDate;
 
     @ApiModelProperty(example = "'2022-12-31 23:59:59'")
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message = DtoValidationFailMessage.INVALID_TIME)
+    @FutureOrPresent(message = DtoValidationFailMessage.INVALID_TIME)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 

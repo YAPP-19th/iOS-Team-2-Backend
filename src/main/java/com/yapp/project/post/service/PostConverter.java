@@ -1,5 +1,6 @@
 package com.yapp.project.post.service;
 
+import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.entity.Post;
@@ -68,7 +69,8 @@ public class PostConverter {
                                 leader.getId(),
                                 leader.getNickName(),
                                 leader.getProfileImageUrl(),
-                                leader.getAddress()
+                                leader.getAddress(),
+                                Position.of(leader.getPositionCode()).getPositionName()
                         )
                 )
                 .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getOnlineStatusName())

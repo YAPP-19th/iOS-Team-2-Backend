@@ -22,6 +22,8 @@ public class LikePostController {
     @ApiOperation("게시글 좋아요 상태 변경")
     @PutMapping(value = "/{postId}/like-posts")
     public ResponseEntity<ApiResult> switchLikeStatus(@PathVariable Long postId, @RequestHeader("accessToken") String accessToken) {
+        jwtService.validateTokenForm(accessToken);
+
         Long memberId = jwtService.getMemberId(accessToken);
         likePostService.switchLikeStatus(memberId, postId);
 
@@ -33,6 +35,8 @@ public class LikePostController {
     @ApiOperation("내가 좋아한 모든 게시글(프로젝트)")
     @GetMapping(value = "/like-posts")
     public ResponseEntity<ApiResult> getAll(@RequestHeader("accessToken") String accessToken) {
+        jwtService.validateTokenForm(accessToken);
+
         Long memberId = jwtService.getMemberId(accessToken);
         LikePostResponse response = likePostService.findAll(memberId);
 

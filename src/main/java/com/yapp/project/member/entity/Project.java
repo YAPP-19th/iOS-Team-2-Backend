@@ -1,6 +1,8 @@
 package com.yapp.project.member.entity;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -29,6 +31,7 @@ public class Project {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "project_member_id", referencedColumnName = "member_id")
     private Member member;
 }

@@ -2,6 +2,8 @@ package com.yapp.project.post.entity;
 
 import com.yapp.project.common.entity.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -18,6 +20,7 @@ public class RecruitingPosition extends BaseEntity<Long> {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "recruiting_position_post_id", referencedColumnName = "post_id")
     private Post post;
 

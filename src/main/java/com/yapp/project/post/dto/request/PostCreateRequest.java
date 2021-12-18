@@ -16,6 +16,7 @@ public class PostCreateRequest {
     private String imageUrl;
 
     @ApiModelProperty(example = "title example")
+    @Size(min = 2, max = 255, message = DtoValidationFailMessage.INVALID_POST_TITLE)
     @NotBlank(message = DtoValidationFailMessage.INVALID_POST_TITLE)  //regexp = "^\\S{2,255}$",
     private String title;
 
@@ -28,8 +29,8 @@ public class PostCreateRequest {
     private LocalDateTime startDate;
 
     @ApiModelProperty(example = "'2022-12-31T23:59:59'")
-    @NotNull
-    @FutureOrPresent
+    @NotNull(message = DtoValidationFailMessage.INVALID_TIME)
+    @FutureOrPresent(message = DtoValidationFailMessage.INVALID_TIME)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
