@@ -8,8 +8,6 @@ import java.util.List;
 @Getter
 @Builder
 public class CreateInfoRequest {
-    private String accessToken;
-
     private String nickName;
 
     private String memberAddress;
@@ -17,6 +15,8 @@ public class CreateInfoRequest {
     private String description;
 
     private int basePosition;
+
+    private List<String> portfolioLink;
 
     private List<String> positionList;
 

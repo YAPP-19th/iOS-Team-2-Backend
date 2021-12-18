@@ -30,8 +30,8 @@ public class JwtService {
 
     private final MemberRepository memberRepository;
 
-    private final Long accessExpiredTime = Duration.ofHours(1).toMillis();
-    private final Long refreshExpiredTime = Duration.ofDays(30).toMillis();
+    private final Long accessExpiredTime = Duration.ofDays(365).toMillis();
+    private final Long refreshExpiredTime = Duration.ofDays(365).toMillis();
 
     private JwtUtil jwtUtil;
 

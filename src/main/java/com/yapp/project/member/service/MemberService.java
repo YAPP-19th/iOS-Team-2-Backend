@@ -47,8 +47,8 @@ public class MemberService {
     }
 
     @Transactional
-    public Long createInfo(CreateInfoRequest request){
-        Optional<Member> member = memberRepository.findById(jwtService.getMemberId(request.getAccessToken()));
+    public Long createInfo(String accessToken, CreateInfoRequest request){
+        Optional<Member> member = memberRepository.findById(jwtService.getMemberId(accessToken));
         int score = getMemberScore(request.getProjectList(), request.getCareerList());
         Member m = memberRepository.save(memberConverter.toMemberEntity(member, request, score));
         for(ProjectRequest req : request.getProjectList())

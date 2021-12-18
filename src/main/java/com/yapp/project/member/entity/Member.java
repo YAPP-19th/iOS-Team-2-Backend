@@ -48,6 +48,9 @@ public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_score")
     private Integer score;
 
+    @Column(name = "member_portfolio_link", columnDefinition = "TEXT")
+    private String portfolioLink;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Project> projects = new ArrayList<>();
 
