@@ -113,7 +113,7 @@ public class PostService {
         return postPage.map(v -> makePostSimpleResponse(v));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public PostDetailResponse findById(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
