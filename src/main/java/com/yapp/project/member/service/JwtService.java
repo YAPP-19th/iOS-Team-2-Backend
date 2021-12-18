@@ -105,4 +105,10 @@ public class JwtService {
         Long jwtMemberId = Long.parseLong(jws.getBody().get("memberId").toString());
         return jwtMemberId;
     }
+
+    public void validateTokenForm(String token){
+        if(token.isEmpty() || token == null || token.equals(" ")){
+            throw new IllegalRequestException(ExceptionMessage.ACCESS_TOKEN_IS_EMPTY);
+        }
+    }
 }
