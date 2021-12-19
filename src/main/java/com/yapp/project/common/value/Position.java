@@ -13,8 +13,8 @@ import java.util.stream.Stream;
 public enum Position {
     // default position //
     DEVELOPER_DEFAULT(1, "개발 기타"),
-    PLANNER_DEFAULT(2, "디자인 기타"),
-    DESIGNER_DEFAULT(3, "기획 기타"),
+    PLANNER_DEFAULT(2, "기획 기타"),
+    DESIGNER_DEFAULT(3, "디자인 기타"),
 
     // developer segmentation //
     DEVELOPER_HYBRID(4, "하이브리드 개발"),
