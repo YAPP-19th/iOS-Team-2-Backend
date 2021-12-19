@@ -16,7 +16,7 @@ public interface TextReviewHistoryRepository extends JpaRepository<TextReviewHis
 
     Page<TextReviewHistory> findAllByTargetMember(Member targetMember, Pageable pageable);
 
-    @Query("SELECT t.title, t.content as cnt " +
+    @Query("SELECT t " +
             " FROM TextReviewHistory t " +
             "WHERE t.targetMember.id = :targetId " +
             "ORDER BY t.createdDate DESC ")

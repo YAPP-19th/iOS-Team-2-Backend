@@ -6,10 +6,10 @@ import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
+import com.yapp.project.review.dto.response.CodeReviewResponse;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.member.service.MemberService;
-import com.yapp.project.review.entity.CodeReviewHistory;
-import com.yapp.project.review.entity.TextReviewHistory;
+import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +70,7 @@ public class MemberController {
     @GetMapping(value = "/getBudiDetailReview/{id}")
     public ResponseEntity<ApiResult> getBudiDetailReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
         jwtService.validateTokenForm(accessToken);
-        List<CodeReviewHistory> response = memberService.getBudiInfoReview(id);
+        List<CodeReviewResponse> response = memberService.getBudiInfoReview(id);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
@@ -80,7 +80,7 @@ public class MemberController {
     @GetMapping(value = "/getBudiDetailTextReview/{id}")
     public ResponseEntity<ApiResult> getBudiDetailTextReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
         jwtService.validateTokenForm(accessToken);
-        List<TextReviewHistory> response = memberService.getBudiInfoTextReview(id);
+        List<TextReviewSimpleResponse> response = memberService.getBudiInfoTextReview(id);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );

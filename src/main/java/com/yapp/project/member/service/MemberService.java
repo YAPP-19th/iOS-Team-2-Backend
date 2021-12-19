@@ -6,6 +6,7 @@ import com.yapp.project.member.dto.request.ProjectRequest;
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
+import com.yapp.project.review.dto.response.CodeReviewResponse;
 import com.yapp.project.member.entity.Career;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.entity.Project;
@@ -13,11 +14,13 @@ import com.yapp.project.member.repository.CareerRepository;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.member.repository.ProjectRepository;
 import com.yapp.project.member.repository.WorkRepository;
+import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import com.yapp.project.review.entity.CodeReviewHistory;
 import com.yapp.project.review.entity.TextReviewHistory;
 import com.yapp.project.review.repository.CodeReviewHistoryRepository;
 import com.yapp.project.review.repository.TextReviewHistoryRepository;
 import com.yapp.project.review.service.CodeReviewHistoryConverter;
+import com.yapp.project.review.service.TextReviewHistoryConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +35,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberConverter memberConverter;
-    private final CodeReviewHistoryConverter codeReviewHistoryConverter;
+    private final TextReviewHistoryConverter textReviewHistoryConverter;
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
     private final CareerRepository careerRepository;
@@ -116,17 +119,20 @@ public class MemberService {
         return responses;
     }
 
-    public List<CodeReviewHistory> getBudiInfoReview(Long id) {
-        List<CodeReviewHistory> codeReviewList = codeReviewHistoryRepository.findALLByTargetMemberIdOrderByCount(id);
-//        List<CodeReviewHistory> response = new ArrayList<>();
-//        for(CodeReviewHistory codeReviewHistory : codeReviewList){
-//            response.add(codeReviewHistoryConverter.toEntity(codeReviewHistory.getReviewer(), codeReviewHistory.getReviewCode(), codeReviewHistory.getTargetMember()))
-//        }
+    public List<CodeReviewResponse> getBudiInfoReview(Long id) {
+        List<CodeReviewResponse> codeReviewList = codeReviewHistoryRepository.findALLByTargetMemberIdOrderByCount(id);
+        for(CodeReviewResponse codeReviewResponse: codeReviewList){
+            codeReviewResponse.getReviewText(codeReviewResponse.getReviewCode());
+        }
         return codeReviewList;
     }
 
-    public List<TextReviewHistory> getBudiInfoTextReview(Long id) {
+    public List<TextReviewSimpleResponse> getBudiInfoTextReview(Long id) {
         List<TextReviewHistory> textReviewList = textReviewHistoryRepository.findALLByTargetMemberIdOrderByCreatedDate(id);
-        return textReviewList;
+        List<TextReviewSimpleResponse> response = new ArrayList<>();
+        for(TextReviewHistory textReviewHistory: textReviewList){
+            response.add(textReviewHistoryConverter.toTextReviewSimpleResponse(textReviewHistory));
+        }
+        return response;
     }
 }
