@@ -13,12 +13,18 @@ import com.yapp.project.member.repository.CareerRepository;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.member.repository.ProjectRepository;
 import com.yapp.project.member.repository.WorkRepository;
+import com.yapp.project.review.entity.CodeReviewHistory;
+import com.yapp.project.review.entity.TextReviewHistory;
+import com.yapp.project.review.repository.CodeReviewHistoryRepository;
+import com.yapp.project.review.repository.TextReviewHistoryRepository;
+import com.yapp.project.review.service.CodeReviewHistoryConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,10 +32,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberConverter memberConverter;
+    private final CodeReviewHistoryConverter codeReviewHistoryConverter;
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
     private final CareerRepository careerRepository;
     private final WorkRepository workRepository;
+    private final CodeReviewHistoryRepository codeReviewHistoryRepository;
+    private final TextReviewHistoryRepository textReviewHistoryRepository;
     private final JwtService jwtService;
 
     public String findByLoginId(String loginId){
@@ -105,5 +114,19 @@ public class MemberService {
         List<Project> projectList = projectRepository.getAllByMemberId(id);
         BudiMemberInfoResponse responses = memberConverter.toBudiMemberInfoResponse(m.get(), projectList);
         return responses;
+    }
+
+    public List<CodeReviewHistory> getBudiInfoReview(Long id) {
+        List<CodeReviewHistory> codeReviewList = codeReviewHistoryRepository.findALLByTargetMemberIdOrderByCount(id);
+//        List<CodeReviewHistory> response = new ArrayList<>();
+//        for(CodeReviewHistory codeReviewHistory : codeReviewList){
+//            response.add(codeReviewHistoryConverter.toEntity(codeReviewHistory.getReviewer(), codeReviewHistory.getReviewCode(), codeReviewHistory.getTargetMember()))
+//        }
+        return codeReviewList;
+    }
+
+    public List<TextReviewHistory> getBudiInfoTextReview(Long id) {
+        List<TextReviewHistory> textReviewList = textReviewHistoryRepository.findALLByTargetMemberIdOrderByCreatedDate(id);
+        return textReviewList;
     }
 }

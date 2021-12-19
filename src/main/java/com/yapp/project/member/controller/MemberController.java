@@ -8,6 +8,8 @@ import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.member.service.MemberService;
+import com.yapp.project.review.entity.CodeReviewHistory;
+import com.yapp.project.review.entity.TextReviewHistory;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +41,6 @@ public class MemberController {
     @PostMapping(value = "/createInfo")
     public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") String accessToken, @RequestBody CreateInfoRequest request) {
         jwtService.validateTokenForm(accessToken);
-
         Long response = memberService.createInfo(accessToken, request);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
@@ -58,7 +59,28 @@ public class MemberController {
     @ApiOperation(value = "버디 상세조회", notes = "member id를 요청해주세요.")
     @GetMapping(value = "/getBudiDetail/{id}")
     public ResponseEntity<ApiResult> getBudiDetail(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
+        jwtService.validateTokenForm(accessToken);
         BudiMemberInfoResponse response = memberService.getBudiInfo(id);
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation(value = "버디 상세조회(버디평가)", notes = "member id를 요청해주세요.")
+    @GetMapping(value = "/getBudiDetailReview/{id}")
+    public ResponseEntity<ApiResult> getBudiDetailReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
+        jwtService.validateTokenForm(accessToken);
+        List<CodeReviewHistory> response = memberService.getBudiInfoReview(id);
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation(value = "버디 상세조회(버디후기)", notes = "member id를 요청해주세요.")
+    @GetMapping(value = "/getBudiDetailTextReview/{id}")
+    public ResponseEntity<ApiResult> getBudiDetailTextReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
+        jwtService.validateTokenForm(accessToken);
+        List<TextReviewHistory> response = memberService.getBudiInfoTextReview(id);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
