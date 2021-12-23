@@ -11,7 +11,7 @@ public class CodeReviewResponse {
     private Long count ;
     private String reviewText;
 
-    public void getReviewText(int reviewCode){
+    public void setReviewText(int reviewCode){
         this.reviewText = ReviewCode.of(reviewCode).getReviewName();
     }
 }

@@ -11,15 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InfoService {
     public List getPostionInfo(String positionInfo){
-        String position = "";
-        if(positionInfo.equals("developer")){
-            position = "개발";
-        }else if(positionInfo.equals("planner")){
-            position = "기획";
-        }else if(positionInfo.equals("designer")){
-            position = "디자인";
-        }
-        List positionList = Position.listOf(position);
+        List positionList = Position.listOf(positionInfo);
         return positionList;
     }
 

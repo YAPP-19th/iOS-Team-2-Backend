@@ -6,13 +6,15 @@ import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
-import com.yapp.project.review.dto.response.CodeReviewResponse;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.member.service.MemberService;
+import com.yapp.project.review.dto.response.CodeReviewResponse;
 import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,9 +80,9 @@ public class MemberController {
 
     @ApiOperation(value = "버디 상세조회(버디후기)", notes = "member id를 요청해주세요.")
     @GetMapping(value = "/getBudiDetailTextReview/{id}")
-    public ResponseEntity<ApiResult> getBudiDetailTextReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
+    public ResponseEntity<ApiResult> getBudiDetailTextReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id, Pageable pageable) {
         jwtService.validateTokenForm(accessToken);
-        List<TextReviewSimpleResponse> response = memberService.getBudiInfoTextReview(id);
+        Page<TextReviewSimpleResponse> response = memberService.getBudiInfoTextReview(id, pageable);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );

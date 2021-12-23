@@ -77,10 +77,10 @@ public enum Position {
     }
 
     public static List<String> listOf(String rootPosition) {
-            return Stream.of(Position.values())
-                    .filter(v->v.getPositionName().contains(rootPosition))
-                    .map(v->Position.of(Position.of(v.getPositionName()).getPositionCode()).getPositionName())
-                    .collect(Collectors.toList());
-
+        List<String> list = Stream.of(Position.values())
+                .filter(name->name.toString().contains(rootPosition.toUpperCase()))
+                .map(name->name.getPositionName())
+                .collect(Collectors.toList());
+        return list;
     }
 }
