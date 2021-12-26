@@ -13,8 +13,8 @@ import java.util.stream.Stream;
 public enum Position {
     // default position //
     DEVELOPER_DEFAULT(1, "개발 기타"),
-    PLANNER_DEFAULT(2, "디자인 기타"),
-    DESIGNER_DEFAULT(3, "기획 기타"),
+    PLANNER_DEFAULT(2, "기획 기타"),
+    DESIGNER_DEFAULT(3, "디자인 기타"),
 
     // developer segmentation //
     DEVELOPER_HYBRID(4, "하이브리드 개발"),
@@ -77,10 +77,10 @@ public enum Position {
     }
 
     public static List<String> listOf(String rootPosition) {
-            return Stream.of(Position.values())
-                    .filter(v->v.getPositionName().contains(rootPosition))
-                    .map(v->Position.of(Position.of(v.getPositionName()).getPositionCode()).getPositionName())
-                    .collect(Collectors.toList());
-
+        List<String> list = Stream.of(Position.values())
+                .filter(name->name.toString().contains(rootPosition.toUpperCase()))
+                .map(name->name.getPositionName())
+                .collect(Collectors.toList());
+        return list;
     }
 }

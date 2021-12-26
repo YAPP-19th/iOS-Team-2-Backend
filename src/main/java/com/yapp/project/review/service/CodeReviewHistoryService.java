@@ -13,7 +13,7 @@ import com.yapp.project.review.dto.response.CodeReviewCountResponse;
 import com.yapp.project.review.dto.response.CodeReviewListResponse;
 import com.yapp.project.review.entity.CodeReviewHistory;
 import com.yapp.project.review.entity.value.ReviewCode;
-import com.yapp.project.review.repository.CodeReviewHistoryRepossitory;
+import com.yapp.project.review.repository.CodeReviewHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CodeReviewHistoryService {
-    private final CodeReviewHistoryRepossitory codeReviewHistoryRepossitory;
+    private final CodeReviewHistoryRepository codeReviewHistoryRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final ApplyRepository applyRepository;
@@ -61,7 +61,7 @@ public class CodeReviewHistoryService {
         List<String> selectedReviews = request.getSelectedReviews();
         for(var selectedReview : selectedReviews){
             var codeReviewHistory = converter.toEntity(reviewer, targetMember, selectedReview);
-            codeReviewHistoryRepossitory.save(codeReviewHistory);
+            codeReviewHistoryRepository.save(codeReviewHistory);
         }
     }
 
@@ -70,7 +70,7 @@ public class CodeReviewHistoryService {
         memberRepository.findById(targetMemberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        List<CodeReviewHistory> codeReviews = codeReviewHistoryRepossitory.findAllByTargetMemberId(targetMemberId);
+        List<CodeReviewHistory> codeReviews = codeReviewHistoryRepository.findAllByTargetMemberId(targetMemberId);
 
         return converter.toCodeReviewCountResponse(codeReviews);
     }

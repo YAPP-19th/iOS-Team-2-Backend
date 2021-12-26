@@ -4,7 +4,9 @@ import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Getter
 public enum PostCategory {
@@ -47,4 +49,15 @@ public enum PostCategory {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_CATEGORY_NAME));
     }
+
+    public static List<String> getAll(){
+        final List<String> result = new ArrayList<>();
+
+        for(var value : PostCategory.values()){
+            result.add(value.getCategoryName());
+        }
+
+        return result;
+    }
+
 }

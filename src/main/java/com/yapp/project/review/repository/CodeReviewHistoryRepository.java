@@ -1,0 +1,20 @@
+package com.yapp.project.review.repository;
+
+import com.yapp.project.review.dto.response.CodeReviewResponse;
+import com.yapp.project.review.entity.CodeReviewHistory;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface CodeReviewHistoryRepository extends JpaRepository<CodeReviewHistory, Long> {
+    List<CodeReviewHistory> findAllByTargetMemberId(Long targetMemberId);
+
+    @Query("SELECT new com.yapp.project.review.dto.response.CodeReviewResponse(c.reviewCode, count(c.reviewCode), '') " +
+            " FROM CodeReviewHistory c " +
+            "WHERE c.targetMember.id = :targetId " +
+            "GROUP BY c.reviewCode " +
+            "ORDER BY 1 desc, 2 desc")
+    List<CodeReviewResponse> findALLByTargetMemberIdOrderByCount(@Param("targetId") Long targetId);
+}

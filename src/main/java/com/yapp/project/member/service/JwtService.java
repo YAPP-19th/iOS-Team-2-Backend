@@ -41,6 +41,9 @@ public class JwtService {
     }
 
     public LoginResponse loginResponse(Long memberId, String loginId){
+        if (memberId == null){
+            memberId = getMemberId(memberRepository.getTokenByLoginId(loginId));
+        }
         return issue(memberId, loginId);
     }
     public LoginResponse issue(Long memberId, String loginId) {

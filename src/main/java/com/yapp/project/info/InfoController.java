@@ -18,12 +18,21 @@ import java.util.List;
 public class InfoController {
     private final InfoService infoService;
 
-    @ApiOperation(value = "직무 리스트", notes = "개발 / 기획 / 디자인")
+    @ApiOperation(value = "직무 리스트", notes = "developer / planner / designer")
     @GetMapping(value = "/positions")
     public ResponseEntity<ApiResult> getPositionList(@RequestParam("position") String position) {
         List list = infoService.getPostionInfo(position);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, list)
+        );
+    }
+
+    @ApiOperation(value = "게시글 카테고리 리스트")
+    @GetMapping(value = "/postCategory")
+    public ResponseEntity<ApiResult> getPostCategoryList() {
+        List<String> response = infoService.getPostCategoryList();
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
