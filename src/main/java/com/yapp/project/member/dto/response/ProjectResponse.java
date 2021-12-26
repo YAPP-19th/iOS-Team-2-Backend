@@ -9,11 +9,11 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 public class ProjectResponse {
-    Long projectId;
-    String name;
+    private Long projectId;
+    private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    LocalDate startDate;
+    private LocalDate startDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    LocalDate endDate;
-    String description;
+    private LocalDate endDate;
+    private String description;
 }

@@ -1,5 +1,7 @@
 package com.yapp.project.member.service;
 
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.member.dto.request.CareerRequest;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
@@ -15,7 +17,6 @@ import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.member.repository.ProjectRepository;
 import com.yapp.project.member.repository.WorkRepository;
 import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
-import com.yapp.project.review.entity.CodeReviewHistory;
 import com.yapp.project.review.entity.TextReviewHistory;
 import com.yapp.project.review.repository.CodeReviewHistoryRepository;
 import com.yapp.project.review.repository.TextReviewHistoryRepository;
@@ -37,7 +38,6 @@ import java.util.Optional;
 public class MemberService {
     private final MemberConverter memberConverter;
     private final TextReviewHistoryConverter textReviewHistoryConverter;
-    private final CodeReviewHistoryConverter codeReviewHistoryConverter;
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
     private final CareerRepository careerRepository;
@@ -76,7 +76,6 @@ public class MemberService {
             for(ProjectRequest reqProject : req.getWorkRequestList())
                 workRepository.save(memberConverter.toWorkEntity(c, reqProject));
         }
-
         return m.getId();
     }
 
@@ -115,9 +114,10 @@ public class MemberService {
     }
 
     public BudiMemberInfoResponse getBudiInfo(Long id) {
-        Optional<Member> m = memberRepository.findById(id);
+        Member m = memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
         List<Project> projectList = projectRepository.getAllByMemberId(id);
-        BudiMemberInfoResponse responses = memberConverter.toBudiMemberInfoResponse(m.get(), projectList);
+        BudiMemberInfoResponse responses = memberConverter.toBudiMemberInfoResponse(m, projectList);
         return responses;
     }
 

@@ -115,7 +115,7 @@ public class MemberConverter {
                 .id(m.getId())
                 .imgUrl(m.getProfileImageUrl())
                 .nickName(m.getNickName())
-                .level(Level.of(m.getScore()))
+                .level(Level.of(m.getScore()).getLevelName())
                 .position(positionList)
                 .projectList(projectResponses)
                 .portfolioList(portfolioList)

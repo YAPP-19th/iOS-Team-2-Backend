@@ -50,7 +50,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "버디 찾기", notes = "developer / designer / planner 중 하나로 요청해주세요.")
-    @GetMapping(value = "/getBudiList/{position}")
+    @GetMapping(value = "/getBudiLists/{position}")
     public ResponseEntity<ApiResult> getBudiList(@PathVariable String position) {
         List<BudiMemberResponse> response = memberService.getBudiList(position);
         return ResponseEntity.ok(
@@ -59,7 +59,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "버디 상세조회", notes = "member id를 요청해주세요.")
-    @GetMapping(value = "/getBudiDetail/{id}")
+    @GetMapping(value = "/getBudiDetails/{id}")
     public ResponseEntity<ApiResult> getBudiDetail(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
         jwtService.validateTokenForm(accessToken);
         BudiMemberInfoResponse response = memberService.getBudiInfo(id);
@@ -69,7 +69,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "버디 상세조회(버디평가)", notes = "member id를 요청해주세요.")
-    @GetMapping(value = "/getBudiDetailReview/{id}")
+    @GetMapping(value = "/getBudiDetailReviews/{id}")
     public ResponseEntity<ApiResult> getBudiDetailReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
         jwtService.validateTokenForm(accessToken);
         List<CodeReviewResponse> response = memberService.getBudiInfoReview(id);
@@ -79,7 +79,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "버디 상세조회(버디후기)", notes = "member id를 요청해주세요.")
-    @GetMapping(value = "/getBudiDetailTextReview/{id}")
+    @GetMapping(value = "/getBudiDetailTextReviews/{id}")
     public ResponseEntity<ApiResult> getBudiDetailTextReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id, Pageable pageable) {
         jwtService.validateTokenForm(accessToken);
         Page<TextReviewSimpleResponse> response = memberService.getBudiInfoTextReview(id, pageable);

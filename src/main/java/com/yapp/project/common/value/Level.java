@@ -25,31 +25,31 @@ public enum Level {
         this.levelName = levelName;
     }
 
-    public static String of(int score) {
+    public static Level of(int score) {
         if (score >= 0 && score <= 3) {
-            return LEVEL1_1.getLevelName();
+            return LEVEL1_1;
         } else if (score >= 4 && score <= 6) {
-            return LEVEL1_2.getLevelName();
+            return LEVEL1_2;
         } else if (score >= 7 && score <= 9) {
-            return LEVEL1_3.getLevelName();
+            return LEVEL1_3;
         } else if (score >= 10 && score <= 19) {
-            return LEVEL2_1.getLevelName();
+            return LEVEL2_1;
         } else if (score >= 20 && score <= 29) {
-            return LEVEL2_2.getLevelName();
+            return LEVEL2_2;
         } else if (score >= 30 && score <= 39) {
-            return LEVEL2_3.getLevelName();
+            return LEVEL2_3;
         } else if (score >= 40 && score <= 49) {
-            return LEVEL3_1.getLevelName();
+            return LEVEL3_1;
         } else if (score >= 50 && score <= 59) {
-            return LEVEL3_2.getLevelName();
+            return LEVEL3_2;
         } else if (score >= 60 && score <= 69) {
-            return LEVEL3_3.getLevelName();
+            return LEVEL3_3;
         } else if (score >= 70 && score <= 79) {
-            return LEVEL4_1.getLevelName();
+            return LEVEL4_1;
         } else if (score >= 80 && score <= 89) {
-            return LEVEL4_2.getLevelName();
+            return LEVEL4_2;
         } else {
-            return LEVEL4_3.getLevelName();
+            return LEVEL4_3;
         }
     }
 }
