@@ -22,7 +22,7 @@ public class CodeReviewHistoryController {
     private final JwtService jwtService;
 
     @ApiOperation("리뷰 '목록' 전체 조회")
-    @GetMapping(value = "/select-reviews")
+    @GetMapping(value = "/select-reviews-list")
     public ResponseEntity<ApiResult> getAllSelectReviewList() {
         var response = codeReviewHistoryService.findAllReviews();
 
@@ -32,18 +32,19 @@ public class CodeReviewHistoryController {
     }
 
     @ApiOperation("특정 사용자 프로필에 '선택하는 리뷰' 등록")
-    @PostMapping(value = "/members/{memberId}/select-reviews")
+    @PostMapping(value = "/select-reviews")
     public ResponseEntity<ApiResult> insert(
             @RequestHeader("accessToken") String accessToken,
-            @PathVariable Long memberId,
+            @RequestParam(required = true) long memberId,
+            @RequestParam(required = true) long postId,
             @RequestBody CodeReviewInsertRequest request
     ) {
 
         jwtService.validateTokenForm(accessToken);
 
-        Long fromMemberId = jwtService.getMemberId(accessToken);
+        long reviewerId = jwtService.getMemberId(accessToken);
 
-        codeReviewHistoryService.create(fromMemberId, memberId, request);
+        codeReviewHistoryService.create(reviewerId, memberId, postId, request.getSelectedReviews());
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
@@ -51,8 +52,8 @@ public class CodeReviewHistoryController {
     }
 
     @ApiOperation("특정 사용자가 받은 '선택하는 리뷰' 개수")
-    @GetMapping(value = "/members/{memberId}/select-reviews")
-    public ResponseEntity<ApiResult> getAll(@PathVariable Long memberId) {
+    @GetMapping(value = "/select-reviews")
+    public ResponseEntity<ApiResult> getAll(@RequestParam(required = true) long memberId) {
         CodeReviewCountResponse response = codeReviewHistoryService.findAllByMember(memberId);
 
         return ResponseEntity.ok(
