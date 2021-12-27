@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,25 +44,36 @@ public class CodeReviewHistoryService {
         Member reviewee = memberRepository.findById(revieweeId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        if(reviewer.getId().longValue() == reviewee.getId().longValue()){
+        if (reviewer.getId().longValue() == reviewee.getId().longValue()) {
             throw new IllegalRequestException(ExceptionMessage.NO_SELF_REVIEW);
         }
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        Optional<Apply> applyOptional = Optional.empty();
-        if (post.getOwner().getId().longValue() == reviewer.getId().longValue()) { // 리뷰어가 프로젝트 리더인 경우
-            applyOptional = applyRepository.findByMemberAndPost(reviewee, post);
-        } else { // 리뷰어가 팀원인 경우
-            applyOptional = applyRepository.findByMemberAndPost(reviewer, post);
+        if (post.getOwner().getId().longValue() == reviewee.getId().longValue()) { // 타겟이 프로젝트 리더인 경우
+            Apply reviewerApply = applyRepository.findByMemberAndPost(reviewer, post)
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
+
+            ApplyStatus.validateApprovedCodeOrElseThrow(reviewerApply.getApplyStatusCode());
+        } else {  // 타겟이 팀원인 경우
+            if (reviewer.getId().longValue() == post.getOwner().getId().longValue()) { // 리뷰어가 프로젝트 리더인 경우
+                Apply revieweeApply = applyRepository.findByMemberAndPost(reviewer, post)
+                        .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
+
+                ApplyStatus.validateApprovedCodeOrElseThrow(revieweeApply.getApplyStatusCode());
+            } else { // 참여자가 또 다른 참여자에게 리뷰를 남기는 경우
+                Apply reviewerApply = applyRepository.findByMemberAndPost(reviewer, post)
+                        .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
+                Apply revieweeApply = applyRepository.findByMemberAndPost(reviewer, post)
+                        .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
+
+                ApplyStatus.validateApprovedCodeOrElseThrow(reviewerApply.getApplyStatusCode());
+                ApplyStatus.validateApprovedCodeOrElseThrow(revieweeApply.getApplyStatusCode());
+            }
         }
 
-        applyOptional.orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
-
-        ApplyStatus.validateApprovedCodeOrElseThrow(applyOptional.get().getApplyStatusCode());
-
-        if(codeReviewHistoryRepository.existsByReviewerAndTargetMemberAndPost(reviewer, reviewee, post)){
+        if (codeReviewHistoryRepository.existsByReviewerAndTargetMemberAndPost(reviewer, reviewee, post)) {
             throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
         }
 
