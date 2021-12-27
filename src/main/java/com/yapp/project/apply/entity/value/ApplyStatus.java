@@ -1,8 +1,8 @@
 package com.yapp.project.apply.entity.value;
 
 import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
-import com.yapp.project.common.value.Position;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -34,5 +34,11 @@ public enum ApplyStatus {
                 .filter(v -> v.applyStatusName.equals(applyStatusName))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_APPLY_STATUS_NAME));
+    }
+
+    public static void validateApprovedCodeOrElseThrow(int code) {
+        if(code != APPROVAL_FOR_PARTICIPATION.applyStatusCode){
+            throw new IllegalRequestException(ExceptionMessage.NOT_APPROVED_APPLY);
+        }
     }
 }
