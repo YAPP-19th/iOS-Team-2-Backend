@@ -1,7 +1,9 @@
 package com.yapp.project.member.entity;
 
-import com.yapp.project.common.entity.BaseEntity;
+import com.yapp.project.common.entity.DeletableEntity;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,7 +14,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세분화 할 것.
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted = false")
+public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세분화 할 것.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
