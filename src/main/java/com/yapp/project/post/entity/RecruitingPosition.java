@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "recruiting_position")
 public class RecruitingPosition extends BaseEntity<Long> {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recruiting_position_id")
     private Long id;
 

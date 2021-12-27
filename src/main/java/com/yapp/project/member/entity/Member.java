@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세분화 할 것.
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 

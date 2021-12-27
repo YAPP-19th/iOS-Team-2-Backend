@@ -17,7 +17,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Apply extends BaseEntity<Long> {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "apply_id")
     private Long id;
 

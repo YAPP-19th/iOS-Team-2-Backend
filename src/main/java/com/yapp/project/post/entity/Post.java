@@ -1,6 +1,8 @@
 package com.yapp.project.post.entity;
 
 import com.yapp.project.common.entity.BaseEntity;
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Post extends BaseEntity<Long> {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
@@ -84,7 +86,9 @@ public class Post extends BaseEntity<Long> {
         this.statusCode = statusCode;
     }
 
-    public boolean validateLeader(Member targetMember){
-        return this.owner.getId().longValue() == targetMember.getId().longValue() ? true : false;
+    public void validateLeaderOrElseThrow(long targetMemberId){
+        if(this.owner.getId().longValue() != targetMemberId){
+            throw new IllegalRequestException(ExceptionMessage.INVALID_MEMBER);
+        }
     }
 }

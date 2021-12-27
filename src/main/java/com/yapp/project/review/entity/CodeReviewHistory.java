@@ -16,7 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class CodeReviewHistory extends BaseEntity<Long> {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "code_review_history_id")
     private Long id;
 
