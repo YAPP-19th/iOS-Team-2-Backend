@@ -14,7 +14,6 @@ public enum StatusCode {
 
     // bad request / not found
     BAD_REQUEST(4000),
-    SERVICE_NOT_FOUND(4001),
     MEMBER_NOT_FOUND(4001),
     NOT_EXIST_POST_STATUS(4002),
     NOT_EXIST_POSITION_CODE(4003),
