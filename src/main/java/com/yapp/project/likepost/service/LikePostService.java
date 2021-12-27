@@ -62,10 +62,12 @@ public class LikePostService {
                     .orElseThrow(() -> new NotFoundException(ExceptionMessage.ALL_OTHER_EXCEPTIONS));
 
             likePostRepository.delete(likePost);
+            post.substractLikeCount();
         }
         else{
             LikePost likePost = new LikePost(member, post);
             likePostRepository.save(likePost);
+            post.addLikeCount();
         }
     }
 }

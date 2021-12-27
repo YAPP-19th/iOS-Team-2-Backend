@@ -52,13 +52,28 @@ public class Post extends BaseEntity<Long> {
     @Column(name = "post_online_code")
     private Integer onlineCode;
 
+    @Column(name = "post_like_count")
+    private Long likeCount;
+
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "post_owner_id", referencedColumnName = "member_id")
     private Member owner;
 
-    public void addViewCount(){
+    public void addViewCount() {
         this.viewCount++;
+    }
+
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    public void substractLikeCount() {
+        if (this.likeCount <= 0) {
+            throw new IllegalRequestException(ExceptionMessage.INVALID_LIKE_COUNT);
+        }
+
+        this.likeCount--;
     }
 
     public void updateInfos(
@@ -70,7 +85,7 @@ public class Post extends BaseEntity<Long> {
             String region,
             String description,
             int onlineCode
-    ){
+    ) {
 
         this.imageUrl = imageUrl;
         this.title = title;
@@ -82,12 +97,12 @@ public class Post extends BaseEntity<Long> {
         this.onlineCode = onlineCode;
     }
 
-    public void updateStatusCode(int statusCode){
+    public void updateStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
 
-    public void validateLeaderOrElseThrow(long targetMemberId){
-        if(this.owner.getId().longValue() != targetMemberId){
+    public void validateLeaderOrElseThrow(long targetMemberId) {
+        if (this.owner.getId().longValue() != targetMemberId) {
             throw new IllegalRequestException(ExceptionMessage.INVALID_MEMBER);
         }
     }

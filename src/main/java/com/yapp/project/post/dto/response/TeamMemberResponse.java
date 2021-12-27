@@ -23,6 +23,6 @@ public class TeamMemberResponse {
 
         private final String address;
 
-        private final String applyPosition;
+        private final PositionAndColor position;
     }
 }

@@ -109,8 +109,6 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        post.addViewCount();
-
         boolean isLiked = false;
         if (accessTokenOptional.isPresent()) { // 로그인 사용자
             Long currentMemberId = jwtService.getMemberId(accessTokenOptional.get());
@@ -120,6 +118,8 @@ public class PostService {
 
             isLiked = likePostRepository.existsByMemberAndPost(currentMember, post);
         }
+
+        post.addViewCount();
 
         return postConverter.toPostDetailResponse(post, post.getOwner(), isLiked);
     }

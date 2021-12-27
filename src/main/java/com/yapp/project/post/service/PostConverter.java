@@ -1,7 +1,6 @@
 package com.yapp.project.post.service;
 
 import com.yapp.project.apply.entity.Apply;
-import com.yapp.project.apply.entity.value.ApplyStatus;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.dto.request.PostCreateRequest;
@@ -31,6 +30,7 @@ public class PostConverter {
                 .viewCount(0L)
                 .onlineCode(OnlineStatus.of(request.getOnlineInfo()).getOnlineStatusCode())
                 .imageUrl(request.getImageUrl())
+                .likeCount(0L)
                 .build();
     }
 
@@ -69,6 +69,7 @@ public class PostConverter {
                 .createdAt(post.getCreatedDate())
                 .modifiedAt(post.getLastModifiedDate())
                 .isLiked(isLiked)
+                .likeCount(post.getLikeCount())
                 .build();
     }
 
@@ -83,6 +84,7 @@ public class PostConverter {
                 .createdAt(post.getCreatedDate())
                 .modifiedAt(post.getLastModifiedDate())
                 .positions(positions)
+                .likeCount(post.getLikeCount())
                 .build();
     }
 
@@ -101,7 +103,10 @@ public class PostConverter {
                             member.getNickName(),
                             member.getProfileImageUrl(),
                             member.getAddress(),
-                            Position.of(apply.getRecruitingPosition().getPositionCode()).getPositionName()
+                            new PositionAndColor(
+                                    Position.of(apply.getRecruitingPosition().getPositionCode()).getPositionName(),
+                                    Position.getRootPosition(apply.getRecruitingPosition().getPositionCode()).getRootPositionCode()
+                            )
                     )
             );
         }
