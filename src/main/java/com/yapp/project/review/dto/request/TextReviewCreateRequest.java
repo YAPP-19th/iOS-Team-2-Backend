@@ -10,11 +10,6 @@ import javax.validation.constraints.Size;
 @Getter
 @AllArgsConstructor
 public class TextReviewCreateRequest {
-    private Long postId;
-
-    @Min(value = 1, message = DtoValidationFailMessage.INVALID_TARGET_MEMBER)
-    private Long targetMemberId;
-
     @Size(min = 2, max = 255, message = DtoValidationFailMessage.INVALID_REVIEW_TITLE)
     private String title;
 

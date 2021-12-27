@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +27,19 @@ public class TextReviewHistoryController {
     private final JwtService jwtService;
 
     @ApiOperation("특정 사용자 프로필에 '작성하는 리뷰' 등록")
-    @PostMapping(value = "/members/{memberId}/text-reviews")
+    @PostMapping(value = "/text-reviews")
     public ResponseEntity<ApiResult> insert(
             @RequestHeader("accessToken") String accessToken,
+            @RequestParam(required = true) long memberId,
+            @RequestParam(required = true) long postId,
             @RequestBody TextReviewCreateRequest request
     ) {
 
         jwtService.validateTokenForm(accessToken);
 
-        Long reviewerId = jwtService.getMemberId(accessToken);
+        long reviewerId = jwtService.getMemberId(accessToken);
 
-        textReviewHistoryService.create(reviewerId, request);
+        textReviewHistoryService.create(reviewerId, memberId, postId, request);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
@@ -43,8 +47,12 @@ public class TextReviewHistoryController {
     }
 
     @ApiOperation("특정 사용자의 텍스트리뷰 모두 조회")
-    @GetMapping(value = "/members/{memberId}/text-reviews")
-    public ResponseEntity<ApiResult> getAll(@PathVariable @Parameter(description = "100 입력하세요") Long memberId, Pageable pageable) {
+    @GetMapping(value = "/text-reviews")
+    public ResponseEntity<ApiResult> getAll(
+            @RequestParam(required = true) @Parameter(description = "100 입력하세요") long memberId,
+            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
+    ) {
+
         Page<TextReviewSimpleResponse> response = textReviewHistoryService.findAllByPages(memberId, pageable);
 
         return ResponseEntity.ok(
