@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE post SET is_deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE post SET is_deleted = true WHERE post_id=?")
 @Where(clause = "is_deleted = false")
 public class Post extends DeletableEntity {
     @Id

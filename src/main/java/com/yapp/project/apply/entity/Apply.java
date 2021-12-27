@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE apply SET is_deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE apply SET is_deleted = true WHERE apply_id=?")
 @Where(clause = "is_deleted = false")
 public class Apply extends DeletableEntity {
     @Id
