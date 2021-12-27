@@ -15,4 +15,5 @@ public class BudiMemberResponse {
 
     private String introduce;
     private List<String> position;
+    private Long likeCount;
 }
