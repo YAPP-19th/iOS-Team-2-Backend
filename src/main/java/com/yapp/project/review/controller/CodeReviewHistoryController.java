@@ -23,16 +23,6 @@ public class CodeReviewHistoryController {
     private final CodeReviewHistoryService codeReviewHistoryService;
     private final JwtService jwtService;
 
-    @ApiOperation("리뷰 '목록' 전체 조회")
-    @GetMapping(value = "/select-reviews-list")
-    public ResponseEntity<ApiResult> getAllSelectReviewList() {
-        var response = codeReviewHistoryService.findAllReviews();
-
-        return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS, response)
-        );
-    }
-
     @ApiOperation("특정 사용자 프로필에 '선택하는 리뷰' 등록")
     @PostMapping(value = "/select-reviews")
     public ResponseEntity<ApiResult> insert(

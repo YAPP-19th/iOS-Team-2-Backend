@@ -3,6 +3,7 @@ package com.yapp.project.info;
 import com.yapp.project.common.value.PostDefaultImage;
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
+import com.yapp.project.review.service.CodeReviewHistoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,13 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/infos")
 @Api(tags = "Info")
 public class InfoController {
-    private final InfoService infoService;
+    private final DefaultInfoService defaultInfoService;
+    private final CodeReviewHistoryService codeReviewHistoryService;
 
     @ApiOperation(value = "직무 리스트", notes = "developer / planner / designer")
     @GetMapping(value = "/positions")
     public ResponseEntity<ApiResult> getPositionList(@RequestParam("position") String position) {
-        List list = infoService.getPostionInfo(position);
+        List list = defaultInfoService.getPostionInfo(position);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, list)
         );
@@ -30,7 +32,7 @@ public class InfoController {
     @ApiOperation(value = "게시글 카테고리 리스트")
     @GetMapping(value = "/postCategory")
     public ResponseEntity<ApiResult> getPostCategoryList() {
-        List<String> response = infoService.getPostCategoryList();
+        List<String> response = defaultInfoService.getPostCategoryList();
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
@@ -40,6 +42,16 @@ public class InfoController {
     @GetMapping(value = "/postDefaultImageUrls")
     public ResponseEntity<ApiResult> getAllPostDefaultImageUrls() {
         var response = PostDefaultImage.getAllUrls();
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation("리뷰 '목록' 전체 조회")
+    @GetMapping(value = "/select-reviews-list")
+    public ResponseEntity<ApiResult> getAllSelectReviewList() {
+        var response = codeReviewHistoryService.findAllReviews();
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class InfoService {
+public class DefaultInfoService {
     public List getPostionInfo(String positionInfo){
         List positionList = Position.listOf(positionInfo);
         return positionList;
