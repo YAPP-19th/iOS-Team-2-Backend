@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/v1/infos")
-@Api(tags = "Info")
+@Api(tags = "앱 운영 정보")
 public class InfoController {
     private final DefaultInfoService defaultInfoService;
     private final CodeReviewHistoryService codeReviewHistoryService;

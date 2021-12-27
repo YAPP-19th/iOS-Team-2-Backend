@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/images", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1/imageUrls", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "이미지 URL 변환")
 public class S3Controller {
     private final S3Uploader s3Uploader;

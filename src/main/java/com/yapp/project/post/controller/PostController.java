@@ -22,7 +22,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/posts", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(tags = "Post (Project)")
+@Api(tags = "프로젝트 관련")
 public class PostController {
     private final PostService postService;
 
