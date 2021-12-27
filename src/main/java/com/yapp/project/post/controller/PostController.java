@@ -71,7 +71,7 @@ public class PostController {
         );
     }
 
-    @ApiOperation("게시글 단건 조회 (확정 멤버)")
+    @ApiOperation("게시글 단건 조회 (참여승인된 멤버만 가져옴)")
     @GetMapping(value = "/{postId}/members")
     public ResponseEntity<ApiResult> getTeamMembers(@PathVariable Long postId) {
         TeamMemberResponse response = postService.findTeamMembersById(postId);

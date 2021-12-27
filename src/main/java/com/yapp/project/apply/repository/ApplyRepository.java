@@ -16,7 +16,7 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
     @Override
     Optional<Apply> findById(Long id);
 
-    List<Apply> findAllByPost(Post post);
+    List<Apply> findAllByPostAndApplyStatusCode(Post post, int applyStatusCode);
 
     long countByRecruitingPosition(RecruitingPosition recruitingPosition);
 

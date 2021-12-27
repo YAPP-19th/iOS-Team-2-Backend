@@ -129,21 +129,9 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        List<Apply> applies = applyRepository.findAllByPost(post);
-        var response = new TeamMemberResponse();
-        for (var apply : applies) {
-            Member member = apply.getMember();
-            response.getTeamMembers().add(
-                    new TeamMemberResponse.TeamMember(
-                            member.getId(),
-                            member.getNickName(),
-                            member.getProfileImageUrl(),
-                            member.getAddress()
-                    )
-            );
-        }
+        List<Apply> applies = applyRepository.findAllByPostAndApplyStatusCode(post, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode());
 
-        return response;
+        return postConverter.toTeamMemberResponse(applies);
     }
 
     @Transactional

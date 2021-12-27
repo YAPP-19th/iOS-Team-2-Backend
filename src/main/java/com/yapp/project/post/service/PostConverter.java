@@ -1,5 +1,7 @@
 package com.yapp.project.post.service;
 
+import com.yapp.project.apply.entity.Apply;
+import com.yapp.project.apply.entity.value.ApplyStatus;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.dto.request.PostCreateRequest;
@@ -86,5 +88,24 @@ public class PostConverter {
 
     public PostDeleteResponse toPostDeleteResponse(Long postId) {
         return new PostDeleteResponse(postId);
+    }
+
+    public TeamMemberResponse toTeamMemberResponse(List<Apply> applies) {
+        var response = new TeamMemberResponse();
+
+        for (var apply : applies) {
+            Member member = apply.getMember();
+            response.getTeamMembers().add(
+                    new TeamMemberResponse.TeamMember(
+                            member.getId(),
+                            member.getNickName(),
+                            member.getProfileImageUrl(),
+                            member.getAddress(),
+                            Position.of(apply.getRecruitingPosition().getPositionCode()).getPositionName()
+                    )
+            );
+        }
+
+        return response;
     }
 }

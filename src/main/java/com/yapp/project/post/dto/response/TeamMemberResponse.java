@@ -22,5 +22,7 @@ public class TeamMemberResponse {
         private final String profileImageUrl;
 
         private final String address;
+
+        private final String applyPosition;
     }
 }
