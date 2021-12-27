@@ -23,4 +23,6 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
     long countByRecruitingPositionAndApplyStatusCode(RecruitingPosition recruitingPosition, int applyStatusCode);
 
     boolean existsByMemberAndPost(Member member, Post post);
+
+    Optional<Apply> findByMemberAndPost(Member member, Post post);
 }
