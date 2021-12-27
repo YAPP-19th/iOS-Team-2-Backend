@@ -46,7 +46,7 @@ public class TextReviewHistoryService {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
         Optional<Apply> applyOptional = Optional.empty();
-        if (post.validateLeader(reviewer)) { // 리뷰어가 프로젝트 리더인 경우
+        if (post.getOwner().getId().longValue() == reviewer.getId().longValue()) { // 리뷰어가 프로젝트 리더인 경우
             applyOptional = applyRepository.findByMemberAndPost(reviewee, post);
         } else { // 리뷰어가 팀원인 경우
             applyOptional = applyRepository.findByMemberAndPost(reviewer, post);
