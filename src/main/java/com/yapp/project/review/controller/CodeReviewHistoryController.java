@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,7 +39,7 @@ public class CodeReviewHistoryController {
             @RequestHeader("accessToken") String accessToken,
             @RequestParam(required = true) long memberId,
             @RequestParam(required = true) long postId,
-            @RequestBody CodeReviewInsertRequest request
+            @Valid @RequestBody CodeReviewInsertRequest request
     ) {
 
         jwtService.validateTokenForm(accessToken);
