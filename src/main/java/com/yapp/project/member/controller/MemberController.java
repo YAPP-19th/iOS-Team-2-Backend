@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/members")
-@Api(tags = "Member")
+@Api(tags = "사용자 관련")
 public class MemberController {
     private final MemberService memberService;
 
@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     @ApiOperation("회원 정보 입력")
-    @PostMapping(value = "/createInfo")
+    @PostMapping(value = "/infos")
     public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") String accessToken, @Valid @RequestBody CreateInfoRequest request) {
         jwtService.validateTokenForm(accessToken);
         Long response = memberService.createInfo(accessToken, request);

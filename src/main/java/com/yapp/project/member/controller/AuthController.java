@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/v1/auth")
-@Api(tags = "Login")
+@Api(tags = "로그인")
 public class AuthController {
     private final MemberService memberService;
     private final JwtService jwtService;

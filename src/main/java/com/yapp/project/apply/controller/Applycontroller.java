@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/applies", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(tags = "지원하기 (Apply)")
+@Api(tags = "지원하기")
 public class Applycontroller {
     private final ApplyService applyService;
     private final JwtService jwtService;
