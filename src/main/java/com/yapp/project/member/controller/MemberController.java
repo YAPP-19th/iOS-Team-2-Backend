@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,7 @@ public class MemberController {
 
     @ApiOperation("회원 정보 입력")
     @PostMapping(value = "/createInfo")
-    public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") String accessToken, @RequestBody CreateInfoRequest request) {
+    public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") String accessToken, @Valid @RequestBody CreateInfoRequest request) {
         jwtService.validateTokenForm(accessToken);
         Long response = memberService.createInfo(accessToken, request);
         return ResponseEntity.ok(
