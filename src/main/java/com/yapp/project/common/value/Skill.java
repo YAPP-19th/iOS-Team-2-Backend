@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.Arrays;
 
 @Getter
-public enum Skill {
+public enum Skill {  //NOT USED
     // default skill //
     DEVELOPER_DEFAULT(1, "개발 기타"),
     PLANNER_DEFAULT(2, "기획 기타"),

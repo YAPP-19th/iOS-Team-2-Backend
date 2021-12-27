@@ -1,7 +1,7 @@
-package com.yapp.project.info;
+package com.yapp.project.info.service;
 
 import com.yapp.project.common.value.Position;
-import com.yapp.project.post.entity.value.PostCategory;
+import com.yapp.project.common.value.PostCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

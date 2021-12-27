@@ -9,10 +9,8 @@ import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
 import com.yapp.project.member.dto.response.ProjectResponse;
-import com.yapp.project.member.entity.Career;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.entity.Project;
-import com.yapp.project.member.entity.Work;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +32,7 @@ public class MemberConverter {
         return new CheckNameResponse(available);
     }
 
-    public Member toMemberEntity(Optional<Member> member, CreateInfoRequest request, int score) {
+    public Member toMemberEntity(Member member, CreateInfoRequest request, int score) {
         List<String> positionList = request.getPositionList()
                 .stream()
                 .map(v -> Position.of(v).getPositionCode())
@@ -42,12 +40,12 @@ public class MemberConverter {
                 .collect(Collectors.toList());
         String positionListString = StringUtils.join(positionList, ' ');
         return Member.builder()
-                .id(member.get().getId())
-                .token(member.get().getToken())
+                .id(member.getId())
+                .token(member.getToken())
                 .score(score)
-                .email(member.get().getEmail())
-                .loginId(member.get().getLoginId())
-                .profileImageUrl(member.get().getProfileImageUrl())
+                .email(member.getEmail())
+                .loginId(member.getLoginId())
+                .profileImageUrl(member.getProfileImageUrl())
                 .nickName(request.getNickName())
                 .address(request.getMemberAddress())
                 .introduce(request.getDescription())
@@ -70,27 +68,6 @@ public class MemberConverter {
                 .member(m)
                 .build();
 
-    }
-
-    public Career toCareerEntity(Member m, CareerRequest request) {
-        return Career.builder()
-                .companyName(request.getCompanyName())
-                .startDate(request.getStartDate())
-                .endDate(request.getEndDate())
-                .nowWorks(request.getNowWorks())
-                .teamName(request.getTeamName())
-                .member(m)
-                .build();
-    }
-
-    public Work toWorkEntity(Career c, ProjectRequest request) {
-        return Work.builder()
-                .name(request.getName())
-                .startDate(request.getStartDate())
-                .endDate(request.getEndDate())
-                .description(request.getDescription())
-                .career(c)
-                .build();
     }
 
     public List<BudiMemberResponse> toBudiMemberResponse(List<Member> members) {

@@ -59,6 +59,7 @@ public enum ExceptionMessage {
 
     // 그외 모든 예외
     ALL_OTHER_EXCEPTIONS(StatusCode.ALL_OTHER_EXCEPTIONS),
+    UNEXPECTED_EXCEPTIONS(StatusCode.UNEXPECTED_EXCEPTIONS),
 
     ;
 
