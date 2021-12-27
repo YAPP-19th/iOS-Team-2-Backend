@@ -18,4 +18,6 @@ public class DtoValidationFailMessage {  //TODO: 메모리 효율적인 방안�
     public final static String EMPTY_SELECTED_REVIEW = "EMPTY_SELECTED_REVIEW";
     public final static String INVALID_REVIEW_TITLE = "INVALID_REVIEW_TITLE";
     public final static String INVALID_REVIEW_CONTENT = "INVALID_REVIEW_CONTENT";
+    public final static String INVALID_NICKNAME = "INVALID_NICKNAME";
+    public final static String INVALID_ADDRESS = "INVALID_ADDRESS";
 }
