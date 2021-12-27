@@ -7,7 +7,6 @@ import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.common.value.RootPosition;
-import com.yapp.project.external.s3.S3Uploader;
 import com.yapp.project.likepost.repository.LikePostRepository;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
@@ -37,15 +36,12 @@ public class PostService {
     private final PostRepository postRepository;
     private final ApplyRepository applyRepository;
     private final PostConverter postConverter;
-    private final S3Uploader s3Uploader;
     private final JwtService jwtService;
 
     private final MemberRepository memberRepository;
     private final RecruitingPositionRepository recruitingPositionRepository;
     private final RecruitingPositionConverter recruitingPositionConverter;
     private final LikePostRepository likePostRepository;
-
-    private final String S3DIR = "post_image";
 
     @Transactional
     public PostCreateResponse create(PostCreateRequest request, String accessToken) {
@@ -209,9 +205,4 @@ public class PostService {
         return postConverter.toPostSimpleResponse(post, positions);
     }
 
-    private String getFileNameFromS3Url(String imageUrl) {
-        String filname = imageUrl.substring(imageUrl.lastIndexOf("/"));
-
-        return "/" + S3DIR + "/" + filname;
-    }
 }
