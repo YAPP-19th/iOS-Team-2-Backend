@@ -26,6 +26,7 @@ public class MemberConverter {
         return Member.builder()
                 .loginId(loginId)
                 .likeCount(0L)
+                .score(0)
                 .build();
     }
 
