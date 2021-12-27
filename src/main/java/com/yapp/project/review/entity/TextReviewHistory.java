@@ -34,9 +34,9 @@ public class TextReviewHistory extends DeletableEntity {
     @JoinColumn(name = "text_review_history_post_id", referencedColumnName = "post_id")
     private Post post;
 
-    @Column(name = "text_review_history_content", length = 1000)
+    @Column(name = "text_review_history_content", length = 1000, nullable = false)
     private String content;
 
-    @Column(name = "text_review_history_title")
+    @Column(name = "text_review_history_title", nullable = false)
     private String title;
 }

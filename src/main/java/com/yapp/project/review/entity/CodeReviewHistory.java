@@ -22,8 +22,8 @@ public class CodeReviewHistory extends DeletableEntity {
     @Column(name = "code_review_history_id")
     private Long id;
 
-    @Column(name = "code_review_history_code")
-    private Integer reviewCode;
+    @Column(name = "code_review_history_code", nullable = false)
+    private int reviewCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code_review_history_reviewer_id", referencedColumnName = "member_id")
