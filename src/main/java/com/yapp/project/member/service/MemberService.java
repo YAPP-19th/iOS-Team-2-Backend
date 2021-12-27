@@ -10,18 +10,14 @@ import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.review.dto.response.CodeReviewResponse;
-import com.yapp.project.member.entity.Career;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.entity.Project;
-import com.yapp.project.member.repository.CareerRepository;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.member.repository.ProjectRepository;
-import com.yapp.project.member.repository.WorkRepository;
 import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import com.yapp.project.review.entity.TextReviewHistory;
 import com.yapp.project.review.repository.CodeReviewHistoryRepository;
 import com.yapp.project.review.repository.TextReviewHistoryRepository;
-import com.yapp.project.review.service.CodeReviewHistoryConverter;
 import com.yapp.project.review.service.TextReviewHistoryConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,8 +37,6 @@ public class MemberService {
     private final TextReviewHistoryConverter textReviewHistoryConverter;
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
-    private final CareerRepository careerRepository;
-    private final WorkRepository workRepository;
     private final CodeReviewHistoryRepository codeReviewHistoryRepository;
     private final TextReviewHistoryRepository textReviewHistoryRepository;
     private final JwtService jwtService;
@@ -68,16 +62,16 @@ public class MemberService {
 
     @Transactional
     public Long createInfo(String accessToken, CreateInfoRequest request) {
-        Optional<Member> member = memberRepository.findById(jwtService.getMemberId(accessToken));
+        Member member = memberRepository.findById(jwtService.getMemberId(accessToken))
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
+
         int score = getMemberScore(request.getProjectList(), request.getCareerList());
+
         Member m = memberRepository.save(memberConverter.toMemberEntity(member, request, score));
+
         for (ProjectRequest req : request.getProjectList())
-            projectRepository.save(memberConverter.toProjectEntity(member.get(), req));
-        for (CareerRequest req : request.getCareerList()) {
-            Career c = careerRepository.save(memberConverter.toCareerEntity(member.get(), req));
-            for (ProjectRequest reqProject : req.getWorkRequestList())
-                workRepository.save(memberConverter.toWorkEntity(c, reqProject));
-        }
+            projectRepository.save(memberConverter.toProjectEntity(member, req));
+
         return m.getId();
     }
 
