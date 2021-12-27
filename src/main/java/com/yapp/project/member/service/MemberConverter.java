@@ -22,9 +22,11 @@ import java.util.stream.Collectors;
 @Component
 public class MemberConverter {
 
-    public Member toCreateMember(String loginId){
+    public Member toCreateMember(String loginId) {
         return Member.builder()
                 .loginId(loginId)
+                .likeCount(0L)
+                .score(0)
                 .build();
     }
 
@@ -34,11 +36,11 @@ public class MemberConverter {
 
     public Member toMemberEntity(Optional<Member> member, CreateInfoRequest request, int score) {
         List<String> positionList = request.getPositionList()
-                                            .stream()
-                                            .map(v->Position.of(v).getPositionCode())
-                                            .map(v->v.toString())
-                                            .collect(Collectors.toList());
-        String positionListString = StringUtils.join(positionList,' ');
+                .stream()
+                .map(v -> Position.of(v).getPositionCode())
+                .map(v -> v.toString())
+                .collect(Collectors.toList());
+        String positionListString = StringUtils.join(positionList, ' ');
         return Member.builder()
                 .id(member.get().getId())
                 .token(member.get().getToken())
@@ -53,52 +55,63 @@ public class MemberConverter {
                 .positionCode(positionListString)
                 .portfolioLink(request.getPortfolioLink()
                         .stream()
-                        .map(n-> String.valueOf(n))
+                        .map(n -> String.valueOf(n))
                         .collect(Collectors.joining(" ")))
+                .likeCount(0L)
                 .build();
     }
 
     public Project toProjectEntity(Member m, ProjectRequest request) {
-            return Project.builder()
-                    .name(request.getName())
-                    .startDate(request.getStartDate())
-                    .endDate(request.getEndDate())
-                    .description(request.getDescription())
-                    .member(m)
-                    .build();
+        return Project.builder()
+                .name(request.getName())
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
+                .description(request.getDescription())
+                .member(m)
+                .build();
 
     }
 
     public Career toCareerEntity(Member m, CareerRequest request) {
-            return Career.builder()
-                    .companyName(request.getCompanyName())
-                    .startDate(request.getStartDate())
-                    .endDate(request.getEndDate())
-                    .nowWorks(request.getNowWorks())
-                    .teamName(request.getTeamName())
-                    .member(m)
-                    .build();
+        return Career.builder()
+                .companyName(request.getCompanyName())
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
+                .nowWorks(request.getNowWorks())
+                .teamName(request.getTeamName())
+                .member(m)
+                .build();
     }
 
     public Work toWorkEntity(Career c, ProjectRequest request) {
-            return Work.builder()
-                    .name(request.getName())
-                    .startDate(request.getStartDate())
-                    .endDate(request.getEndDate())
-                    .description(request.getDescription())
-                    .career(c)
-                    .build();
+        return Work.builder()
+                .name(request.getName())
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
+                .description(request.getDescription())
+                .career(c)
+                .build();
     }
 
     public List<BudiMemberResponse> toBudiMemberResponse(List<Member> members) {
         List<BudiMemberResponse> responses = new LinkedList<>();
-        for(Member m : members){
+        for (Member m : members) {
             List<String> positionList = new LinkedList<>();
             String[] codeList = m.getPositionCode().split(" ");
-            for(String code : codeList){
+            for (String code : codeList) {
                 positionList.add(Position.of(Integer.parseInt(code)).getPositionName());
             }
-            responses.add(new BudiMemberResponse(m.getId(), m.getProfileImageUrl(), m.getNickName(), m.getAddress(), m.getIntroduce(), positionList));
+            responses.add(
+                    new BudiMemberResponse(
+                            m.getId(),
+                            m.getProfileImageUrl(),
+                            m.getNickName(),
+                            m.getAddress(),
+                            m.getIntroduce(),
+                            positionList,
+                            m.getLikeCount()
+                    )
+            );
         }
         return responses;
     }
@@ -107,7 +120,7 @@ public class MemberConverter {
         List<String> positionList = new LinkedList<>();
         String[] codeList = m.getPositionCode().split(" ");
         String[] portfolioList = m.getPortfolioLink().split(" ");
-        for(String code : codeList){
+        for (String code : codeList) {
             positionList.add(Position.of(Integer.parseInt(code)).getPositionName());
         }
         List<ProjectResponse> projectResponses = toProjectResponse(projectList);
@@ -119,13 +132,14 @@ public class MemberConverter {
                 .position(positionList)
                 .projectList(projectResponses)
                 .portfolioList(portfolioList)
+                .likeCount(m.getLikeCount())
                 .build();
         return response;
     }
 
     public List<ProjectResponse> toProjectResponse(List<Project> projects) {
         List<ProjectResponse> projectList = new LinkedList<>();
-        for(Project project : projects){
+        for (Project project : projects) {
             projectList.add(new ProjectResponse(project.getId(), project.getName(), project.getStartDate(), project.getEndDate(), project.getDescription()));
         }
         return projectList;

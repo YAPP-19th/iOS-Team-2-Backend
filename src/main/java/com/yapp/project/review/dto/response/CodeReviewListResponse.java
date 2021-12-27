@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class CodeReviewListResponse {
-    private List<String> positives;
+    private final List<String> positives;
 
-    private List<String> negatives;
+    private final List<String> negatives;
 }

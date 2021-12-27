@@ -50,17 +50,7 @@ public class PostService {
         Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        Post post = postConverter.toPostEntity(
-                request.getTitle(),
-                request.getCategoryName(),
-                request.getStartDate(),
-                request.getEndDate(),
-                request.getRegion(),
-                request.getDescription(),
-                request.getOnlineInfo(),
-                request.getImageUrl(),
-                leader
-        );
+        Post post = postConverter.toPostEntity(request, leader);
         Post postEntity = postRepository.save(post);
 
         for (var positionDetail : request.getRecruitingPositions()) {
@@ -77,8 +67,12 @@ public class PostService {
 
     @Transactional
     public void update(Long postId, PostUpdateRequest request, String accessToken) {
+        Long leaderId = jwtService.getMemberId(accessToken);
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        post.validateLeaderOrElseThrow(leaderId);
 
         post.updateInfos(
                 request.getImageUrl(),
@@ -115,8 +109,6 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        post.addViewCount();
-
         boolean isLiked = false;
         if (accessTokenOptional.isPresent()) { // 로그인 사용자
             Long currentMemberId = jwtService.getMemberId(accessTokenOptional.get());
@@ -127,6 +119,8 @@ public class PostService {
             isLiked = likePostRepository.existsByMemberAndPost(currentMember, post);
         }
 
+        post.addViewCount();
+
         return postConverter.toPostDetailResponse(post, post.getOwner(), isLiked);
     }
 
@@ -135,21 +129,9 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        List<Apply> applies = applyRepository.findAllByPost(post);
-        var response = new TeamMemberResponse();
-        for (var apply : applies) {
-            Member member = apply.getMember();
-            response.getTeamMembers().add(
-                    new TeamMemberResponse.TeamMember(
-                            member.getId(),
-                            member.getNickName(),
-                            member.getProfileImageUrl(),
-                            member.getAddress()
-                    )
-            );
-        }
+        List<Apply> applies = applyRepository.findAllByPostAndApplyStatusCode(post, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode());
 
-        return response;
+        return postConverter.toTeamMemberResponse(applies);
     }
 
     @Transactional

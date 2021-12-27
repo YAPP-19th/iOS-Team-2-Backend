@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 public class CodeReviewCountResponse {
-    private Map<String, Integer> positives = new HashMap<>();
+    private final Map<String, Integer> positives = new HashMap<>();
 
-    private Map<String, Integer> negatives = new HashMap<>();
+    private final Map<String, Integer> negatives = new HashMap<>();
 }

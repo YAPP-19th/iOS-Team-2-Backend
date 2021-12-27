@@ -16,7 +16,7 @@ public class PostUpdateRequest {
     private String imageUrl;
 
     @ApiModelProperty(example = "title example")
-    @NotBlank(message = DtoValidationFailMessage.INVALID_POST_TITLE)
+    @Pattern(regexp = "^[0-9|ㄱ-ㅎ|가-힣|a-z|A-Z|]{2,100}$", message = DtoValidationFailMessage.INVALID_POST_TITLE)
     private String title;
 
     @ApiModelProperty(example = "여행")
@@ -38,7 +38,7 @@ public class PostUpdateRequest {
     private String region;
 
     @ApiModelProperty(example = "description detail example")
-    @NotBlank(message = DtoValidationFailMessage.INVALID_DESCRIPTION)
+    @Pattern(regexp = "^[0-9|ㄱ-ㅎ|가-힣|a-z|A-Z|]{2,4000}$", message = DtoValidationFailMessage.INVALID_DESCRIPTION)
     private String description;
 
     @ApiModelProperty(example = "'{미정|온라인|오프라인|온오프라인} 넷 중 택1'")

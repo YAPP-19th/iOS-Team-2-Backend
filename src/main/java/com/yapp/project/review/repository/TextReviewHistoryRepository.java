@@ -1,14 +1,11 @@
 package com.yapp.project.review.repository;
 
 import com.yapp.project.member.entity.Member;
+import com.yapp.project.post.entity.Post;
 import com.yapp.project.review.entity.TextReviewHistory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface TextReviewHistoryRepository extends JpaRepository<TextReviewHistory, Long> {
     @Override
@@ -17,4 +14,6 @@ public interface TextReviewHistoryRepository extends JpaRepository<TextReviewHis
     Page<TextReviewHistory> findAllByTargetMember(Member targetMember, Pageable pageable);
 
     Page<TextReviewHistory> findAllByTargetMember_Id(Long targetId, Pageable pageable);
+
+    boolean existsByReviewerAndTargetMemberAndPost(Member reviewer, Member targetMember, Post post);
 }

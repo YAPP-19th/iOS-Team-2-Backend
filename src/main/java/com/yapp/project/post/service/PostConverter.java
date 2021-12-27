@@ -1,7 +1,9 @@
 package com.yapp.project.post.service;
 
+import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
+import com.yapp.project.post.dto.request.PostCreateRequest;
 import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.value.OnlineStatus;
@@ -14,30 +16,21 @@ import java.util.List;
 
 @Component
 public class PostConverter {
-    public Post toPostEntity(
-            String title,
-            String categoryName,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            String region,
-            String description,
-            String onlineInfo,
-            String imageUrl,
-            Member owner
-    ) {
+    public Post toPostEntity(PostCreateRequest request, Member leader) {
 
         return Post.builder()
-                .title(title)
-                .categoryCode(PostCategory.of(categoryName).getCategoryCode())
-                .startDate(startDate)
-                .endDate(endDate)
-                .region(region)
-                .description(description)
-                .owner(owner)
+                .title(request.getTitle())
+                .categoryCode(PostCategory.of(request.getCategoryName()).getCategoryCode())
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
+                .region(request.getRegion())
+                .description(request.getDescription())
+                .owner(leader)
                 .statusCode(PostStatus.RECRUITING.getPostStatusCode())
                 .viewCount(0L)
-                .onlineCode(OnlineStatus.of(onlineInfo).getOnlineStatusCode())
-                .imageUrl(imageUrl)
+                .onlineCode(OnlineStatus.of(request.getOnlineInfo()).getOnlineStatusCode())
+                .imageUrl(request.getImageUrl())
+                .likeCount(0L)
                 .build();
     }
 
@@ -76,6 +69,7 @@ public class PostConverter {
                 .createdAt(post.getCreatedDate())
                 .modifiedAt(post.getLastModifiedDate())
                 .isLiked(isLiked)
+                .likeCount(post.getLikeCount())
                 .build();
     }
 
@@ -90,10 +84,33 @@ public class PostConverter {
                 .createdAt(post.getCreatedDate())
                 .modifiedAt(post.getLastModifiedDate())
                 .positions(positions)
+                .likeCount(post.getLikeCount())
                 .build();
     }
 
     public PostDeleteResponse toPostDeleteResponse(Long postId) {
         return new PostDeleteResponse(postId);
+    }
+
+    public TeamMemberResponse toTeamMemberResponse(List<Apply> applies) {
+        var response = new TeamMemberResponse();
+
+        for (var apply : applies) {
+            Member member = apply.getMember();
+            response.getTeamMembers().add(
+                    new TeamMemberResponse.TeamMember(
+                            member.getId(),
+                            member.getNickName(),
+                            member.getProfileImageUrl(),
+                            member.getAddress(),
+                            new PositionAndColor(
+                                    Position.of(apply.getRecruitingPosition().getPositionCode()).getPositionName(),
+                                    Position.getRootPosition(apply.getRecruitingPosition().getPositionCode()).getRootPositionCode()
+                            )
+                    )
+            );
+        }
+
+        return response;
     }
 }

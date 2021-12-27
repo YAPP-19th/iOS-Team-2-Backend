@@ -17,7 +17,7 @@ public class PostCreateRequest {
 
     @ApiModelProperty(example = "title example")
     @Size(min = 2, max = 255, message = DtoValidationFailMessage.INVALID_POST_TITLE)
-    @NotBlank(message = DtoValidationFailMessage.INVALID_POST_TITLE)  //regexp = "^\\S{2,255}$",
+    @Pattern(regexp = "^[0-9|ㄱ-ㅎ|가-힣|a-z|A-Z|]{2,100}$", message = DtoValidationFailMessage.INVALID_POST_TITLE)  //regexp = "^\\S{2,255}$",
     private String title;
 
     @ApiModelProperty(example = "여행")
@@ -39,7 +39,7 @@ public class PostCreateRequest {
     private String region;
 
     @ApiModelProperty(example = "description detail example")
-    @NotBlank(message = DtoValidationFailMessage.INVALID_DESCRIPTION)  //regexp = "^\\S{2,21844}$",
+    @Pattern(regexp = "^[0-9|ㄱ-ㅎ|가-힣|a-z|A-Z|]{2,4000}$", message = DtoValidationFailMessage.INVALID_DESCRIPTION)  //regexp = "^\\S{2,21844}$",
     private String description;
 
     @ApiModelProperty(example = "'{미정|온라인|오프라인|온오프라인} 넷 중 택1'")

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class LikeMember {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_member_id")
     private Long id;
 

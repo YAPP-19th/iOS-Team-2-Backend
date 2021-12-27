@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class TeamMemberResponse {
-    private List<TeamMember> teamMembers = new ArrayList<>();
+    private final List<TeamMember> teamMembers = new ArrayList<>();
 
     @Getter
     @RequiredArgsConstructor
@@ -22,5 +22,7 @@ public class TeamMemberResponse {
         private final String profileImageUrl;
 
         private final String address;
+
+        private final PositionAndColor position;
     }
 }

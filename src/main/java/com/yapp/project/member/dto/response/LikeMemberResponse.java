@@ -25,5 +25,7 @@ public class LikeMemberResponse {
         private final String address;
 
         private final String position;
+
+        private final Long likeCount;
     }
 }

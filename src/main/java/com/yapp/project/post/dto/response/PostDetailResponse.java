@@ -45,6 +45,8 @@ public class PostDetailResponse {
 
     private final Boolean isLiked;
 
+    private final Long likeCount;
+
     @Getter
     @RequiredArgsConstructor
     public static class MemberDto{

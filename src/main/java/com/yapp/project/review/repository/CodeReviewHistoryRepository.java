@@ -1,5 +1,7 @@
 package com.yapp.project.review.repository;
 
+import com.yapp.project.member.entity.Member;
+import com.yapp.project.post.entity.Post;
 import com.yapp.project.review.dto.response.CodeReviewResponse;
 import com.yapp.project.review.entity.CodeReviewHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +19,6 @@ public interface CodeReviewHistoryRepository extends JpaRepository<CodeReviewHis
             "GROUP BY c.reviewCode " +
             "ORDER BY 1 desc, 2 desc")
     List<CodeReviewResponse> findALLByTargetMemberIdOrderByCount(@Param("targetId") Long targetId);
+
+    boolean existsByReviewerAndTargetMemberAndPost(Member reviewer, Member targetMember, Post post);
 }

@@ -35,7 +35,8 @@ public class LikeMemberService {
                     toMember.getNickName(),
                     toMember.getProfileImageUrl(),
                     toMember.getAddress(),
-                    Position.of(toMember.getPositionCode()).getPositionName()
+                    Position.of(toMember.getPositionCode()).getPositionName(),
+                    toMember.getLikeCount()
             );
 
             response.getLikedMembers().add(memberInfo);

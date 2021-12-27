@@ -2,6 +2,7 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.common.value.Level;
 import com.yapp.project.member.dto.request.CareerRequest;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
@@ -46,65 +47,64 @@ public class MemberService {
     private final TextReviewHistoryRepository textReviewHistoryRepository;
     private final JwtService jwtService;
 
-    public String findByLoginId(String loginId){
+    public String findByLoginId(String loginId) {
         Optional<Member> member = memberRepository.findMemberByLoginId(loginId);
         String memberId = "";
-        if(!member.isEmpty()){
+        if (!member.isEmpty()) {
             memberId = member.get().getLoginId();
         }
         return memberId;
     }
+
     @Transactional
-    public Long create(String loginId){
+    public Long create(String loginId) {
         Member m = memberRepository.save(memberConverter.toCreateMember(loginId));
         return m.getId();
     }
 
-    public CheckNameResponse checkDuplicateName(String name){
+    public CheckNameResponse checkDuplicateName(String name) {
         return memberConverter.toCheckNameResponse(memberRepository.existsByNickName(name));
     }
 
     @Transactional
-    public Long createInfo(String accessToken, CreateInfoRequest request){
+    public Long createInfo(String accessToken, CreateInfoRequest request) {
         Optional<Member> member = memberRepository.findById(jwtService.getMemberId(accessToken));
         int score = getMemberScore(request.getProjectList(), request.getCareerList());
         Member m = memberRepository.save(memberConverter.toMemberEntity(member, request, score));
-        for(ProjectRequest req : request.getProjectList())
+        for (ProjectRequest req : request.getProjectList())
             projectRepository.save(memberConverter.toProjectEntity(member.get(), req));
-        for(CareerRequest req : request.getCareerList()) {
+        for (CareerRequest req : request.getCareerList()) {
             Career c = careerRepository.save(memberConverter.toCareerEntity(member.get(), req));
-            for(ProjectRequest reqProject : req.getWorkRequestList())
+            for (ProjectRequest reqProject : req.getWorkRequestList())
                 workRepository.save(memberConverter.toWorkEntity(c, reqProject));
         }
         return m.getId();
     }
 
-    public int getMemberScore(List<ProjectRequest> projectRequest, List<CareerRequest> careerRequest){
+    public int getMemberScore(List<ProjectRequest> projectRequest, List<CareerRequest> careerRequest) {
         int projectPeriod = 0;
         int careerPeriod = 0;
-        for(ProjectRequest p: projectRequest){
+        for (ProjectRequest p : projectRequest) {
             LocalDate startDate = p.getStartDate();
             LocalDate endDate = p.getEndDate();
-            projectPeriod += (Math.round((float)ChronoUnit.DAYS.between(startDate, endDate)/30));
+            projectPeriod += (Math.round((float) ChronoUnit.DAYS.between(startDate, endDate) / 30));
 
         }
-        for(CareerRequest p: careerRequest){
+        for (CareerRequest p : careerRequest) {
             LocalDate startDate = p.getStartDate();
             LocalDate endDate = p.getEndDate();
-            careerPeriod += Math.round((float)ChronoUnit.DAYS.between(startDate, endDate)/30);
+            careerPeriod += Math.round((float) ChronoUnit.DAYS.between(startDate, endDate) / 30);
         }
-        return (projectPeriod)*2 + (careerPeriod)*2;
+        return (projectPeriod) * 2 + (careerPeriod) * 2;
     }
 
     public List<BudiMemberResponse> getBudiList(String position) {
         int positionCode = 0;
-        if(position.equals("developer")){
+        if (position.equals("developer")) {
             positionCode = 1;
-        }
-        else if(position.equals("planner")){
+        } else if (position.equals("planner")) {
             positionCode = 2;
-        }
-        else if(position.equals("designer")){
+        } else if (position.equals("designer")) {
             positionCode = 3;
         }
 
@@ -121,9 +121,9 @@ public class MemberService {
         return responses;
     }
 
-    public List<CodeReviewResponse> getBudiInfoReview(Long id) {
+    public List<CodeReviewResponse> getBudiInfoReview(Long id) {  // TODO: 중복로직 삭제 여부 회의
         List<CodeReviewResponse> codeReviewList = codeReviewHistoryRepository.findALLByTargetMemberIdOrderByCount(id);
-        for(CodeReviewResponse codeReviewResponse: codeReviewList){
+        for (CodeReviewResponse codeReviewResponse : codeReviewList) {
             codeReviewResponse.setReviewText(codeReviewResponse.getReviewCode());
         }
         return codeReviewList;
