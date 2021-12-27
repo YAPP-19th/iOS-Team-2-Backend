@@ -17,7 +17,7 @@ import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.entity.value.OnlineStatus;
-import com.yapp.project.post.entity.value.PostCategory;
+import com.yapp.project.common.value.PostCategory;
 import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;

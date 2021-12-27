@@ -7,7 +7,7 @@ import com.yapp.project.post.dto.request.PostCreateRequest;
 import com.yapp.project.post.dto.response.*;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.value.OnlineStatus;
-import com.yapp.project.post.entity.value.PostCategory;
+import com.yapp.project.common.value.PostCategory;
 import com.yapp.project.post.entity.value.PostStatus;
 import org.springframework.stereotype.Component;
 
