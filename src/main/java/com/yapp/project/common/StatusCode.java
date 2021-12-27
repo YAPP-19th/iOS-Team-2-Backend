@@ -66,7 +66,8 @@ public enum StatusCode {
     NOT_IMPLEMENTED(0),
 
     // 그외 모든 예외
-    ALL_OTHER_EXCEPTIONS(9999),
+    ALL_OTHER_EXCEPTIONS(9000),
+    UNEXPECTED_EXCEPTIONS(9999)
 
     ;
 
