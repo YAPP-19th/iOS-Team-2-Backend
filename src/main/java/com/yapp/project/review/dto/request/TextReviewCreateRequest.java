@@ -4,7 +4,6 @@ import com.yapp.project.common.exception.DtoValidationFailMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Getter

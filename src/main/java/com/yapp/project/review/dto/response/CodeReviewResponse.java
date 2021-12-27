@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CodeReviewResponse {
     private Integer reviewCode;
-    private Long count ;
+    private Long count;
     private String reviewText;
 
     public void setReviewText(int reviewCode){

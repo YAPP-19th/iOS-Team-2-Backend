@@ -121,7 +121,7 @@ public class MemberService {
         return responses;
     }
 
-    public List<CodeReviewResponse> getBudiInfoReview(Long id) {
+    public List<CodeReviewResponse> getBudiInfoReview(Long id) {  // TODO: 중복로직 삭제 여부 회으
         List<CodeReviewResponse> codeReviewList = codeReviewHistoryRepository.findALLByTargetMemberIdOrderByCount(id);
         for(CodeReviewResponse codeReviewResponse: codeReviewList){
             codeReviewResponse.setReviewText(codeReviewResponse.getReviewCode());
