@@ -71,6 +71,8 @@ public class CodeReviewHistoryService {
             var codeReviewHistory = converter.toEntity(reviewer, reviewee, selectedReview);
             codeReviewHistoryRepository.save(codeReviewHistory);
         }
+
+        // TODO: 상대방의 레벨 검사 로직
     }
 
     @Transactional(readOnly = true)

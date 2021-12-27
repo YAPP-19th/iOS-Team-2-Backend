@@ -62,6 +62,8 @@ public class TextReviewHistoryService {
 
         var textReviewHistory = converter.toEntity(reviewer, reviewee, post, request.getTitle(), request.getContent());
         textReviewHistoryRepository.save(textReviewHistory);
+
+        // TODO: 상대방의 레벨 검사 로직
     }
 
     @Transactional(readOnly = true)
