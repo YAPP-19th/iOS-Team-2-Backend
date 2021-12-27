@@ -11,5 +11,5 @@ import java.util.Map;
 public class CodeReviewCountResponse {
     private final Map<String, Integer> positives = new HashMap<>();
 
-    private Map<String, Integer> negatives = new HashMap<>();
+    private final Map<String, Integer> negatives = new HashMap<>();
 }
