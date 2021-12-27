@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class TeamMemberResponse {
-    private List<TeamMember> teamMembers = new ArrayList<>();
+    private final List<TeamMember> teamMembers = new ArrayList<>();
 
     @Getter
     @RequiredArgsConstructor

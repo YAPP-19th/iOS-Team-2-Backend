@@ -30,5 +30,5 @@ public class PostSimpleResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime modifiedAt;
 
-    private List<PositionAndColor> positions;
+    private final List<PositionAndColor> positions;
 }

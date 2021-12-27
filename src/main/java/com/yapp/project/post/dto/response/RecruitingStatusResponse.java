@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class RecruitingStatusResponse {
-    private List<RecruitingStatus> RecruitingStatuses = new ArrayList<>();
+    private final List<RecruitingStatus> RecruitingStatuses = new ArrayList<>();
 
     @Getter
     @RequiredArgsConstructor
