@@ -50,17 +50,7 @@ public class PostService {
         Member leader = memberRepository.findById(leaderId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        Post post = postConverter.toPostEntity(
-                request.getTitle(),
-                request.getCategoryName(),
-                request.getStartDate(),
-                request.getEndDate(),
-                request.getRegion(),
-                request.getDescription(),
-                request.getOnlineInfo(),
-                request.getImageUrl(),
-                leader
-        );
+        Post post = postConverter.toPostEntity(request, leader);
         Post postEntity = postRepository.save(post);
 
         for (var positionDetail : request.getRecruitingPositions()) {
@@ -77,8 +67,12 @@ public class PostService {
 
     @Transactional
     public void update(Long postId, PostUpdateRequest request, String accessToken) {
+        Long leaderId = jwtService.getMemberId(accessToken);
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        post.validateLeaderOrElseThrow(leaderId);
 
         post.updateInfos(
                 request.getImageUrl(),
