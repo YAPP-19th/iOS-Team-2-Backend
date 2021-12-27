@@ -1,12 +1,14 @@
 package com.yapp.project.post.entity;
 
-import com.yapp.project.common.entity.BaseEntity;
+import com.yapp.project.common.entity.DeletableEntity;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,7 +18,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Post extends BaseEntity<Long> {
+@SQLDelete(sql = "UPDATE post SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted = false")
+public class Post extends DeletableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")

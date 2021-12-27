@@ -1,6 +1,5 @@
 package com.yapp.project.post.entity;
 
-import com.yapp.project.common.entity.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "recruiting_position")
-public class RecruitingPosition extends BaseEntity<Long> {
+public class RecruitingPosition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recruiting_position_id")

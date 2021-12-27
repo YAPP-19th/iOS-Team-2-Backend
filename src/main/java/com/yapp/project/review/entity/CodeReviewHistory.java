@@ -1,11 +1,14 @@
 package com.yapp.project.review.entity;
 
 import com.yapp.project.common.entity.BaseEntity;
+import com.yapp.project.common.entity.DeletableEntity;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.entity.Post;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -14,7 +17,9 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CodeReviewHistory extends BaseEntity<Long> {
+@SQLDelete(sql = "UPDATE code_review_history SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted = false")
+public class CodeReviewHistory extends DeletableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "code_review_history_id")
