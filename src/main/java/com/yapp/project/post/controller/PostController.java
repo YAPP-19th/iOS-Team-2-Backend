@@ -12,17 +12,24 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/posts", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "프로젝트 관련")
+@Validated
 public class PostController {
     private final PostService postService;
 
@@ -32,7 +39,7 @@ public class PostController {
     @PostMapping()
     public ResponseEntity<ApiResult> insert(
             @Valid @RequestBody PostCreateRequest request,
-            @RequestHeader("accessToken") String accessToken
+            @RequestHeader("accessToken") @NotBlank String accessToken
     ) {
 
         jwtService.validateTokenForm(accessToken);
@@ -47,9 +54,9 @@ public class PostController {
     @ApiOperation("게시글 수정 (모집정보 수정 불가)")
     @PutMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult> update(
-            @PathVariable Long postId,
+            @PathVariable @Positive Long postId,
             @Valid @RequestBody PostUpdateRequest request,
-            @RequestHeader("accessToken") String accessToken
+            @RequestHeader("accessToken") @NotBlank String accessToken
     ) {
 
         jwtService.validateTokenForm(accessToken);
@@ -63,7 +70,11 @@ public class PostController {
 
     @ApiOperation("게시글 단건 조회 (전체 틀)")
     @GetMapping(value = "/{postId}")
-    public ResponseEntity<ApiResult> getOne(@PathVariable Long postId, @RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<ApiResult> getOne(
+            @PathVariable @Positive Long postId,
+            @Nullable @RequestHeader("accessToken") String accessToken
+    ) {
+
         PostDetailResponse response = postService.findById(postId, Optional.ofNullable(accessToken));
 
         return ResponseEntity.ok(
@@ -73,7 +84,7 @@ public class PostController {
 
     @ApiOperation("게시글 단건 조회 (참여승인된 멤버만 가져옴)")
     @GetMapping(value = "/{postId}/members")
-    public ResponseEntity<ApiResult> getTeamMembers(@PathVariable Long postId) {
+    public ResponseEntity<ApiResult> getTeamMembers(@PathVariable @Positive Long postId) {
         TeamMemberResponse response = postService.findTeamMembersById(postId);
 
         return ResponseEntity.ok(
@@ -83,7 +94,7 @@ public class PostController {
 
     @ApiOperation("게시글 단건 조회 (지원 현황)")
     @GetMapping(value = "/{postId}/recruitingStatus")
-    public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable Long postId) {
+    public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable @Positive Long postId) {
         var response = postService.findRecruitingStatusById(postId);
 
         return ResponseEntity.ok(
@@ -93,7 +104,10 @@ public class PostController {
 
     @ApiOperation("게시글 전체 조회")
     @GetMapping()
-    public ResponseEntity<ApiResult> getAll(Pageable pageable) {
+    public ResponseEntity<ApiResult> getAll(
+            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
+    ) {
+
         Page<PostSimpleResponse> response = postService.findAllByPages(pageable);
 
         return ResponseEntity.ok(
@@ -103,7 +117,11 @@ public class PostController {
 
     @ApiOperation("position으로 조회")
     @GetMapping(value = "/positions/{rootPositionName}")
-    public ResponseEntity<ApiResult> getAllByPosition(@PathVariable String rootPositionName, Pageable pageable) {
+    public ResponseEntity<ApiResult> getAllByPosition(
+            @PathVariable String rootPositionName,
+            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
+    ) {
+
         Page<PostSimpleResponse> response = postService.findAllByPosition(rootPositionName, pageable);
 
         return ResponseEntity.ok(
@@ -113,7 +131,11 @@ public class PostController {
 
     @ApiOperation("게시글 단건 삭제")
     @DeleteMapping(value = "/{postId}")
-    public ResponseEntity<ApiResult> deleteOne(@RequestHeader("accessToken") String accessToken, @PathVariable Long postId) {
+    public ResponseEntity<ApiResult> deleteOne(
+            @RequestHeader("accessToken") @NotBlank String accessToken,
+            @PathVariable @Positive Long postId
+    ) {
+
         jwtService.validateTokenForm(accessToken);
 
         PostDeleteResponse response = postService.deleteById(accessToken, postId);

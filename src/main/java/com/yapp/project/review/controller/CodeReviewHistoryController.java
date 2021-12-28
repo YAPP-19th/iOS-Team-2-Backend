@@ -11,14 +11,18 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "선택하는 리뷰")
+@Validated
 public class CodeReviewHistoryController {
     private final CodeReviewHistoryService codeReviewHistoryService;
     private final JwtService jwtService;
@@ -26,9 +30,9 @@ public class CodeReviewHistoryController {
     @ApiOperation("특정 사용자 프로필에 '선택하는 리뷰' 등록")
     @PostMapping(value = "/select-reviews")
     public ResponseEntity<ApiResult> insert(
-            @RequestHeader("accessToken") String accessToken,
-            @RequestParam(required = true) long memberId,
-            @RequestParam(required = true) long postId,
+            @RequestHeader("accessToken") @NotBlank String accessToken,
+            @RequestParam(required = true) @Positive long memberId,
+            @RequestParam(required = true) @Positive long postId,
             @Valid @RequestBody CodeReviewInsertRequest request
     ) {
 
@@ -45,7 +49,7 @@ public class CodeReviewHistoryController {
 
     @ApiOperation("특정 사용자가 받은 '선택하는 리뷰' 개수")
     @GetMapping(value = "/select-reviews")
-    public ResponseEntity<ApiResult> getAll(@RequestParam(required = true) long memberId) {
+    public ResponseEntity<ApiResult> getAll(@RequestParam(required = true) @Positive long memberId) {
         CodeReviewCountResponse response = codeReviewHistoryService.findAllByMember(memberId);
 
         return ResponseEntity.ok(

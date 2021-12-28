@@ -9,21 +9,24 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/v1/infos")
 @Api(tags = "앱 운영 정보")
+@Validated
 public class InfoController {
     private final DefaultInfoService defaultInfoService;
     private final CodeReviewHistoryService codeReviewHistoryService;
 
     @ApiOperation(value = "직무 리스트", notes = "developer / planner / designer")
     @GetMapping(value = "/positions")
-    public ResponseEntity<ApiResult> getPositionList(@RequestParam("position") String position) {
+    public ResponseEntity<ApiResult> getPositionList(@RequestParam("position") @NotBlank String position) {
         List list = defaultInfoService.getPostionInfo(position);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, list)
