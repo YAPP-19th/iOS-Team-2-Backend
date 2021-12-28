@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -44,10 +45,11 @@ public class GlobalExceptionHandler {
             HttpRequestMethodNotSupportedException.class,
             HttpMessageNotReadableException.class,
             MissingServletRequestParameterException.class,
-            TypeMismatchException.class
+            TypeMismatchException.class,
+            MissingRequestHeaderException.class
     })
     protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return createApiExceptionResult(ExceptionMessage.HTTP_REQUEST_METHOD_NOT_SUPPORTED);
+        return createApiExceptionResult(ExceptionMessage.INVALID_HTTP_REQUEST);
     }
 
     @ExceptionHandler(AmazonS3Exception.class)
