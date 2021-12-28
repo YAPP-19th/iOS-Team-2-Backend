@@ -8,13 +8,9 @@ import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.member.service.MemberService;
-import com.yapp.project.review.dto.response.CodeReviewResponse;
-import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
