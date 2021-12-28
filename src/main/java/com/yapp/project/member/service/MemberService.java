@@ -9,6 +9,7 @@ import com.yapp.project.member.dto.request.ProjectRequest;
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
+import com.yapp.project.member.repository.LikeMemberRepositroy;
 import com.yapp.project.review.dto.response.CodeReviewResponse;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.entity.Project;
@@ -39,6 +40,7 @@ public class MemberService {
     private final ProjectRepository projectRepository;
     private final CodeReviewHistoryRepository codeReviewHistoryRepository;
     private final TextReviewHistoryRepository textReviewHistoryRepository;
+    private final LikeMemberRepositroy likeMemberRepositroy;
     private final JwtService jwtService;
 
     public String findByLoginId(String loginId) {
@@ -107,24 +109,19 @@ public class MemberService {
         return responses;
     }
 
-    public BudiMemberInfoResponse getBudiInfo(Long id) {
+    public BudiMemberInfoResponse getBudiInfo(Long id, Optional<String> accessTokenOpt) {
         Member m = memberRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
         List<Project> projectList = projectRepository.getAllByMemberId(id);
-        BudiMemberInfoResponse responses = memberConverter.toBudiMemberInfoResponse(m, projectList);
+
+        boolean isLikedFromCurrentMember = false;
+        if (accessTokenOpt.isPresent()) {
+            long currentMemberId = jwtService.getMemberId(accessTokenOpt.get());
+            isLikedFromCurrentMember = likeMemberRepositroy.existsByFromMemberIdAndToMemberId(currentMemberId, m.getId());
+        }
+
+        BudiMemberInfoResponse responses = memberConverter.toBudiMemberInfoResponse(m, projectList, isLikedFromCurrentMember);
         return responses;
     }
 
-    public List<CodeReviewResponse> getBudiInfoReview(Long id) {  // TODO: 중복로직 삭제 여부 회의
-        List<CodeReviewResponse> codeReviewList = codeReviewHistoryRepository.findALLByTargetMemberIdOrderByCount(id);
-        for (CodeReviewResponse codeReviewResponse : codeReviewList) {
-            codeReviewResponse.setReviewText(codeReviewResponse.getReviewCode());
-        }
-        return codeReviewList;
-    }
-
-    public Page<TextReviewSimpleResponse> getBudiInfoTextReview(Long id, Pageable pageable) {
-        Page<TextReviewHistory> textReviewList = textReviewHistoryRepository.findAllByTargetMember_Id(id, pageable);
-        return textReviewList.map(p -> textReviewHistoryConverter.toTextReviewSimpleResponse(p));
-    }
 }

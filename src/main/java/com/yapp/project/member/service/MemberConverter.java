@@ -93,7 +93,7 @@ public class MemberConverter {
         return responses;
     }
 
-    public BudiMemberInfoResponse toBudiMemberInfoResponse(Member m, List<Project> projectList) {
+    public BudiMemberInfoResponse toBudiMemberInfoResponse(Member m, List<Project> projectList, boolean isLikedFromCurrentMember) {
         List<String> positionList = new LinkedList<>();
         String[] codeList = m.getPositionCode().split(" ");
         String[] portfolioList = m.getPortfolioLink().split(" ");
@@ -110,6 +110,7 @@ public class MemberConverter {
                 .projectList(projectResponses)
                 .portfolioList(portfolioList)
                 .likeCount(m.getLikeCount())
+                .isLikedFromCurrentMember(isLikedFromCurrentMember)
                 .build();
         return response;
     }

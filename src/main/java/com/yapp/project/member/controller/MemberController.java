@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -60,33 +61,13 @@ public class MemberController {
     }
 
     @ApiOperation(value = "버디 상세조회", notes = "member id를 요청해주세요.")
-    @GetMapping(value = "/budiDetails/{id}")
-    public ResponseEntity<ApiResult> getBudiDetail(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
-        jwtService.validateTokenForm(accessToken);
-        BudiMemberInfoResponse response = memberService.getBudiInfo(id);
+    @GetMapping(value = "/budiDetails/{memberId}")
+    public ResponseEntity<ApiResult> getBudiDetail(@RequestHeader("accessToken") String accessToken, @PathVariable Long memberId) {
+        BudiMemberInfoResponse response = memberService.getBudiInfo(memberId, Optional.ofNullable(accessToken));
+
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
-// TODO: 아래 로직은 review 패키지에 포함되어 있음
 
-//    @ApiOperation(value = "버디 상세조회(버디평가)", notes = "member id를 요청해주세요.")
-//    @GetMapping(value = "/budiDetailReviews/{id}")
-//    public ResponseEntity<ApiResult> getBudiDetailReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
-//        jwtService.validateTokenForm(accessToken);
-//        List<CodeReviewResponse> response = memberService.getBudiInfoReview(id);
-//        return ResponseEntity.ok(
-//                ApiResult.of(ResponseMessage.SUCCESS, response)
-//        );
-//    }
-//
-//    @ApiOperation(value = "버디 상세조회(버디후기)", notes = "member id를 요청해주세요.")
-//    @GetMapping(value = "/budiDetailTextReviews/{id}")
-//    public ResponseEntity<ApiResult> getBudiDetailTextReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id, Pageable pageable) {
-//        jwtService.validateTokenForm(accessToken);
-//        Page<TextReviewSimpleResponse> response = memberService.getBudiInfoTextReview(id, pageable);
-//        return ResponseEntity.ok(
-//                ApiResult.of(ResponseMessage.SUCCESS, response)
-//        );
-//    }
 }
