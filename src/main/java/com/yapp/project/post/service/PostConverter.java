@@ -62,7 +62,7 @@ public class PostConverter {
                                 leader.getNickName(),
                                 leader.getProfileImageUrl(),
                                 leader.getAddress(),
-                                Position.of(leader.getPositionCode()).getPositionName()
+                                Position.of(Integer.parseInt(leader.getPositionCode().split(" ")[0])).getPositionName()
                         )
                 )
                 .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getOnlineStatusName())
