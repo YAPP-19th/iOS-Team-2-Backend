@@ -2,7 +2,7 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.value.Level;
 import com.yapp.project.common.value.Position;
-import com.yapp.project.member.dto.request.CareerRequest;
+import com.yapp.project.common.value.RootPosition;
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
@@ -25,6 +25,15 @@ public class MemberConverter {
                 .loginId(loginId)
                 .likeCount(0L)
                 .score(0)
+                .address("")  //TODO: 초기 값으로 설정 해주지 않으면 오류 발생
+                .basePositionCode(RootPosition.DEVELOPER.getRootPositionCode())
+                .email("")
+                .introduce("")
+                .nickName("")
+                .positionCode(Integer.toString(Position.DEVELOPER_DEFAULT.getPositionCode()) + " ") //TODO: position code가 string이어서 다른 부분에서 에러발생
+                .portfolioLink("")
+                .projects(List.of())
+                .profileImageUrl("")
                 .build();
     }
 
