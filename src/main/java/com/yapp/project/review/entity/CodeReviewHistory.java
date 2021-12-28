@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE code_review_history SET is_deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE code_review_history SET is_deleted = true WHERE code_review_history_id=?")
 @Where(clause = "is_deleted = false")
 public class CodeReviewHistory extends DeletableEntity {
     @Id

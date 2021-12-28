@@ -17,7 +17,7 @@ public class CreateInfoRequest {
     @Size(min = 2, message = DtoValidationFailMessage.INVALID_ADDRESS)
     private String memberAddress;
 
-    @Pattern(regexp = "^[0-9|ㄱ-ㅎ|가-힣|a-z|A-Z|]{2,15}$", message = DtoValidationFailMessage.INVALID_DESCRIPTION)
+    @Size(min = 2, max = 255, message = DtoValidationFailMessage.INVALID_POST_TITLE)
     private String description;
 
     private int basePosition;

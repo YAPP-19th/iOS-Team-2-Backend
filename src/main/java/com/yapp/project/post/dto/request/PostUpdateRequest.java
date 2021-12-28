@@ -12,11 +12,11 @@ import java.util.List;
 @Builder
 @Getter
 public class PostUpdateRequest {
-    @NotBlank(message = DtoValidationFailMessage.EMPTY_POST_IMAGE_URL)
+    @NotBlank(message = DtoValidationFailMessage.INVALID_URL)
     private String imageUrl;
 
     @ApiModelProperty(example = "title example")
-    @Pattern(regexp = "^[0-9|ㄱ-ㅎ|가-힣|a-z|A-Z|]{2,100}$", message = DtoValidationFailMessage.INVALID_POST_TITLE)
+    @Size(min = 2, max = 255, message = DtoValidationFailMessage.INVALID_POST_TITLE)
     private String title;
 
     @ApiModelProperty(example = "여행")
@@ -38,7 +38,7 @@ public class PostUpdateRequest {
     private String region;
 
     @ApiModelProperty(example = "description detail example")
-    @Pattern(regexp = "^[0-9|ㄱ-ㅎ|가-힣|a-z|A-Z|]{2,4000}$", message = DtoValidationFailMessage.INVALID_DESCRIPTION)
+    @Size(min = 2, max = 1000, message = DtoValidationFailMessage.INVALID_DESCRIPTION)
     private String description;
 
     @ApiModelProperty(example = "'{미정|온라인|오프라인|온오프라인} 넷 중 택1'")

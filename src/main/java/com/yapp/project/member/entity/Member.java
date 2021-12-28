@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id=?")
 @Where(clause = "is_deleted = false")
 public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세분화 할 것.
     @Id
