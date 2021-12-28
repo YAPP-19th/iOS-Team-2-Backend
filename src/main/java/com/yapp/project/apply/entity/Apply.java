@@ -1,6 +1,8 @@
 package com.yapp.project.apply.entity;
 
 import com.yapp.project.common.entity.DeletableEntity;
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.RecruitingPosition;
@@ -38,7 +40,13 @@ public class Apply extends DeletableEntity {
     @JoinColumn(name = "apply_post_id", referencedColumnName = "post_id")
     private Post post;
 
-    public void updateApplyStatusCode(int applyStatusCode){
+    public void updateApplyStatusCode(int applyStatusCode) {
         this.applyStatusCode = applyStatusCode;
+    }
+
+    public void validateApplicantOrElseThrow(long memberId) {
+        if (this.getMember().getId().longValue() != memberId) {
+            throw new IllegalRequestException(ExceptionMessage.INVALID_APPLICANT);
+        }
     }
 }

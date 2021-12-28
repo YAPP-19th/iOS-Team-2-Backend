@@ -61,6 +61,8 @@ public enum StatusCode {
     NOT_APPROVED_APPLY(4045),
     INVALID_MEMBER(4046),
     INVALID_LIKE_COUNT(4047),
+    INVALID_APPLICANT(4048),
+    ALREADY_APPLIED(4049),
   
     // 지원하지 않는 API에 대한 access 시 발생
     NOT_IMPLEMENTED(0),

@@ -1,6 +1,7 @@
 package com.yapp.project.apply.controller;
 
 import com.yapp.project.apply.dto.request.ApplyRequest;
+import com.yapp.project.apply.dto.response.ApplyResponse;
 import com.yapp.project.apply.service.ApplyService;
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
@@ -27,12 +28,12 @@ public class Applycontroller {
     public ResponseEntity<ApiResult> insert(@Valid @RequestBody ApplyRequest request, @RequestHeader("accessToken") String accessToken) {
         jwtService.validateTokenForm(accessToken);
 
-        Long memberId = jwtService.getMemberId(accessToken);
+        long memberId = jwtService.getMemberId(accessToken);
 
-        applyService.apply(memberId, request);
+        ApplyResponse response = applyService.apply(memberId, request);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
@@ -41,9 +42,9 @@ public class Applycontroller {
     public ResponseEntity<ApiResult> approveApplication(@PathVariable Long applyId, @RequestHeader("accessToken") String accessToken) {
         jwtService.validateTokenForm(accessToken);
 
-        Long memberId = jwtService.getMemberId(accessToken); // TODO: 예외처리
+        long memberId = jwtService.getMemberId(accessToken); // TODO: 예외처리
 
-        applyService.approveApplication(applyId);
+        applyService.approveApplication(applyId, memberId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
@@ -55,7 +56,7 @@ public class Applycontroller {
     public ResponseEntity<ApiResult> cancelApplication(@PathVariable Long applyId, @RequestHeader("accessToken") String accessToken) {
         jwtService.validateTokenForm(accessToken);
 
-        Long memberId = jwtService.getMemberId(accessToken);
+        long memberId = jwtService.getMemberId(accessToken);
 
         applyService.cancelApplication(applyId, memberId);
 
