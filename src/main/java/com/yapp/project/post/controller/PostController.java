@@ -44,7 +44,7 @@ public class PostController {
         );
     }
 
-    @ApiOperation("게시글 수정 (참여정보 수정 포함)")
+    @ApiOperation("게시글 수정 (모집정보 수정 불가)")
     @PutMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult> update(
             @PathVariable Long postId,

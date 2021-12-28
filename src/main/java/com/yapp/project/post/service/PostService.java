@@ -84,17 +84,6 @@ public class PostService {
                 request.getDescription(),
                 OnlineStatus.of(request.getOnlineInfo()).getOnlineStatusCode()
         );
-
-        recruitingPositionRepository.deleteAllByPost(post); //TODO: apply가 recruitingPosition을 참조하기 때문에 delete시 문제
-
-        for (var positionDetail : request.getRecruitingPositions()) {
-            var recruitingPosition = recruitingPositionConverter.toRecruitingPositionEntity(
-                    positionDetail.getPositionName(),
-                    positionDetail.getRecruitingNumber()
-            );
-            recruitingPosition.setPost(post);
-            recruitingPositionRepository.save(recruitingPosition);
-        }
     }
 
     @Transactional(readOnly = true)
