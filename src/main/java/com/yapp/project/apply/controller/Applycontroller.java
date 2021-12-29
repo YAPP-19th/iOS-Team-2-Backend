@@ -43,7 +43,7 @@ public class Applycontroller {
 
     @ApiOperation("지원 승인하기")
     @PatchMapping(value = "/{applyId}")
-    public ResponseEntity<ApiResult> approveApplication(@PathVariable @Positive Long applyId, @RequestHeader("accessToken") @NotBlank String accessToken) {
+    public ResponseEntity<ApiResult> approveApplication(@PathVariable @Positive long applyId, @RequestHeader("accessToken") @NotBlank String accessToken) {
         jwtService.validateTokenForm(accessToken);
 
         long memberId = jwtService.getMemberId(accessToken); // TODO: 예외처리
@@ -57,7 +57,7 @@ public class Applycontroller {
 
     @ApiOperation("지원 취소하기")
     @DeleteMapping(value = "/{applyId}")
-    public ResponseEntity<ApiResult> cancelApplication(@PathVariable @Positive Long applyId, @RequestHeader("accessToken") @NotBlank String accessToken) {
+    public ResponseEntity<ApiResult> cancelApplication(@PathVariable @Positive long applyId, @RequestHeader("accessToken") @NotBlank String accessToken) {
         jwtService.validateTokenForm(accessToken);
 
         long memberId = jwtService.getMemberId(accessToken);

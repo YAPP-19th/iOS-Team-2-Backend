@@ -65,7 +65,7 @@ public class MemberController {
     @GetMapping(value = "/budiDetails/{memberId}")
     public ResponseEntity<ApiResult> getBudiDetail(
             @RequestHeader("accessToken") @Nullable String accessToken,
-            @PathVariable @Positive Long memberId
+            @PathVariable @Positive long memberId
     ) {
 
         BudiMemberInfoResponse response = memberService.getBudiInfo(memberId, Optional.ofNullable(accessToken));

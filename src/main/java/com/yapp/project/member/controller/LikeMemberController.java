@@ -27,7 +27,7 @@ public class LikeMemberController {
     @ApiOperation("사용자 좋아요 상태 변경")
     @PutMapping(value = "/{memberId}/like-members")
     public ResponseEntity<ApiResult> switchLikeMemberStatus(
-            @PathVariable @Positive Long memberId,
+            @PathVariable @Positive long memberId,
             @RequestHeader("accessToken") @NotBlank String accessToken
     ) {
 

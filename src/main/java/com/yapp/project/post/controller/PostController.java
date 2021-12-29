@@ -54,7 +54,7 @@ public class PostController {
     @ApiOperation("게시글 수정 (모집정보 수정 불가)")
     @PutMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult> update(
-            @PathVariable @Positive Long postId,
+            @PathVariable @Positive long postId,
             @Valid @RequestBody PostUpdateRequest request,
             @RequestHeader("accessToken") @NotBlank String accessToken
     ) {
@@ -71,7 +71,7 @@ public class PostController {
     @ApiOperation("게시글 단건 조회 (전체 틀)")
     @GetMapping(value = "/{postId}")
     public ResponseEntity<ApiResult> getOne(
-            @PathVariable @Positive Long postId,
+            @PathVariable @Positive long postId,
             @Nullable @RequestHeader("accessToken") String accessToken
     ) {
 
@@ -94,7 +94,7 @@ public class PostController {
 
     @ApiOperation("게시글 단건 조회 (지원 현황)")
     @GetMapping(value = "/{postId}/recruitingStatus")
-    public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable @Positive Long postId) {
+    public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable @Positive long postId) {
         var response = postService.findRecruitingStatusById(postId);
 
         return ResponseEntity.ok(
@@ -133,7 +133,7 @@ public class PostController {
     @DeleteMapping(value = "/{postId}")
     public ResponseEntity<ApiResult> deleteOne(
             @RequestHeader("accessToken") @NotBlank String accessToken,
-            @PathVariable @Positive Long postId
+            @PathVariable @Positive long postId
     ) {
 
         jwtService.validateTokenForm(accessToken);
