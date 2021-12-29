@@ -19,4 +19,6 @@ public interface LikeMemberRepositroy extends JpaRepository<LikeMember, Long> {
     List<LikeMember> findAllByFromMember(Member fromMember);
 
     Optional<LikeMember> findByFromMemberAndToMember(Member fromMember, Member toMember);
+
+    boolean existsByFromMemberIdAndToMemberId(long fromMemberId, long toMemberId);
 }

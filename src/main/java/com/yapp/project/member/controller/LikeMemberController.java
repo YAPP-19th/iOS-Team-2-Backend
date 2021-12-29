@@ -9,19 +9,28 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/members")
 @Api(tags = "사용자 좋아요(팔로잉)")
+@Validated
 public class LikeMemberController {
     private final LikeMemberService likeMemberService;
     private final JwtService jwtService;
 
     @ApiOperation("사용자 좋아요 상태 변경")
     @PutMapping(value = "/{memberId}/like-members")
-    public ResponseEntity<ApiResult> switchLikeMemberStatus(@PathVariable Long memberId, @RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<ApiResult> switchLikeMemberStatus(
+            @PathVariable @Positive long memberId,
+            @RequestHeader("accessToken") @NotBlank String accessToken
+    ) {
+
         jwtService.validateTokenForm(accessToken);
 
         Long fromMemberId = jwtService.getMemberId(accessToken);
@@ -34,7 +43,7 @@ public class LikeMemberController {
 
     @ApiOperation("내가 좋아한 모든 상대방")
     @GetMapping(value = "/like-members")
-    public ResponseEntity<ApiResult> getAll(@RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<ApiResult> getAll(@RequestHeader("accessToken") @NotBlank String accessToken) {
         jwtService.validateTokenForm(accessToken);
 
         Long fromMemberId = jwtService.getMemberId(accessToken);

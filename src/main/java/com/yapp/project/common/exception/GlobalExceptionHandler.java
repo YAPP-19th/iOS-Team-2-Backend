@@ -9,17 +9,31 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import javax.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    /**
+     * from @Valid
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiExceptionResult handleMethodValidException(MethodArgumentNotValidException exception){
         return createApiExceptionResult(StatusCode.DTO_VALIDATION_FAIL, exception.getAllErrors().get(0).getDefaultMessage());
+    }
+
+    /**
+     * from @Validated
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ApiExceptionResult handleConstraintViolationException(ConstraintViolationException exception){
+        return createApiExceptionResult(StatusCode.DTO_VALIDATION_FAIL, exception.getMessage());
     }
 
     @ExceptionHandler(BindException.class)
@@ -44,10 +58,11 @@ public class GlobalExceptionHandler {
             HttpRequestMethodNotSupportedException.class,
             HttpMessageNotReadableException.class,
             MissingServletRequestParameterException.class,
-            TypeMismatchException.class
+            TypeMismatchException.class,
+            MissingRequestHeaderException.class
     })
-    protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        return createApiExceptionResult(ExceptionMessage.HTTP_REQUEST_METHOD_NOT_SUPPORTED);
+    protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(Exception exception) {
+        return createApiExceptionResult(ExceptionMessage.INVALID_HTTP_REQUEST);
     }
 
     @ExceptionHandler(AmazonS3Exception.class)

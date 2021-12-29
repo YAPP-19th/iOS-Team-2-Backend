@@ -20,5 +20,5 @@ public class BudiMemberInfoResponse {
     private List<ProjectResponse> projectList;
     private String[] portfolioList;
 
-    // TODO: like member
+    private Boolean isLikedFromCurrentMember;
 }

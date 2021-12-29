@@ -16,12 +16,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "작성하는 리뷰")
+@Validated
 public class TextReviewHistoryController {
     private final TextReviewHistoryService textReviewHistoryService;
     private final JwtService jwtService;
@@ -29,9 +34,9 @@ public class TextReviewHistoryController {
     @ApiOperation("특정 사용자 프로필에 '작성하는 리뷰' 등록")
     @PostMapping(value = "/text-reviews")
     public ResponseEntity<ApiResult> insert(
-            @RequestHeader("accessToken") String accessToken,
-            @RequestParam(required = true) long memberId,
-            @RequestParam(required = true) long postId,
+            @RequestHeader("accessToken") @NotBlank String accessToken,
+            @RequestParam(required = true) @Positive long memberId,
+            @RequestParam(required = true) @Positive long postId,
             @RequestBody TextReviewCreateRequest request
     ) {
 
@@ -49,7 +54,7 @@ public class TextReviewHistoryController {
     @ApiOperation("특정 사용자의 텍스트리뷰 모두 조회")
     @GetMapping(value = "/text-reviews")
     public ResponseEntity<ApiResult> getAll(
-            @RequestParam(required = true) @Parameter(description = "100 입력하세요") long memberId,
+            @RequestParam(required = true) @Parameter(description = "100 입력하세요") @Positive long memberId,
             @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
     ) {
 

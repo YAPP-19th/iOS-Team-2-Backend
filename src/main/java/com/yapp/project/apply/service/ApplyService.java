@@ -1,6 +1,7 @@
 package com.yapp.project.apply.service;
 
 import com.yapp.project.apply.dto.request.ApplyRequest;
+import com.yapp.project.apply.dto.response.ApplyResponse;
 import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.apply.entity.value.ApplyStatus;
 import com.yapp.project.apply.repository.ApplyRepository;
@@ -23,34 +24,39 @@ public class ApplyService {
     private final ApplyConverter applyConverter;
 
     @Transactional
-    public void apply(Long memberId, ApplyRequest request) { // TODO: 지원 알림처리
+    public ApplyResponse apply(long memberId, ApplyRequest request) { // TODO: 지원 알림처리
+        if (applyRepository.existsByMemberIdAndRecruitingPositionId(memberId, request.getRecruitingPositionId())) {
+            throw new IllegalRequestException(ExceptionMessage.ALREADY_APPLIED);
+        }
+
         var recruitingPosition = recruitingPositionRepository.findById(request.getRecruitingPositionId())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_RECRUITING_POSITION_ID));
-
-        long count = applyRepository.countByRecruitingPosition(recruitingPosition);
-
-        if (count >= recruitingPosition.getRecruitingNumber())
-            throw new IllegalRequestException(ExceptionMessage.EXCEEDED_APPLICANTS_NUMBER);
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
 
         Apply apply = applyConverter.toEntity(member, recruitingPosition, ApplyStatus.DONE_APPLYING.getApplyStatusCode());
-        applyRepository.save(apply);
+        Apply applyEntity = applyRepository.save(apply);
+
+        return applyConverter.toApplyResponse(applyEntity);
     }
 
     @Transactional
-    public void approveApplication(Long applyId) {
+    public void approveApplication(long applyId, long leaderId) {
         Apply apply = applyRepository.findById(applyId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_APPLY_ID));
+
+        apply.getPost().validateLeaderOrElseThrow(leaderId);
 
         apply.updateApplyStatusCode(ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode());
     }
 
     @Transactional
-    public void cancelApplication(Long applyId, Long applicantId) {
-        if (applyRepository.existsById(applyId))
-            throw new NotFoundException(ExceptionMessage.NOT_EXIST_APPLY_ID);
+    public void cancelApplication(long applyId, long applicantId) {
+        Apply apply = applyRepository.findById(applyId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_APPLY_ID));
+
+        apply.validateApplicantOrElseThrow(applicantId);
 
         applyRepository.deleteById(applyId);
     }

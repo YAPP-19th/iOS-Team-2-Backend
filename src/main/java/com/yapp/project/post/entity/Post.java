@@ -102,8 +102,8 @@ public class Post extends DeletableEntity {
         this.statusCode = statusCode;
     }
 
-    public void validateLeaderOrElseThrow(long targetMemberId) {
-        if (this.owner.getId().longValue() != targetMemberId) {
+    public void validateLeaderOrElseThrow(long memberId) {
+        if (this.owner.getId().longValue() != memberId) {
             throw new IllegalRequestException(ExceptionMessage.INVALID_MEMBER);
         }
     }
