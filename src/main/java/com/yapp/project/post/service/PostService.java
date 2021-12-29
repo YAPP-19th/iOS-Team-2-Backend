@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public class PostService {
     private final RecruitingPositionRepository recruitingPositionRepository;
     private final RecruitingPositionConverter recruitingPositionConverter;
     private final LikePostRepository likePostRepository;
+
+    private final PostMediator postMediator;
 
     @Transactional
     public PostCreateResponse create(PostCreateRequest request, String accessToken) {
@@ -140,17 +143,17 @@ public class PostService {
 
     @Transactional
     public PostDeleteResponse deleteById(String accessToken, Long postId) {
-        Long memberId = jwtService.getMemberId(accessToken);
+        long memberId = jwtService.getMemberId(accessToken);
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        if (post.getOwner().getId().equals(memberId)) {  // TODO: CASCADE 설정하기
-            postRepository.deleteById(postId);
-            return postConverter.toPostDeleteResponse(postId);
-        }
+        post.validateLeaderOrElseThrow(memberId);
 
-        throw new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID);
+        postMediator.deleteCascade(post);
+        postRepository.deleteById(postId);
+
+        return postConverter.toPostDeleteResponse(postId);
     }
 
     @Transactional(readOnly = true)

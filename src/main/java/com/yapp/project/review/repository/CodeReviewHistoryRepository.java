@@ -21,4 +21,6 @@ public interface CodeReviewHistoryRepository extends JpaRepository<CodeReviewHis
     List<CodeReviewResponse> findALLByTargetMemberIdOrderByCount(@Param("targetId") Long targetId);
 
     boolean existsByReviewerAndTargetMemberAndPost(Member reviewer, Member targetMember, Post post);
+
+    void deleteAllByPost(Post post);
 }

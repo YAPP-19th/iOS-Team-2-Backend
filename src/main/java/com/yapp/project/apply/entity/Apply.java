@@ -7,6 +7,8 @@ import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.RecruitingPosition;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -25,18 +27,21 @@ public class Apply extends DeletableEntity {
     @Column(name = "apply_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "apply_member_id", referencedColumnName = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "apply_recruiting_position_id", referencedColumnName = "recruiting_position_id")
     private RecruitingPosition recruitingPosition;
 
     @Column(name = "apply_status_code")
     private Integer applyStatusCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "apply_post_id", referencedColumnName = "post_id")
     private Post post;
 

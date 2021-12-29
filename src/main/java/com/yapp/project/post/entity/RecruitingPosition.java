@@ -18,7 +18,7 @@ public class RecruitingPosition {
     @Column(name = "recruiting_position_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "recruiting_position_post_id", referencedColumnName = "post_id")
     private Post post;

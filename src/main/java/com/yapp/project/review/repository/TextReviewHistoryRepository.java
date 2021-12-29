@@ -16,4 +16,6 @@ public interface TextReviewHistoryRepository extends JpaRepository<TextReviewHis
     Page<TextReviewHistory> findAllByTargetMember_Id(Long targetId, Pageable pageable);
 
     boolean existsByReviewerAndTargetMemberAndPost(Member reviewer, Member targetMember, Post post);
+
+    void deleteAllByPost(Post post);
 }
