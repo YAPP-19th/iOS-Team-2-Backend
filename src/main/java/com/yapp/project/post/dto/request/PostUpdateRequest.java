@@ -35,7 +35,7 @@ public class PostUpdateRequest {
     @ApiModelProperty(example = "용인시 수지구 죽전동")
     @NotBlank(message = DtoValidationFailMessage.INVALID_REGION)
     private String region;
-
+  
     @ApiModelProperty(example = "to be updated description detail example")
     @Size(min = 2, max = 1000, message = DtoValidationFailMessage.INVALID_DESCRIPTION)
     private String description;
