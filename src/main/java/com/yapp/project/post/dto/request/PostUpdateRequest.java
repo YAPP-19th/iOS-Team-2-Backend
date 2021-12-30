@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class PostUpdateRequest {
     @NotBlank(message = DtoValidationFailMessage.INVALID_URL)
     private String imageUrl;

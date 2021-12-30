@@ -1,6 +1,7 @@
 package com.yapp.project.member.dto.request;
 
 import com.yapp.project.common.exception.DtoValidationFailMessage;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreateInfoRequest {
     @Size(min = 2, max = 12, message = DtoValidationFailMessage.INVALID_NICKNAME)
     private String nickName;
