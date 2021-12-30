@@ -49,7 +49,7 @@ public class CodeReviewHistoryService {
             ApplyStatus.validateApprovedCodeOrElseThrow(reviewerApply.getApplyStatusCode());
         } else {  // 타겟이 팀원인 경우
             if (reviewer.getId().longValue() == post.getOwner().getId().longValue()) { // 리뷰어가 프로젝트 리더인 경우
-                Apply revieweeApply = applyRepository.findByMemberAndPost(reviewer, post)
+                Apply revieweeApply = applyRepository.findByMemberAndPost(reviewee, post)
                         .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
 
                 ApplyStatus.validateApprovedCodeOrElseThrow(revieweeApply.getApplyStatusCode());
@@ -69,6 +69,7 @@ public class CodeReviewHistoryService {
         }
 
         for (var selectedReview : selectedReviews) {
+            // TODO: 존재하는 선택하는 리뷰인지 검사
             var codeReviewHistory = converter.toEntity(reviewer, reviewee, selectedReview);
             codeReviewHistoryRepository.save(codeReviewHistory);
         }
