@@ -23,7 +23,7 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
 
     Optional<Apply> findByMemberAndPost(Member member, Post post);
 
-    boolean existsByMemberIdAndRecruitingPositionId(long memberId, long recruitingPositionId);
+    boolean existsByMemberIdAndPostId(long memberId, long postId);
 
     void deleteAllByPost(Post post);
 

@@ -69,7 +69,7 @@ public class CodeReviewHistoryService {
             throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
         }
 
-        for (var selectedReview : selectedReviews) {
+        for (var selectedReview : selectedReviews) { // TODO: 선택된 리뷰 count로 변경 (reviewer가 문제가 됨)
             ReviewCode.validateIsExistReviewOrElseThrow(selectedReview);
 
             var codeReviewHistory = converter.toEntity(reviewer, reviewee, selectedReview, post);

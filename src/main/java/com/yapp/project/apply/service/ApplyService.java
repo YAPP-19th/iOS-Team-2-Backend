@@ -12,6 +12,7 @@ import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
+import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,10 @@ public class ApplyService {
 
     @Transactional
     public ApplyResponse apply(long memberId, ApplyRequest request) { // TODO: 지원 알림처리
-        if (applyRepository.existsByMemberIdAndRecruitingPositionId(memberId, request.getRecruitingPositionId())) {
+        RecruitingPosition rp = recruitingPositionRepository.findById(request.getRecruitingPositionId())
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_RECRUITING_POSITION_ID));
+
+        if (applyRepository.existsByMemberIdAndPostId(memberId, rp.getPost().getId())) { // 프로젝트 당 1회 지원 가능
             throw new IllegalRequestException(ExceptionMessage.ALREADY_APPLIED);
         }
 
