@@ -70,6 +70,8 @@ public class ApplyService {
     public List<ApplicantResponse> getApplyList(long postId, Optional<String> positionOpt, long leaderId) {
         List<Apply> applies;
 
+        //TODO: leaderId가 post작성자인지 검증
+
         if (positionOpt.isPresent()) { // 직군으로 조회
             BasePosition basePosition = BasePosition.fromEnglishName(positionOpt.get());
             applies = applyRepository.findALlByBasePositionCodeAndPostId(basePosition.getCode(), postId);
