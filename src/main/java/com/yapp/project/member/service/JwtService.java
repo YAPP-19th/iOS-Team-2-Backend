@@ -50,7 +50,7 @@ public class JwtService {
         String accessToken = jwtUtil.createToken(memberId, loginId, accessExpiredTime);
         String refreshToken = jwtUtil.createToken(memberId, loginId, refreshExpiredTime);
         updateToken(loginId, refreshToken);
-        return new LoginResponse(loginId, accessToken);
+        return new LoginResponse(memberId, loginId, accessToken);
     }
 
     @Transactional

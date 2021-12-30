@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,11 @@ public class MemberController {
     @PostMapping(value = "/infos")
     public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") @NotBlank String accessToken, @Valid @RequestBody CreateInfoRequest request) {
         jwtService.validateTokenForm(accessToken);
-        Long response = memberService.createInfo(accessToken, request);
+        Long memberId = memberService.createInfo(accessToken, request);
+
+        var response = new HashMap<String, Long>();
+        response.put("memberId", memberId);
+
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
