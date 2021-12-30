@@ -20,6 +20,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.validation.ConstraintViolationException;
+import java.security.SignatureException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -86,6 +87,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ApiExceptionResult handleFileSizeLimitExceededException(MaxUploadSizeExceededException exception) {
         return createApiExceptionResult(ExceptionMessage.FILE_SIZE_LIMIT_EXCEEDED);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ApiExceptionResult handleSignatureException(SignatureException exception) {
+        return createApiExceptionResult(ExceptionMessage.JWT_SIGNATURE_DOES_NOT_MATCH);
     }
 
     @ExceptionHandler(Exception.class)

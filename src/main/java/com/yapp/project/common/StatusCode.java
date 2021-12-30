@@ -69,7 +69,8 @@ public enum StatusCode {
 
     // 그외 모든 예외
     ALL_OTHER_EXCEPTIONS(9000),
-    UNEXPECTED_EXCEPTIONS(9999)
+    UNEXPECTED_EXCEPTIONS(9999),
+    JWT_SIGNATURE_DOES_NOT_MATCH(9001),
 
     ;
 
