@@ -1,5 +1,6 @@
 package com.yapp.project.post.dto.response;
 
+import com.yapp.project.common.dto.PositionAndColor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;

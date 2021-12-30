@@ -4,6 +4,7 @@ import com.yapp.project.apply.dto.response.ApplicantResponse;
 import com.yapp.project.apply.dto.response.ApplyResponse;
 import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.apply.entity.value.ApplyStatus;
+import com.yapp.project.common.dto.PositionAndColor;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.entity.RecruitingPosition;
@@ -46,7 +47,7 @@ public class ApplyConverter {
                                             .nickName(apply.getMember().getNickName())
                                             .address(apply.getMember().getAddress())
                                             .position(
-                                                    new ApplicantResponse.PositionAndColor(
+                                                    new PositionAndColor(
                                                             Position.of(apply.getMember().getBasePositionCode()).getName(),
                                                             Position.getBasePosition(apply.getMember().getBasePositionCode()).getCode()
                                                     )

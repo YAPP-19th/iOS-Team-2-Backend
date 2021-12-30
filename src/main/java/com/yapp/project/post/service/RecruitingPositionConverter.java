@@ -1,7 +1,7 @@
 package com.yapp.project.post.service;
 
+import com.yapp.project.common.dto.PositionAndColor;
 import com.yapp.project.common.value.Position;
-import com.yapp.project.post.dto.response.PositionAndColor;
 import com.yapp.project.post.dto.response.RecruitingStatusResponse;
 import com.yapp.project.post.entity.RecruitingPosition;
 import org.springframework.stereotype.Component;

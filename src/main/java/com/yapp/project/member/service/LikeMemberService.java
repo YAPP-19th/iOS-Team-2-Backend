@@ -3,12 +3,16 @@ package com.yapp.project.member.service;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
+import com.yapp.project.likepost.dto.LikePostResponse;
+import com.yapp.project.likepost.entity.LikePost;
 import com.yapp.project.member.dto.response.LikeMemberResponse;
 import com.yapp.project.member.entity.LikeMember;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.LikeMemberRepositroy;
 import com.yapp.project.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,49 +23,35 @@ import java.util.List;
 public class LikeMemberService {
     private final LikeMemberRepositroy likeMemberRepositroy;
     private final MemberRepository memberRepository;
+    private final LikeMemberConverter likeMemberConverter;
 
     @Transactional(readOnly = true)
-    public LikeMemberResponse findAll(Long fromMemberId) {
-        Member fromMember = memberRepository.findById(fromMemberId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+    public Page<LikeMemberResponse> findAll(Pageable pageable, long fromMemberId) {
+        Page<LikeMember> likeMemberPage = likeMemberRepositroy.findAllByFromMemberId(pageable, fromMemberId);
 
-        List<LikeMember> likeMembers = likeMemberRepositroy.findAllByFromMember(fromMember);
-
-        LikeMemberResponse response = new LikeMemberResponse();
-        for(var likeMember : likeMembers){
-            var toMember = likeMember.getToMember();
-            var memberInfo = new LikeMemberResponse.LikedMember(
-                    toMember.getId(),
-                    toMember.getNickName(),
-                    toMember.getProfileImageUrl(),
-                    toMember.getAddress(),
-                    Position.of(toMember.getPositionCode()).getName(),
-                    toMember.getLikeCount()
-            );
-
-            response.getLikedMembers().add(memberInfo);
-        }
-
-        return response;
+        return likeMemberPage.map(lm -> likeMemberConverter.toLikeMemberResponse(lm));
     }
 
     @Transactional
-    public void switchLikeMemberStatus(Long fromMemberId, Long memberId) {
+    public boolean switchLikeMemberStatus(Long fromMemberId, Long targetMemberId) {
         Member fromMember = memberRepository.findById(fromMemberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        Member toMember = memberRepository.findById(memberId)
+        Member toMember = memberRepository.findById(targetMemberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        if(likeMemberRepositroy.existsByFromMemberAndToMember(fromMember, toMember)) {
-            LikeMember likeMember= likeMemberRepositroy.findByFromMemberAndToMember(fromMember, toMember)
-                            .orElseThrow(() -> new NotFoundException(ExceptionMessage.ALL_OTHER_EXCEPTIONS));
+        if (likeMemberRepositroy.existsByFromMemberAndToMember(fromMember, toMember)) {
+            LikeMember likeMember = likeMemberRepositroy.findByFromMemberAndToMember(fromMember, toMember)
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.INVALID_HTTP_REQUEST));
 
             likeMemberRepositroy.delete(likeMember);
-        }
-        else{
+
+            return false;
+        } else {
             LikeMember likeMember = new LikeMember(fromMember, toMember);
             likeMemberRepositroy.save(likeMember);
+
+            return true;
         }
     }
 }

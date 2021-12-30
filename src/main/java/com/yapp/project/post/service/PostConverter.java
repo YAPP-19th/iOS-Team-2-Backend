@@ -1,6 +1,7 @@
 package com.yapp.project.post.service;
 
 import com.yapp.project.apply.entity.Apply;
+import com.yapp.project.common.dto.PositionAndColor;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.dto.request.PostCreateRequest;

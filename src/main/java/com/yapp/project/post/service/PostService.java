@@ -3,6 +3,7 @@ package com.yapp.project.post.service;
 import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.apply.entity.value.ApplyStatus;
 import com.yapp.project.apply.repository.ApplyRepository;
+import com.yapp.project.common.dto.PositionAndColor;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;

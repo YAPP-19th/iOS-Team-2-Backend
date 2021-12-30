@@ -1,5 +1,6 @@
 package com.yapp.project.apply.dto.response;
 
+import com.yapp.project.common.dto.PositionAndColor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +38,5 @@ public class ApplicantResponse {
         private final long id;
 
         private final String position;
-    }
-
-    @Getter
-    @RequiredArgsConstructor
-    public static class PositionAndColor {
-        private final String position;
-
-        private final int colorCode;
     }
 }
