@@ -1,6 +1,7 @@
 package com.yapp.project.review.entity.value;
 
 import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 
 import lombok.Getter;
@@ -80,5 +81,13 @@ public enum ReviewCode {
                 result.add(value.getName());
         }
         return result;
+    }
+
+    public static void validateIsExistReviewOrElseThrow(String reviewStr) {
+        for(var reviewCode : ReviewCode.values()){
+            if(reviewCode.name.equals(reviewStr)) return;
+        }
+
+        throw new IllegalRequestException(ExceptionMessage.NOT_EXIST_SELECT_REVIEW);
     }
 }

@@ -1,6 +1,8 @@
 package com.yapp.project.member.entity;
 
 import com.yapp.project.common.entity.DeletableEntity;
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -63,5 +65,17 @@ public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세�
 
     public boolean isSameMember(Member member){
         return this.id.longValue() == member.getId().longValue() ? true : false;
+    }
+
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    public void substractLikeCount() {
+        if (this.likeCount <= 0) {
+            throw new IllegalRequestException(ExceptionMessage.INVALID_LIKE_COUNT);
+        }
+
+        this.likeCount--;
     }
 }

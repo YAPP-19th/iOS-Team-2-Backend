@@ -7,6 +7,7 @@ import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -19,6 +20,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.validation.ConstraintViolationException;
+import java.security.SignatureException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -65,9 +67,10 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException.class,
             MissingServletRequestParameterException.class,
             TypeMismatchException.class,
-            MissingRequestHeaderException.class
+            MissingRequestHeaderException.class,
+            HttpMessageConversionException.class
     })
-    protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(Exception exception) {
+    protected ApiExceptionResult handleHttpBadRequest(Exception exception) {
         return createApiExceptionResult(ExceptionMessage.INVALID_HTTP_REQUEST);
     }
 
@@ -84,6 +87,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ApiExceptionResult handleFileSizeLimitExceededException(MaxUploadSizeExceededException exception) {
         return createApiExceptionResult(ExceptionMessage.FILE_SIZE_LIMIT_EXCEEDED);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ApiExceptionResult handleSignatureException(SignatureException exception) {
+        return createApiExceptionResult(ExceptionMessage.JWT_SIGNATURE_DOES_NOT_MATCH);
     }
 
     @ExceptionHandler(Exception.class)

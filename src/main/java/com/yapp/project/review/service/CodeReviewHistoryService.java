@@ -6,7 +6,6 @@ import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
-import com.yapp.project.info.dto.CodeReviewListResponse;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.post.entity.Post;
@@ -30,13 +29,6 @@ public class CodeReviewHistoryService {
     private final ApplyRepository applyRepository;
     private final CodeReviewHistoryConverter converter;
 
-    public CodeReviewListResponse findAllReviews() {
-        return new CodeReviewListResponse(
-                ReviewCode.getAllPositiveReviewNames(),
-                ReviewCode.getAllNegativeReviewNames()
-        );
-    }
-
     @Transactional
     public void create(long reviewerId, long revieweeId, long postId, List<String> selectedReviews) {
         Member reviewer = memberRepository.findById(reviewerId)
@@ -58,7 +50,7 @@ public class CodeReviewHistoryService {
             ApplyStatus.validateApprovedCodeOrElseThrow(reviewerApply.getApplyStatusCode());
         } else {  // 타겟이 팀원인 경우
             if (reviewer.getId().longValue() == post.getOwner().getId().longValue()) { // 리뷰어가 프로젝트 리더인 경우
-                Apply revieweeApply = applyRepository.findByMemberAndPost(reviewer, post)
+                Apply revieweeApply = applyRepository.findByMemberAndPost(reviewee, post)
                         .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
 
                 ApplyStatus.validateApprovedCodeOrElseThrow(revieweeApply.getApplyStatusCode());
@@ -78,7 +70,9 @@ public class CodeReviewHistoryService {
         }
 
         for (var selectedReview : selectedReviews) {
-            var codeReviewHistory = converter.toEntity(reviewer, reviewee, selectedReview);
+            ReviewCode.validateIsExistReviewOrElseThrow(selectedReview);
+
+            var codeReviewHistory = converter.toEntity(reviewer, reviewee, selectedReview, post);
             codeReviewHistoryRepository.save(codeReviewHistory);
         }
 

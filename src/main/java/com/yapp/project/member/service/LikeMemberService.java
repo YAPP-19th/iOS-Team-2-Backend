@@ -46,10 +46,14 @@ public class LikeMemberService {
 
             likeMemberRepositroy.delete(likeMember);
 
+            toMember.substractLikeCount();
+            
             return false;
         } else {
             LikeMember likeMember = new LikeMember(fromMember, toMember);
             likeMemberRepositroy.save(likeMember);
+
+            toMember.addLikeCount();
 
             return true;
         }

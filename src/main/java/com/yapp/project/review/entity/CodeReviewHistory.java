@@ -25,7 +25,7 @@ public class CodeReviewHistory extends DeletableEntity {
     private Long id;
 
     @Column(name = "code_review_history_code", nullable = false)
-    private int reviewCode;
+    private Integer reviewCode;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
