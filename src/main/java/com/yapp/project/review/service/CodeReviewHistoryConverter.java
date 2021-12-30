@@ -1,6 +1,7 @@
 package com.yapp.project.review.service;
 
 import com.yapp.project.member.entity.Member;
+import com.yapp.project.post.entity.Post;
 import com.yapp.project.review.dto.response.CodeReviewCountResponse;
 import com.yapp.project.review.entity.CodeReviewHistory;
 import com.yapp.project.review.entity.value.ReviewCode;
@@ -10,11 +11,12 @@ import java.util.List;
 
 @Component
 public class CodeReviewHistoryConverter {
-    public CodeReviewHistory toEntity(Member reviewer, Member targetmember, String selectedReview){
+    public CodeReviewHistory toEntity(Member reviewer, Member targetmember, String selectedReview, Post post){
         return CodeReviewHistory.builder()
                 .reviewer(reviewer)
                 .targetMember(targetmember)
                 .reviewCode(ReviewCode.of(selectedReview).getCode())
+                .post(post)
                 .build();
     }
 

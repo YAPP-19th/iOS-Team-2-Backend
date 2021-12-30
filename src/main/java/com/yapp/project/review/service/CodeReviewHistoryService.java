@@ -12,6 +12,7 @@ import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.review.dto.response.CodeReviewCountResponse;
 import com.yapp.project.review.entity.CodeReviewHistory;
+import com.yapp.project.review.entity.value.ReviewCode;
 import com.yapp.project.review.repository.CodeReviewHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -69,8 +70,9 @@ public class CodeReviewHistoryService {
         }
 
         for (var selectedReview : selectedReviews) {
-            // TODO: 존재하는 선택하는 리뷰인지 검사
-            var codeReviewHistory = converter.toEntity(reviewer, reviewee, selectedReview);
+            ReviewCode.validateIsExistReviewOrElseThrow(selectedReview);
+
+            var codeReviewHistory = converter.toEntity(reviewer, reviewee, selectedReview, post);
             codeReviewHistoryRepository.save(codeReviewHistory);
         }
 
