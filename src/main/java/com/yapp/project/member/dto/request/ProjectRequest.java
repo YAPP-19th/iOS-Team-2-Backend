@@ -9,14 +9,14 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class ProjectRequest {
-    String name;
+    private String name;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDate startDate;
+    private LocalDate startDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDate endDate;
+    private LocalDate endDate;
 
-    String description;
+    private String description;
 
 }
