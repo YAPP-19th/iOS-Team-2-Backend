@@ -11,6 +11,7 @@ import java.util.List;
 
 @Builder
 @Getter
+@NoArgsConstructor
 public class PostCreateRequest {
     @NotBlank(message = DtoValidationFailMessage.INVALID_URL)
     private String imageUrl;
