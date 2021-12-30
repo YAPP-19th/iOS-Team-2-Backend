@@ -1,6 +1,7 @@
 package com.yapp.project.post.service;
 
 import com.yapp.project.apply.entity.Apply;
+import com.yapp.project.common.dto.PositionAndColor;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.dto.request.PostCreateRequest;
@@ -20,15 +21,15 @@ public class PostConverter {
 
         return Post.builder()
                 .title(request.getTitle())
-                .categoryCode(PostCategory.of(request.getCategoryName()).getCategoryCode())
+                .categoryCode(PostCategory.of(request.getCategoryName()).getCode())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .region(request.getRegion())
                 .description(request.getDescription())
                 .owner(leader)
-                .statusCode(PostStatus.RECRUITING.getPostStatusCode())
+                .statusCode(PostStatus.RECRUITING.getCode())
                 .viewCount(0L)
-                .onlineCode(OnlineStatus.of(request.getOnlineInfo()).getOnlineStatusCode())
+                .onlineCode(OnlineStatus.of(request.getOnlineInfo()).getCode())
                 .imageUrl(request.getImageUrl())
                 .likeCount(0L)
                 .build();
@@ -40,7 +41,7 @@ public class PostConverter {
             int categoryCode,
             LocalDateTime createdAt) {
 
-        return new PostCreateResponse(id, imageUrl, PostCategory.of(categoryCode).getCategoryName(), createdAt);
+        return new PostCreateResponse(id, imageUrl, PostCategory.of(categoryCode).getName(), createdAt);
     }
 
     // used
@@ -54,18 +55,18 @@ public class PostConverter {
                 .endDate(post.getEndDate())
                 .region(post.getRegion())
                 .viewCount(post.getViewCount())
-                .status(PostStatus.of(post.getStatusCode()).getPostStatusName())
-                .category(PostCategory.of(post.getCategoryCode()).getCategoryName())
+                .status(PostStatus.of(post.getStatusCode()).getName())
+                .category(PostCategory.of(post.getCategoryCode()).getName())
                 .leader(
                         new PostDetailResponse.MemberDto(
                                 leader.getId(),
                                 leader.getNickName(),
                                 leader.getProfileImageUrl(),
                                 leader.getAddress(),
-                                Position.of(Integer.parseInt(leader.getPositionCode().split(" ")[0])).getPositionName()
+                                Position.of(Integer.parseInt(leader.getPositionCode().split(" ")[0])).getName()
                         )
                 )
-                .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getOnlineStatusName())
+                .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getName())
                 .createdAt(post.getCreatedDate())
                 .modifiedAt(post.getLastModifiedDate())
                 .isLiked(isLiked)
@@ -104,8 +105,8 @@ public class PostConverter {
                             member.getProfileImageUrl(),
                             member.getAddress(),
                             new PositionAndColor(
-                                    Position.of(apply.getRecruitingPosition().getPositionCode()).getPositionName(),
-                                    Position.getRootPosition(apply.getRecruitingPosition().getPositionCode()).getRootPositionCode()
+                                    Position.of(apply.getRecruitingPosition().getPositionCode()).getName(),
+                                    Position.getBasePosition(apply.getRecruitingPosition().getPositionCode()).getCode()
                             )
                     )
             );

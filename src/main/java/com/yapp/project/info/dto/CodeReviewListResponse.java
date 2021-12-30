@@ -1,4 +1,4 @@
-package com.yapp.project.review.dto.response;
+package com.yapp.project.info.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

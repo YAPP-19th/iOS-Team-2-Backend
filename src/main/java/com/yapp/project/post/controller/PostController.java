@@ -82,7 +82,7 @@ public class PostController {
         );
     }
 
-    @ApiOperation("게시글 단건 조회 (참여승인된 멤버만 가져옴)")
+    @ApiOperation("게시글 단건 조회 (참여승인된 멤버 조회)")
     @GetMapping(value = "/{postId}/members")
     public ResponseEntity<ApiResult> getTeamMembers(@PathVariable @Positive Long postId) {
         TeamMemberResponse response = postService.findTeamMembersById(postId);
@@ -92,10 +92,10 @@ public class PostController {
         );
     }
 
-    @ApiOperation("게시글 단건 조회 (지원 현황)")
+    @ApiOperation("게시글 단건 조회 (모집 정보 조회)")
     @GetMapping(value = "/{postId}/recruitingStatus")
     public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable @Positive long postId) {
-        var response = postService.findRecruitingStatusById(postId);
+        var response = postService.findRecruitingStatusByPostId(postId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
@@ -116,13 +116,13 @@ public class PostController {
     }
 
     @ApiOperation("position으로 조회")
-    @GetMapping(value = "/positions/{rootPositionName}")
+    @GetMapping(value = "/positions/{basePositionName}")
     public ResponseEntity<ApiResult> getAllByPosition(
-            @PathVariable String rootPositionName,
+            @PathVariable String basePositionName,
             @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
     ) {
 
-        Page<PostSimpleResponse> response = postService.findAllByPosition(rootPositionName, pageable);
+        Page<PostSimpleResponse> response = postService.findAllByPosition(basePositionName, pageable);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
@@ -144,4 +144,6 @@ public class PostController {
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
+
+    //TODO: 내가 모집중인 전체 프로젝트
 }

@@ -37,7 +37,7 @@ public class Apply extends DeletableEntity {
     @JoinColumn(name = "apply_recruiting_position_id", referencedColumnName = "recruiting_position_id")
     private RecruitingPosition recruitingPosition;
 
-    @Column(name = "apply_status_code")
+    @Column(name = "apply_status_code", nullable = false)
     private Integer applyStatusCode;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

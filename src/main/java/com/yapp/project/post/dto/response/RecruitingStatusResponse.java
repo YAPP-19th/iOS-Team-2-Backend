@@ -1,5 +1,6 @@
 package com.yapp.project.post.dto.response;
 
+import com.yapp.project.common.dto.PositionAndColor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ public class RecruitingStatusResponse {
 
         private final PositionAndColor positions;
 
-        private final String status;
+        private final int recruitingNumber;
+
+        private final String approvedStatus;
     }
 }

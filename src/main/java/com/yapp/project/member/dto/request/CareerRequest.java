@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class CareerRequest {
+public class CareerRequest {  //TODO: 삭제
     private Long memberId;
 
     private String companyName;

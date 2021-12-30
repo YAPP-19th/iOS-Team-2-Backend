@@ -1,6 +1,7 @@
 package com.yapp.project.apply.service;
 
 import com.yapp.project.apply.dto.request.ApplyRequest;
+import com.yapp.project.apply.dto.response.ApplicantResponse;
 import com.yapp.project.apply.dto.response.ApplyResponse;
 import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.apply.entity.value.ApplyStatus;
@@ -8,12 +9,16 @@ import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +40,7 @@ public class ApplyService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
 
-        Apply apply = applyConverter.toEntity(member, recruitingPosition, ApplyStatus.DONE_APPLYING.getApplyStatusCode());
+        Apply apply = applyConverter.toEntity(member, recruitingPosition, ApplyStatus.DONE_APPLYING.getCode());
         Apply applyEntity = applyRepository.save(apply);
 
         return applyConverter.toApplyResponse(applyEntity);
@@ -48,7 +53,7 @@ public class ApplyService {
 
         apply.getPost().validateLeaderOrElseThrow(leaderId);
 
-        apply.updateApplyStatusCode(ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode());
+        apply.updateApplyStatusCode(ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode());
     }
 
     @Transactional
@@ -61,4 +66,19 @@ public class ApplyService {
         applyRepository.deleteById(applyId);
     }
 
+    @Transactional(readOnly = true)
+    public List<ApplicantResponse> getApplyList(long postId, Optional<String> positionOpt, long leaderId) {
+        List<Apply> applies;
+
+        //TODO: leaderId가 post작성자인지 검증
+
+        if (positionOpt.isPresent()) { // 직군으로 조회
+            BasePosition basePosition = BasePosition.fromEnglishName(positionOpt.get());
+            applies = applyRepository.findALlByBasePositionCodeAndPostId(basePosition.getCode(), postId);
+        } else {
+            applies = applyRepository.findAllByPostId(postId);
+        }
+
+        return applyConverter.toApplicantResponses(applies);
+    }
 }

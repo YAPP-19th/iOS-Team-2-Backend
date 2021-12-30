@@ -17,7 +17,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findMemberByLoginId(String loginId);
 
     @Transactional
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("UPDATE Member m SET m.token = :refreshToken WHERE m.loginId = :loginId")
     void setRefreshTokenByLoginId(@Param("loginId") String loginId, @Param("refreshToken") String refreshToken);
 

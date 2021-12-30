@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,10 +35,13 @@ public class LikePostController {
         jwtService.validateTokenForm(accessToken);
 
         Long memberId = jwtService.getMemberId(accessToken);
-        likePostService.switchLikeStatus(memberId, postId);
+        boolean isLiked = likePostService.switchLikeStatus(memberId, postId);
+
+        var response = new HashMap<String, Boolean>();
+        response.put("isLiked", isLiked);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 

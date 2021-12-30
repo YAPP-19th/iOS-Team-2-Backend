@@ -28,24 +28,24 @@ public enum PostCategory {
     RELIGION(15, "종교"),
     SPACE_ALIEN(16, "우주/외계인");
 
-    private final int categoryCode;
-    private final String categoryName;
+    private final int code;
+    private final String name;
 
-    PostCategory(int categoryCode, String categoryName) {
-        this.categoryCode = categoryCode;
-        this.categoryName = categoryName;
+    PostCategory(int code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
     public static PostCategory of(int categoryCode) {
         return Arrays.stream(PostCategory.values())
-                .filter(v -> v.categoryCode == categoryCode)
+                .filter(v -> v.code == categoryCode)
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_CATEGORY_CODE));
     }
 
     public static PostCategory of(String categoryName) {
         return Arrays.stream(PostCategory.values())
-                .filter(v -> v.categoryName.equals(categoryName))
+                .filter(v -> v.name.equals(categoryName))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_CATEGORY_NAME));
     }
@@ -54,7 +54,7 @@ public enum PostCategory {
         final List<String> result = new ArrayList<>();
 
         for(var value : PostCategory.values()){
-            result.add(value.getCategoryName());
+            result.add(value.getName());
         }
 
         return result;

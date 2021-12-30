@@ -32,7 +32,7 @@ public class LikePostService {
     }
 
     @Transactional
-    public void switchLikeStatus(Long memberId, Long postId) {
+    public boolean switchLikeStatus(Long memberId, Long postId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
@@ -41,15 +41,19 @@ public class LikePostService {
 
         if (likePostRepository.existsByMemberAndPost(member, post)) {
             LikePost likePost = likePostRepository.findByMemberAndPost(member, post)
-                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.ALL_OTHER_EXCEPTIONS));
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.INVALID_HTTP_REQUEST));
 
             likePostRepository.delete(likePost);
             post.substractLikeCount();
+
+            return false;
         }
         else{
             LikePost likePost = new LikePost(member, post);
             likePostRepository.save(likePost);
             post.addLikeCount();
+
+            return true;
         }
     }
 }

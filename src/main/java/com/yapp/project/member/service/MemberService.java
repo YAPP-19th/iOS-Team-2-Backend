@@ -2,6 +2,7 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.member.dto.request.CareerRequest;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
@@ -85,17 +86,11 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public List<BudiMemberResponse> getBudiList(String position) {
-        int positionCode = 0;
-        if (position.equals("developer")) {
-            positionCode = 1;
-        } else if (position.equals("planner")) {
-            positionCode = 2;
-        } else if (position.equals("designer")) {
-            positionCode = 3;
-        }
+        BasePosition basePosition = BasePosition.fromEnglishName(position);
 
-        List<Member> m = memberRepository.getMemberBybasePositionCode(positionCode);
+        List<Member> m = memberRepository.getMemberBybasePositionCode(basePosition.getCode());
         List<BudiMemberResponse> responses = memberConverter.toBudiMemberResponse(m);
+
         return responses;
     }
 

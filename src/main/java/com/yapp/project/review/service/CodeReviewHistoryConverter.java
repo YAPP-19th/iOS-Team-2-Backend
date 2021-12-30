@@ -14,7 +14,7 @@ public class CodeReviewHistoryConverter {
         return CodeReviewHistory.builder()
                 .reviewer(reviewer)
                 .targetMember(targetmember)
-                .reviewCode(ReviewCode.of(selectedReview).getReviewCode())
+                .reviewCode(ReviewCode.of(selectedReview).getCode())
                 .build();
     }
 
@@ -25,7 +25,7 @@ public class CodeReviewHistoryConverter {
 
         for(var codeReview : codeReviews){
             int reviewCode = codeReview.getReviewCode();
-            String reviewName = ReviewCode.of(reviewCode).getReviewName();
+            String reviewName = ReviewCode.of(reviewCode).getName();
 
             if(reviewCode > 0){
                 positiveMap.put(reviewName, positiveMap.getOrDefault(reviewName, 0) + 1);

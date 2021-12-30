@@ -3,10 +3,11 @@ package com.yapp.project.post.service;
 import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.apply.entity.value.ApplyStatus;
 import com.yapp.project.apply.repository.ApplyRepository;
+import com.yapp.project.common.dto.PositionAndColor;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
-import com.yapp.project.common.value.RootPosition;
+import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.likepost.repository.LikePostRepository;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
@@ -24,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -80,12 +80,12 @@ public class PostService {
         post.updateInfos(
                 request.getImageUrl(),
                 request.getTitle(),
-                PostCategory.of(request.getCategoryName()).getCategoryCode(),
+                PostCategory.of(request.getCategoryName()).getCode(),
                 request.getStartDate(),
                 request.getEndDate(),
                 request.getRegion(),
                 request.getDescription(),
-                OnlineStatus.of(request.getOnlineInfo()).getOnlineStatusCode()
+                OnlineStatus.of(request.getOnlineInfo()).getCode()
         );
     }
 
@@ -121,20 +121,19 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        List<Apply> applies = applyRepository.findAllByPostAndApplyStatusCode(post, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode());
+        List<Apply> applies = applyRepository.findAllByPostAndApplyStatusCode(post, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode());
 
         return postConverter.toTeamMemberResponse(applies);
     }
 
     @Transactional
-    public RecruitingStatusResponse findRecruitingStatusById(Long postId) {
+    public RecruitingStatusResponse findRecruitingStatusByPostId(Long postId) {
         var response = new RecruitingStatusResponse();
-        List<RecruitingPosition> positions = recruitingPositionRepository.findAllByPostId(postId);
-        for (var position : positions) {
+        List<RecruitingPosition> recruitingPositions = recruitingPositionRepository.findAllByPostId(postId);
+        for (var recruitingPosition : recruitingPositions) {
             response.getRecruitingStatuses().add(recruitingPositionConverter.toRecruitingStatus(
-                    position.getId(),
-                    position.getPositionCode(),
-                    Long.toString(applyRepository.countByRecruitingPositionAndApplyStatusCode(position, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode()))
+                    recruitingPosition,
+                    applyRepository.countByRecruitingPositionAndApplyStatusCode(recruitingPosition, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode())
             ));
         }
 
@@ -157,8 +156,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostSimpleResponse> findAllByPosition(String rootPositionName, Pageable pageable) {
-        Page<Post> allByPositionCode = recruitingPositionRepository.findDistinctPostByPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
+    public Page<PostSimpleResponse> findAllByPosition(String basePositionName, Pageable pageable) {
+        Page<Post> allByPositionCode = recruitingPositionRepository.findDistinctPostByPositionCode(BasePosition.of(basePositionName).getCode(), pageable);
 
         return allByPositionCode.map(p -> makePostSimpleResponse(p));
     }
@@ -170,8 +169,8 @@ public class PostService {
         for (var positionDetail : positionDetailsByPost) {
             positions.add(
                     new PositionAndColor(
-                            Position.of(positionDetail.getPositionCode()).getPositionName(),
-                            Position.getRootPosition(positionDetail.getPositionCode()).getRootPositionCode()
+                            Position.of(positionDetail.getPositionCode()).getName(),
+                            Position.getBasePosition(positionDetail.getPositionCode()).getCode()
                     )
             );
         }
