@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 public class RecruitingPositionConverter {
     public RecruitingPosition toRecruitingPositionEntity(String positionName, int recruitingNumber){
         return RecruitingPosition.builder()
-                .basePositionCode(Position.getBasePosition(Position.of(positionName).getPositionCode()).getCode())
-                .positionCode(Position.of(positionName).getPositionCode())
+                .basePositionCode(Position.getBasePosition(Position.of(positionName).getCode()).getCode())
+                .positionCode(Position.of(positionName).getCode())
                 .recruitingNumber(recruitingNumber)
                 .build();
     }
@@ -20,7 +20,7 @@ public class RecruitingPositionConverter {
         return new RecruitingStatusResponse.RecruitingStatus(
                 recruitingPositionId,
                 new PositionAndColor(
-                        Position.of(positionCode).getPositionName(),
+                        Position.of(positionCode).getName(),
                         Position.getBasePosition(positionCode).getCode()
                 ),
                 status

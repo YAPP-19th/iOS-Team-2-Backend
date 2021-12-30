@@ -16,7 +16,7 @@ public class LikePostConverter {
                 .title(post.getTitle())
                 .startDate(post.getStartDate())
                 .endDate(post.getEndDate())
-                .projectStatus(PostStatus.of(post.getStatusCode()).getPostStatusName())
+                .projectStatus(PostStatus.of(post.getStatusCode()).getName())
                 .build();
     }
 }

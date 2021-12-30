@@ -39,24 +39,24 @@ public enum ReviewCode {
 
     ;
 
-    private final int reviewCode;
-    private final String reviewName;
+    private final int code;
+    private final String name;
 
-    ReviewCode(int reviewCode, String reviewName) {
-        this.reviewCode = reviewCode;
-        this.reviewName = reviewName;
+    ReviewCode(int code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
     public static ReviewCode of(int reviewCode) {
         return Arrays.stream(ReviewCode.values())
-                .filter(v -> v.reviewCode == reviewCode)
+                .filter(v -> v.code == reviewCode)
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_REVIEW_CODE));
     }
 
     public static ReviewCode of(String reviewName) {
         return Arrays.stream(ReviewCode.values())
-                .filter(v -> v.reviewName.equals(reviewName))
+                .filter(v -> v.name.equals(reviewName))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_REVIEW_NAME));
     }
@@ -65,8 +65,8 @@ public enum ReviewCode {
         final List<String> result = new ArrayList<>();
 
         for(var value : ReviewCode.values()){
-            if(value.getReviewCode() > 0)
-                result.add(value.getReviewName());
+            if(value.getCode() > 0)
+                result.add(value.getName());
         }
 
         return result;
@@ -76,8 +76,8 @@ public enum ReviewCode {
         final List<String> result = new ArrayList<>();
 
         for(var value : ReviewCode.values()){
-            if(value.getReviewCode() < 0)
-                result.add(value.getReviewName());
+            if(value.getCode() < 0)
+                result.add(value.getName());
         }
         return result;
     }

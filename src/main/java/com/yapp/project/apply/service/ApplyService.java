@@ -40,7 +40,7 @@ public class ApplyService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
 
-        Apply apply = applyConverter.toEntity(member, recruitingPosition, ApplyStatus.DONE_APPLYING.getApplyStatusCode());
+        Apply apply = applyConverter.toEntity(member, recruitingPosition, ApplyStatus.DONE_APPLYING.getCode());
         Apply applyEntity = applyRepository.save(apply);
 
         return applyConverter.toApplyResponse(applyEntity);
@@ -53,7 +53,7 @@ public class ApplyService {
 
         apply.getPost().validateLeaderOrElseThrow(leaderId);
 
-        apply.updateApplyStatusCode(ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode());
+        apply.updateApplyStatusCode(ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode());
     }
 
     @Transactional

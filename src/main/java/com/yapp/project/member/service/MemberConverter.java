@@ -30,7 +30,7 @@ public class MemberConverter {
                 .email("")
                 .introduce("")
                 .nickName("")
-                .positionCode(Integer.toString(Position.DEVELOPER_DEFAULT.getPositionCode()) + " ") //TODO: position code가 string이어서 다른 부분에서 에러발생
+                .positionCode(Integer.toString(Position.DEVELOPER_DEFAULT.getCode()) + " ") //TODO: position code가 string이어서 다른 부분에서 에러발생
                 .portfolioLink("")
                 .projects(List.of())
                 .profileImageUrl("")
@@ -44,7 +44,7 @@ public class MemberConverter {
     public Member toMemberEntity(Member member, CreateInfoRequest request, int score) {
         List<String> positionList = request.getPositionList()
                 .stream()
-                .map(v -> Position.of(v).getPositionCode())
+                .map(v -> Position.of(v).getCode())
                 .map(v -> v.toString())
                 .collect(Collectors.toList());
         String positionListString = StringUtils.join(positionList, ' ');
@@ -85,7 +85,7 @@ public class MemberConverter {
             List<String> positionList = new LinkedList<>();
             String[] codeList = m.getPositionCode().split(" ");
             for (String code : codeList) {
-                positionList.add(Position.of(Integer.parseInt(code)).getPositionName());
+                positionList.add(Position.of(Integer.parseInt(code)).getName());
             }
             responses.add(
                     new BudiMemberResponse(
@@ -107,7 +107,7 @@ public class MemberConverter {
         String[] codeList = m.getPositionCode().split(" ");
         String[] portfolioList = m.getPortfolioLink().split(" ");
         for (String code : codeList) {
-            positionList.add(Position.of(Integer.parseInt(code)).getPositionName());
+            positionList.add(Position.of(Integer.parseInt(code)).getName());
         }
         List<ProjectResponse> projectResponses = toProjectResponse(projectList);
         BudiMemberInfoResponse response = BudiMemberInfoResponse.builder()

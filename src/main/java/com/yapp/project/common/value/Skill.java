@@ -55,24 +55,24 @@ public enum Skill {  //NOT USED
 
     ;
 
-    private final int skillCode;
-    private final String skillName;
+    private final int code;
+    private final String name;
 
-    Skill(int skillCode, String skillName) {
-        this.skillCode = skillCode;
-        this.skillName = skillName;
+    Skill(int code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
     public static Skill of(int skillCode) {
         return Arrays.stream(Skill.values())
-                .filter(v -> v.skillCode == skillCode)
+                .filter(v -> v.code == skillCode)
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_SKILL_CODE));
     }
 
     public static Skill of(String skillName) {
         return Arrays.stream(Skill.values())
-                .filter(v -> v.skillName.equals(skillName))
+                .filter(v -> v.name.equals(skillName))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_SKILL_NAME));
     }

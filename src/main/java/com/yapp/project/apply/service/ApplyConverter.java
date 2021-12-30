@@ -26,7 +26,7 @@ public class ApplyConverter {
     public ApplyResponse toApplyResponse(Apply applyEntity) {
         return new ApplyResponse(
                 applyEntity.getId(),
-                ApplyStatus.of(applyEntity.getApplyStatusCode()).getApplyStatusName(),
+                ApplyStatus.of(applyEntity.getApplyStatusCode()).getName(),
                 applyEntity.getRecruitingPosition().getId(),
                 applyEntity.getPost().getId()
         );
@@ -47,7 +47,7 @@ public class ApplyConverter {
                                             .address(apply.getMember().getAddress())
                                             .position(
                                                     new ApplicantResponse.PositionAndColor(
-                                                            Position.of(apply.getMember().getBasePositionCode()).getPositionName(),
+                                                            Position.of(apply.getMember().getBasePositionCode()).getName(),
                                                             Position.getBasePosition(apply.getMember().getBasePositionCode()).getCode()
                                                     )
                                             )
@@ -57,7 +57,7 @@ public class ApplyConverter {
                             .recruitingPositionResponse(
                                     new ApplicantResponse.RecruitingPositionResponse(
                                             apply.getRecruitingPosition().getId(),
-                                            Position.of(apply.getRecruitingPosition().getBasePositionCode()).getPositionName()
+                                            Position.of(apply.getRecruitingPosition().getBasePositionCode()).getName()
                                     )
                             )
                             .build()

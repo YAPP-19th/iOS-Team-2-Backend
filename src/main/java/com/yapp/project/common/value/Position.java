@@ -41,24 +41,24 @@ public enum Position {
 
     ;
 
-    private final int positionCode;
-    private final String positionName;
+    private final int code;
+    private final String name;
 
-    Position(int positionCode, String positionName) {
-        this.positionCode = positionCode;
-        this.positionName = positionName;
+    Position(int code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
     public static Position of(int positionCode) {
         return Arrays.stream(Position.values())
-                .filter(v -> v.positionCode == positionCode)
+                .filter(v -> v.code == positionCode)
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POSITION_CODE));
     }
 
     public static Position of(String positionName) {
         return Arrays.stream(Position.values())
-                .filter(v -> v.positionName.equals(positionName))
+                .filter(v -> v.name.equals(positionName))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POSITION_NAME));
     }
@@ -79,7 +79,7 @@ public enum Position {
     public static List<String> listOf(String basePosition) {
         List<String> list = Stream.of(Position.values())
                 .filter(name->name.toString().contains(basePosition.toUpperCase()))
-                .map(name->name.getPositionName())
+                .map(name->name.getName())
                 .collect(Collectors.toList());
         return list;
     }

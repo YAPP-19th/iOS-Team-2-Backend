@@ -12,6 +12,6 @@ public class CodeReviewResponse {
     private String reviewText;
 
     public void setReviewText(int reviewCode){
-        this.reviewText = ReviewCode.of(reviewCode).getReviewName();
+        this.reviewText = ReviewCode.of(reviewCode).getName();
     }
 }

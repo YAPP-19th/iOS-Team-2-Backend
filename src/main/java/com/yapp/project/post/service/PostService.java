@@ -79,12 +79,12 @@ public class PostService {
         post.updateInfos(
                 request.getImageUrl(),
                 request.getTitle(),
-                PostCategory.of(request.getCategoryName()).getCategoryCode(),
+                PostCategory.of(request.getCategoryName()).getCode(),
                 request.getStartDate(),
                 request.getEndDate(),
                 request.getRegion(),
                 request.getDescription(),
-                OnlineStatus.of(request.getOnlineInfo()).getOnlineStatusCode()
+                OnlineStatus.of(request.getOnlineInfo()).getCode()
         );
     }
 
@@ -120,7 +120,7 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
-        List<Apply> applies = applyRepository.findAllByPostAndApplyStatusCode(post, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode());
+        List<Apply> applies = applyRepository.findAllByPostAndApplyStatusCode(post, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode());
 
         return postConverter.toTeamMemberResponse(applies);
     }
@@ -133,7 +133,7 @@ public class PostService {
             response.getRecruitingStatuses().add(recruitingPositionConverter.toRecruitingStatus(
                     position.getId(),
                     position.getPositionCode(),
-                    Long.toString(applyRepository.countByRecruitingPositionAndApplyStatusCode(position, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode()))
+                    Long.toString(applyRepository.countByRecruitingPositionAndApplyStatusCode(position, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode()))
             ));
         }
 
@@ -169,7 +169,7 @@ public class PostService {
         for (var positionDetail : positionDetailsByPost) {
             positions.add(
                     new PositionAndColor(
-                            Position.of(positionDetail.getPositionCode()).getPositionName(),
+                            Position.of(positionDetail.getPositionCode()).getName(),
                             Position.getBasePosition(positionDetail.getPositionCode()).getCode()
                     )
             );
