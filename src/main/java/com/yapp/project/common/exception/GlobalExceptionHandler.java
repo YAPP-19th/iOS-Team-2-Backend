@@ -7,6 +7,7 @@ import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -65,7 +66,8 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException.class,
             MissingServletRequestParameterException.class,
             TypeMismatchException.class,
-            MissingRequestHeaderException.class
+            MissingRequestHeaderException.class,
+            HttpMessageConversionException.class
     })
     protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(Exception exception) {
         return createApiExceptionResult(ExceptionMessage.INVALID_HTTP_REQUEST);
