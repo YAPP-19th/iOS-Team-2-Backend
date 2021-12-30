@@ -35,4 +35,11 @@ public enum RootPosition {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_ROOT_POSITION_NAME));
     }
+
+    public static RootPosition fromEnglishName(String rootPositionEngName) {
+        return Arrays.stream(RootPosition.values())
+                .filter(v -> v.name().equals(rootPositionEngName.toUpperCase()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_ROOT_POSITION_NAME));
+    }
 }

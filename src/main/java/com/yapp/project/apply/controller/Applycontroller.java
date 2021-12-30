@@ -1,6 +1,7 @@
 package com.yapp.project.apply.controller;
 
 import com.yapp.project.apply.dto.request.ApplyRequest;
+import com.yapp.project.apply.dto.response.ApplicantResponse;
 import com.yapp.project.apply.dto.response.ApplyResponse;
 import com.yapp.project.apply.service.ApplyService;
 import com.yapp.project.common.web.ApiResult;
@@ -11,12 +12,15 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -66,6 +70,23 @@ public class Applycontroller {
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
+        );
+    }
+
+    @ApiOperation(value = "지원자 조회", notes = "developer / designer / planner 는 선택사항입니다.")
+    @GetMapping()
+    public ResponseEntity<ApiResult> getApplyList(
+            @RequestParam @Positive long postId,
+            @RequestParam @Nullable String position,
+            @RequestHeader("accessToken") @NotBlank String accessToken
+    ) {
+
+        long leaderId = jwtService.getMemberId(accessToken);
+
+        List<ApplicantResponse> response = applyService.getApplyList(postId, Optional.ofNullable(position), leaderId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 }

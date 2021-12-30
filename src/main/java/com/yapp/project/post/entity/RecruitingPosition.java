@@ -29,9 +29,6 @@ public class RecruitingPosition {
     @Column(name = "recruiting_position_position_code")
     private Integer positionCode;
 
-    @Column(name = "recruiting_position_skill_code")
-    private Integer skillCode;
-
     @Column(name = "recruiting_position_recruiting_number")
     private Integer recruitingNumber;
 

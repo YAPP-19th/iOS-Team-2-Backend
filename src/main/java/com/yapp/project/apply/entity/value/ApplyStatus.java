@@ -41,4 +41,8 @@ public enum ApplyStatus {
             throw new IllegalRequestException(ExceptionMessage.NOT_APPROVED_APPLY);
         }
     }
+
+    public static boolean isApproved(int code) {
+        return ApplyStatus.APPROVAL_FOR_PARTICIPATION.getApplyStatusCode() == code;
+    }
 }
