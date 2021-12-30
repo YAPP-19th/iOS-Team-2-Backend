@@ -11,10 +11,6 @@ import javax.validation.constraints.Min;
 @AllArgsConstructor
 public class ApplyRequest {
     @ApiModelProperty(example = "1")
-    @Min(value = 1L, message = DtoValidationFailMessage.INVALID_POST_ID)
-    private Long postId;
-
-    @ApiModelProperty(example = "1")
     @Min(value = 1L, message = DtoValidationFailMessage.INVALID_RECRUITINGPOSITION_ID)
     private Long recruitingPositionId;
 }
