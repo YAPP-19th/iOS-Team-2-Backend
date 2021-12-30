@@ -38,7 +38,7 @@ public enum BasePosition {
 
     public static BasePosition fromEnglishName(String basePositionEngName) {
         return Arrays.stream(BasePosition.values())
-                .filter(v -> v.name().equals(basePositionEngName.toUpperCase()))
+                .filter(v -> v.name().toUpperCase().equals(basePositionEngName.toUpperCase()))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_BASE_POSITION_NAME));
     }
