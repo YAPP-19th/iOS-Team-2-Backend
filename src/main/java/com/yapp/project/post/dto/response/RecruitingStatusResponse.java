@@ -19,6 +19,8 @@ public class RecruitingStatusResponse {
 
         private final PositionAndColor positions;
 
-        private final String status;
+        private final int recruitingNumber;
+
+        private final String approvedStatus;
     }
 }

@@ -2,6 +2,7 @@ package com.yapp.project.common.exception;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.yapp.project.common.StatusCode;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.beans.TypeMismatchException;
@@ -48,6 +49,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     protected ApiExceptionResult handleNotFoundException(NotFoundException exception) {
+        return createApiExceptionResult(exception);
+    }
+
+    @ExceptionHandler(IllegalRequestException.class)
+    protected ApiExceptionResult handleIllegalRequestException(IllegalRequestException exception) {
         return createApiExceptionResult(exception);
     }
 

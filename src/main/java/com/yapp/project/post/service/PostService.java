@@ -126,14 +126,13 @@ public class PostService {
     }
 
     @Transactional
-    public RecruitingStatusResponse findRecruitingStatusById(Long postId) {
+    public RecruitingStatusResponse findRecruitingStatusByPostId(Long postId) {
         var response = new RecruitingStatusResponse();
-        List<RecruitingPosition> positions = recruitingPositionRepository.findAllByPostId(postId);
-        for (var position : positions) {
+        List<RecruitingPosition> recruitingPositions = recruitingPositionRepository.findAllByPostId(postId);
+        for (var recruitingPosition : recruitingPositions) {
             response.getRecruitingStatuses().add(recruitingPositionConverter.toRecruitingStatus(
-                    position.getId(),
-                    position.getPositionCode(),
-                    Long.toString(applyRepository.countByRecruitingPositionAndApplyStatusCode(position, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode()))
+                    recruitingPosition,
+                    applyRepository.countByRecruitingPositionAndApplyStatusCode(recruitingPosition, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode())
             ));
         }
 

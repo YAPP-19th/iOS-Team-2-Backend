@@ -82,7 +82,7 @@ public class PostController {
         );
     }
 
-    @ApiOperation("게시글 단건 조회 (참여승인된 멤버만 가져옴)")
+    @ApiOperation("게시글 단건 조회 (참여승인된 멤버 조회)")
     @GetMapping(value = "/{postId}/members")
     public ResponseEntity<ApiResult> getTeamMembers(@PathVariable @Positive Long postId) {
         TeamMemberResponse response = postService.findTeamMembersById(postId);
@@ -92,10 +92,10 @@ public class PostController {
         );
     }
 
-    @ApiOperation("게시글 단건 조회 (지원 현황)")
+    @ApiOperation("게시글 단건 조회 (모집 정보 조회)")
     @GetMapping(value = "/{postId}/recruitingStatus")
     public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable @Positive long postId) {
-        var response = postService.findRecruitingStatusById(postId);
+        var response = postService.findRecruitingStatusByPostId(postId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

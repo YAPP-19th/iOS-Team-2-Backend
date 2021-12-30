@@ -16,14 +16,15 @@ public class RecruitingPositionConverter {
                 .build();
     }
 
-    public RecruitingStatusResponse.RecruitingStatus toRecruitingStatus(Long recruitingPositionId, int positionCode, String status) {
+    public RecruitingStatusResponse.RecruitingStatus toRecruitingStatus(RecruitingPosition recruitingPosition, long approvedCount) {
         return new RecruitingStatusResponse.RecruitingStatus(
-                recruitingPositionId,
+                recruitingPosition.getId(),
                 new PositionAndColor(
-                        Position.of(positionCode).getName(),
-                        Position.getBasePosition(positionCode).getCode()
+                        Position.of(recruitingPosition.getPositionCode()).getName(),
+                        Position.getBasePosition(recruitingPosition.getPositionCode()).getCode()
                 ),
-                status
+                recruitingPosition.getRecruitingNumber(),
+                approvedCount + "/" + recruitingPosition.getRecruitingNumber()
         );
     }
 }
