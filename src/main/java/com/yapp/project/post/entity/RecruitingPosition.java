@@ -23,13 +23,13 @@ public class RecruitingPosition {
     @JoinColumn(name = "recruiting_position_post_id", referencedColumnName = "post_id")
     private Post post;
 
-    @Column(name = "recruiting_position_root_position_code")
+    @Column(name = "recruiting_position_root_position_code", nullable = false)
     private Integer rootPositionCode;
 
-    @Column(name = "recruiting_position_position_code")
+    @Column(name = "recruiting_position_position_code", nullable = false)
     private Integer positionCode;
 
-    @Column(name = "recruiting_position_recruiting_number")
+    @Column(name = "recruiting_position_recruiting_number", nullable = false)
     private Integer recruitingNumber;
 
     public void setPost(Post post) {

@@ -16,12 +16,12 @@ public class LikeMember {
     @Column(name = "like_member_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "like_member_from_member_id", referencedColumnName = "member_id")
     private Member fromMember;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "like_member_to_member_id", referencedColumnName = "member_id")
     private Member toMember;
