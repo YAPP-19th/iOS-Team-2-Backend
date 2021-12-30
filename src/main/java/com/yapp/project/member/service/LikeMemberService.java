@@ -44,10 +44,10 @@ public class LikeMemberService {
             LikeMember likeMember = likeMemberRepositroy.findByFromMemberAndToMember(fromMember, toMember)
                     .orElseThrow(() -> new NotFoundException(ExceptionMessage.INVALID_HTTP_REQUEST));
 
-            toMember.substractLikeCount();
-
             likeMemberRepositroy.delete(likeMember);
 
+            toMember.substractLikeCount();
+            
             return false;
         } else {
             LikeMember likeMember = new LikeMember(fromMember, toMember);
