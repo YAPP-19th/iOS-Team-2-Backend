@@ -2,6 +2,7 @@ package com.yapp.project.common.exception;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.yapp.project.common.StatusCode;
+import com.yapp.project.common.exception.type.FileUploadFailException;
 import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -47,13 +48,12 @@ public class GlobalExceptionHandler {
         return createApiExceptionResult(ExceptionMessage.INVALID_JWT_STRINGS);
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    protected ApiExceptionResult handleNotFoundException(NotFoundException exception) {
-        return createApiExceptionResult(exception);
-    }
-
-    @ExceptionHandler(IllegalRequestException.class)
-    protected ApiExceptionResult handleIllegalRequestException(IllegalRequestException exception) {
+    @ExceptionHandler({
+            NotFoundException.class,
+            IllegalRequestException.class,
+            FileUploadFailException.class
+    })
+    protected ApiExceptionResult handleDefinedException(RuntimeException exception) {
         return createApiExceptionResult(exception);
     }
 
