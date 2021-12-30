@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
             MissingRequestHeaderException.class,
             HttpMessageConversionException.class
     })
-    protected ApiExceptionResult handleHttpRequestMethodNotSupportedException(Exception exception) {
+    protected ApiExceptionResult handleHttpBadRequest(Exception exception) {
         return createApiExceptionResult(ExceptionMessage.INVALID_HTTP_REQUEST);
     }
 
