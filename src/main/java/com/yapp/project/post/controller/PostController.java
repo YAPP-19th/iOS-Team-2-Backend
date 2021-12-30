@@ -116,13 +116,13 @@ public class PostController {
     }
 
     @ApiOperation("position으로 조회")
-    @GetMapping(value = "/positions/{rootPositionName}")
+    @GetMapping(value = "/positions/{basePositionName}")
     public ResponseEntity<ApiResult> getAllByPosition(
-            @PathVariable String rootPositionName,
+            @PathVariable String basePositionName,
             @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
     ) {
 
-        Page<PostSimpleResponse> response = postService.findAllByPosition(rootPositionName, pageable);
+        Page<PostSimpleResponse> response = postService.findAllByPosition(basePositionName, pageable);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

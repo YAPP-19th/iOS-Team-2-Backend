@@ -63,22 +63,22 @@ public enum Position {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POSITION_NAME));
     }
 
-    public static RootPosition getRootPosition(int positionCode){
+    public static BasePosition getBasePosition(int positionCode){
         String prefix = Position.of(positionCode).name().split("_")[0];
 
-        if(RootPosition.DESIGNER.toString().equals(prefix))
-            return RootPosition.DESIGNER;
-        else if(RootPosition.DEVELOPER.toString().equals(prefix))
-            return RootPosition.DEVELOPER;
-        else if (RootPosition.PLANNER.toString().equals(prefix))
-            return RootPosition.PLANNER;
+        if(BasePosition.DESIGNER.toString().equals(prefix))
+            return BasePosition.DESIGNER;
+        else if(BasePosition.DEVELOPER.toString().equals(prefix))
+            return BasePosition.DEVELOPER;
+        else if (BasePosition.PLANNER.toString().equals(prefix))
+            return BasePosition.PLANNER;
 
-        throw new NotFoundException(ExceptionMessage.NOT_EXIST_ROOT_POSITION_NAME);
+        throw new NotFoundException(ExceptionMessage.NOT_EXIST_BASE_POSITION_NAME);
     }
 
-    public static List<String> listOf(String rootPosition) {
+    public static List<String> listOf(String basePosition) {
         List<String> list = Stream.of(Position.values())
-                .filter(name->name.toString().contains(rootPosition.toUpperCase()))
+                .filter(name->name.toString().contains(basePosition.toUpperCase()))
                 .map(name->name.getPositionName())
                 .collect(Collectors.toList());
         return list;

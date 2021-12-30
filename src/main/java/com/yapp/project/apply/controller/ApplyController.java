@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequestMapping(value = "/api/v1/applies", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "지원하기")
 @Validated
-public class Applycontroller {
+public class ApplyController {
     private final ApplyService applyService;
     private final JwtService jwtService;
 

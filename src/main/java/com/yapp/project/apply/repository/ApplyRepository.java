@@ -27,8 +27,8 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
 
     void deleteAllByPost(Post post);
 
-    @Query("select a from Apply a where a.recruitingPosition.rootPositionCode = :rootPositionCode and a.post.id = :postId")  //todo
-    List<Apply> findALlByRootPositionCodeAndPostId(int rootPositionCode, long postId);
+    @Query("select a from Apply a where a.recruitingPosition.basePositionCode = :basePositionCode and a.post.id = :postId")  //todo
+    List<Apply> findALlByBasePositionCodeAndPostId(int basePositionCode, long postId);
 
     List<Apply> findAllByPostId(long postId);
 }

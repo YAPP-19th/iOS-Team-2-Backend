@@ -105,7 +105,7 @@ public class PostConverter {
                             member.getAddress(),
                             new PositionAndColor(
                                     Position.of(apply.getRecruitingPosition().getPositionCode()).getPositionName(),
-                                    Position.getRootPosition(apply.getRecruitingPosition().getPositionCode()).getRootPositionCode()
+                                    Position.getBasePosition(apply.getRecruitingPosition().getPositionCode()).getCode()
                             )
                     )
             );

@@ -9,8 +9,7 @@ import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
-import com.yapp.project.common.value.Position;
-import com.yapp.project.common.value.RootPosition;
+import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
@@ -72,8 +71,8 @@ public class ApplyService {
         List<Apply> applies;
 
         if (positionOpt.isPresent()) { // 직군으로 조회
-            RootPosition rootPosition = RootPosition.fromEnglishName(positionOpt.get());
-            applies = applyRepository.findALlByRootPositionCodeAndPostId(rootPosition.getRootPositionCode(), postId);
+            BasePosition basePosition = BasePosition.fromEnglishName(positionOpt.get());
+            applies = applyRepository.findALlByBasePositionCodeAndPostId(basePosition.getCode(), postId);
         } else {
             applies = applyRepository.findAllByPostId(postId);
         }

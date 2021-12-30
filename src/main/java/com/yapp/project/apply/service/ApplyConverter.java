@@ -6,7 +6,6 @@ import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.apply.entity.value.ApplyStatus;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
-import com.yapp.project.post.dto.response.PositionAndColor;
 import com.yapp.project.post.entity.RecruitingPosition;
 import org.springframework.stereotype.Component;
 
@@ -49,7 +48,7 @@ public class ApplyConverter {
                                             .position(
                                                     new ApplicantResponse.PositionAndColor(
                                                             Position.of(apply.getMember().getBasePositionCode()).getPositionName(),
-                                                            Position.getRootPosition(apply.getMember().getBasePositionCode()).getRootPositionCode()
+                                                            Position.getBasePosition(apply.getMember().getBasePositionCode()).getCode()
                                                     )
                                             )
                                             .isApproved(ApplyStatus.isApproved(apply.getApplyStatusCode().intValue()))
@@ -58,7 +57,7 @@ public class ApplyConverter {
                             .recruitingPositionResponse(
                                     new ApplicantResponse.RecruitingPositionResponse(
                                             apply.getRecruitingPosition().getId(),
-                                            Position.of(apply.getRecruitingPosition().getRootPositionCode()).getPositionName()
+                                            Position.of(apply.getRecruitingPosition().getBasePositionCode()).getPositionName()
                                     )
                             )
                             .build()

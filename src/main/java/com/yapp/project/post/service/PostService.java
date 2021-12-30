@@ -6,7 +6,7 @@ import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
-import com.yapp.project.common.value.RootPosition;
+import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.likepost.repository.LikePostRepository;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -157,8 +156,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostSimpleResponse> findAllByPosition(String rootPositionName, Pageable pageable) {
-        Page<Post> allByPositionCode = recruitingPositionRepository.findDistinctPostByPositionCode(RootPosition.of(rootPositionName).getRootPositionCode(), pageable);
+    public Page<PostSimpleResponse> findAllByPosition(String basePositionName, Pageable pageable) {
+        Page<Post> allByPositionCode = recruitingPositionRepository.findDistinctPostByPositionCode(BasePosition.of(basePositionName).getCode(), pageable);
 
         return allByPositionCode.map(p -> makePostSimpleResponse(p));
     }
@@ -171,7 +170,7 @@ public class PostService {
             positions.add(
                     new PositionAndColor(
                             Position.of(positionDetail.getPositionCode()).getPositionName(),
-                            Position.getRootPosition(positionDetail.getPositionCode()).getRootPositionCode()
+                            Position.getBasePosition(positionDetail.getPositionCode()).getCode()
                     )
             );
         }
