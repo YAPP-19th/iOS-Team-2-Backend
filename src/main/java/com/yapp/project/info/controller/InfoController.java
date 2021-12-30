@@ -61,4 +61,6 @@ public class InfoController {
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
+
+    //TODO: 위치 정보 제공 API 추가
 }
