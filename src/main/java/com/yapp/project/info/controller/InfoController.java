@@ -22,7 +22,6 @@ import java.util.List;
 @Validated
 public class InfoController {
     private final DefaultInfoService defaultInfoService;
-    private final CodeReviewHistoryService codeReviewHistoryService;
 
     @ApiOperation(value = "직무 리스트", notes = "developer / planner / designer")
     @GetMapping(value = "/positions")
@@ -55,7 +54,7 @@ public class InfoController {
     @ApiOperation("리뷰 '목록' 전체 조회")
     @GetMapping(value = "/select-reviews-list")
     public ResponseEntity<ApiResult> getAllSelectReviewList() {
-        var response = codeReviewHistoryService.findAllReviews();
+        var response = defaultInfoService.findAllReviews();
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

@@ -30,13 +30,6 @@ public class CodeReviewHistoryService {
     private final ApplyRepository applyRepository;
     private final CodeReviewHistoryConverter converter;
 
-    public CodeReviewListResponse findAllReviews() {
-        return new CodeReviewListResponse(
-                ReviewCode.getAllPositiveReviewNames(),
-                ReviewCode.getAllNegativeReviewNames()
-        );
-    }
-
     @Transactional
     public void create(long reviewerId, long revieweeId, long postId, List<String> selectedReviews) {
         Member reviewer = memberRepository.findById(reviewerId)
