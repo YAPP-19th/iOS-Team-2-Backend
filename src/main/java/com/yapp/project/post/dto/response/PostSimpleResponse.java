@@ -1,6 +1,7 @@
 package com.yapp.project.post.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.yapp.project.common.dto.PositionAndColor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,5 +31,7 @@ public class PostSimpleResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime modifiedAt;
 
-    private List<PositionAndColor> positions;
+    private final Long likeCount;
+
+    private final List<PositionAndColor> positions;
 }

@@ -11,13 +11,14 @@ import java.util.List;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostCreateRequest {
-    @NotBlank(message = DtoValidationFailMessage.EMPTY_POST_IMAGE_URL)
+    @NotBlank(message = DtoValidationFailMessage.INVALID_URL)
     private String imageUrl;
 
     @ApiModelProperty(example = "title example")
     @Size(min = 2, max = 255, message = DtoValidationFailMessage.INVALID_POST_TITLE)
-    @NotBlank(message = DtoValidationFailMessage.INVALID_POST_TITLE)  //regexp = "^\\S{2,255}$",
     private String title;
 
     @ApiModelProperty(example = "여행")
@@ -39,11 +40,11 @@ public class PostCreateRequest {
     private String region;
 
     @ApiModelProperty(example = "description detail example")
-    @NotBlank(message = DtoValidationFailMessage.INVALID_DESCRIPTION)  //regexp = "^\\S{2,21844}$",
+    @Size(min = 2, max = 1000, message = DtoValidationFailMessage.INVALID_DESCRIPTION)
     private String description;
 
     @ApiModelProperty(example = "'{미정|온라인|오프라인|온오프라인} 넷 중 택1'")
-    @Pattern(regexp = "^[가-힣]*$", message = DtoValidationFailMessage.INVALID_POST_ONLINE_INFO)
+    @NotBlank(message = DtoValidationFailMessage.INVALID_POST_ONLINE_INFO)
     private String onlineInfo;
 
     private List<RecruitingPositionRequest> recruitingPositions;

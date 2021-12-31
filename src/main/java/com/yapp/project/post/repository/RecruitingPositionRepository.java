@@ -16,10 +16,8 @@ public interface RecruitingPositionRepository extends JpaRepository<RecruitingPo
 
     List<RecruitingPosition> findAllByPostId(Long postId);
 
-    @Query(value = "select distinct r.post from RecruitingPosition r where r.rootPositionCode = :rootPositionCode")
-    Page<Post> findDistinctPostByPositionCode(@Param("rootPositionCode") int rootPositionCode, Pageable pageable);
-
-    Page<RecruitingPosition> findAllByRootPositionCode(int rootPositionCode, Pageable pageable);
+    @Query(value = "select distinct r.post from RecruitingPosition r where r.basePositionCode = :basePositionCode") //TODO 수정
+    Page<Post> findDistinctPostByPositionCode(@Param("basePositionCode") int basePositionCode, Pageable pageable);
 
     void deleteAllByPost(Post post);
 }

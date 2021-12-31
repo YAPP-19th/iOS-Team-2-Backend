@@ -8,22 +8,26 @@ import com.yapp.project.member.dto.response.CheckNameResponse;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.member.service.MemberService;
-import com.yapp.project.review.dto.response.CodeReviewResponse;
-import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/members")
-@Api(tags = "Member")
+@Api(tags = "사용자 관련")
+@Validated
 public class MemberController {
     private final MemberService memberService;
 
@@ -31,7 +35,7 @@ public class MemberController {
 
     @ApiOperation(value = "닉네임 중복 확인", notes = "중복이면 false 반환 / 중복 아니면 true 반환")
     @GetMapping(value = "/checkDuplicateName")
-    public ResponseEntity<ApiResult> checkDuplicateName(@RequestParam("name") String name) {
+    public ResponseEntity<ApiResult> checkDuplicateName(@RequestParam("name") @NotBlank String name) {
         CheckNameResponse response = memberService.checkDuplicateName(name);
 
         return ResponseEntity.ok(
@@ -40,10 +44,14 @@ public class MemberController {
     }
 
     @ApiOperation("회원 정보 입력")
-    @PostMapping(value = "/createInfo")
-    public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") String accessToken, @RequestBody CreateInfoRequest request) {
+    @PostMapping(value = "/infos")
+    public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") @NotBlank String accessToken, @Valid @RequestBody CreateInfoRequest request) {
         jwtService.validateTokenForm(accessToken);
-        Long response = memberService.createInfo(accessToken, request);
+        Long memberId = memberService.createInfo(accessToken, request);
+
+        var response = new HashMap<String, Long>();
+        response.put("memberId", memberId);
+
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
@@ -51,7 +59,7 @@ public class MemberController {
 
     @ApiOperation(value = "버디 찾기", notes = "developer / designer / planner 중 하나로 요청해주세요.")
     @GetMapping(value = "/budiLists/{position}")
-    public ResponseEntity<ApiResult> getBudiList(@PathVariable String position) {
+    public ResponseEntity<ApiResult> getBudiList(@PathVariable @NotBlank String position) {
         List<BudiMemberResponse> response = memberService.getBudiList(position);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
@@ -59,32 +67,17 @@ public class MemberController {
     }
 
     @ApiOperation(value = "버디 상세조회", notes = "member id를 요청해주세요.")
-    @GetMapping(value = "/budiDetails/{id}")
-    public ResponseEntity<ApiResult> getBudiDetail(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
-        jwtService.validateTokenForm(accessToken);
-        BudiMemberInfoResponse response = memberService.getBudiInfo(id);
+    @GetMapping(value = "/budiDetails/{memberId}")
+    public ResponseEntity<ApiResult> getBudiDetail(
+            @RequestHeader("accessToken") @Nullable String accessToken,
+            @PathVariable @Positive long memberId
+    ) {
+
+        BudiMemberInfoResponse response = memberService.getBudiInfo(memberId, Optional.ofNullable(accessToken));
+
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
-    @ApiOperation(value = "버디 상세조회(버디평가)", notes = "member id를 요청해주세요.")
-    @GetMapping(value = "/budiDetailReviews/{id}")
-    public ResponseEntity<ApiResult> getBudiDetailReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id) {
-        jwtService.validateTokenForm(accessToken);
-        List<CodeReviewResponse> response = memberService.getBudiInfoReview(id);
-        return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS, response)
-        );
-    }
-
-    @ApiOperation(value = "버디 상세조회(버디후기)", notes = "member id를 요청해주세요.")
-    @GetMapping(value = "/budiDetailTextReviews/{id}")
-    public ResponseEntity<ApiResult> getBudiDetailTextReview(@RequestHeader("accessToken") String accessToken, @PathVariable Long id, Pageable pageable) {
-        jwtService.validateTokenForm(accessToken);
-        Page<TextReviewSimpleResponse> response = memberService.getBudiInfoTextReview(id, pageable);
-        return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS, response)
-        );
-    }
 }

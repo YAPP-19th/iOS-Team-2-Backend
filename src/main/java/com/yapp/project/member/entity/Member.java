@@ -1,7 +1,11 @@
 package com.yapp.project.member.entity;
 
-import com.yapp.project.common.entity.BaseEntity;
+import com.yapp.project.common.entity.DeletableEntity;
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,28 +16,30 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세분화 할 것.
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id=?")
+@Where(clause = "is_deleted = false")
+public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세분화 할 것.
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "member_nick_name", length = 10)
+    @Column(name = "member_nick_name", length = 10, nullable = false)
     private String nickName;
 
     @Column(name = "member_profile_image_url", columnDefinition = "TEXT")
     private String profileImageUrl;
 
-    @Column(name = "member_address")
+    @Column(name = "member_address", nullable = false)
     private String address;
 
-    @Column(name = "member_introduce")
+    @Column(name = "member_introduce", nullable = false)
     private String introduce;
 
-    @Column(name = "member_base_position_code")
+    @Column(name = "member_base_position_code", nullable = false)
     private Integer basePositionCode;
 
-    @Column(name = "member_position_code")
+    @Column(name = "member_position_code", nullable = false)
     private String positionCode;
 
     @Column(name = "member_email")
@@ -45,19 +51,31 @@ public class Member extends BaseEntity<Long> {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_login_id")
     private String loginId;
 
-    @Column(name = "member_score")
+    @Column(name = "member_score", nullable = false)
     private Integer score;
 
-    @Column(name = "member_portfolio_link", columnDefinition = "TEXT")
+    @Column(name = "member_like_count", nullable = false)
+    private Long likeCount;
+
+    @Column(name = "member_portfolio_link", columnDefinition = "TEXT", nullable = false)
     private String portfolioLink;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Project> projects = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Career> careers = new ArrayList<>();
 
     public boolean isSameMember(Member member){
         return this.id.longValue() == member.getId().longValue() ? true : false;
+    }
+
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    public void substractLikeCount() {
+        if (this.likeCount <= 0) {
+            throw new IllegalRequestException(ExceptionMessage.INVALID_LIKE_COUNT);
+        }
+
+        this.likeCount--;
     }
 }

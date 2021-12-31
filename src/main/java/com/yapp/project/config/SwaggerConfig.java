@@ -39,7 +39,7 @@ public class SwaggerConfig {
     );
 
     private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES = new HashSet<>(
-            Arrays.asList("application/json", "application/xml")
+            Arrays.asList("application/json")
     );
 
     @Bean
@@ -67,7 +67,7 @@ public class SwaggerConfig {
         @ApiModelProperty(value = "한 페이지 당 요소 개수(최대 100)", allowableValues="range[0, 100]", example = "10")
         private Integer size;
 
-        @ApiModelProperty(value = "정렬기준(사용법: entity필드명,ASC|DESC, 예시: createdDate,DESC (최신순))", example = "createdDate,DESC")
+        @ApiModelProperty(value = "정렬기준(사용법: entity필드명,ASC|DESC, 예시: id,DESC (최신순))", example = "createdDate,DESC")
         private List<String> sort;
     }
 

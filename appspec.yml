@@ -1,0 +1,24 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/budi-app
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+    mode: 777
+
+hooks:
+  BeforeInstall:
+    - location: scripts/beforeInstall.bash
+      timeout: 180
+      runas: ubuntu
+  AfterInstall:
+    - location: scripts/deploy.sh
+      timeout: 180
+      runas: ubuntu

@@ -18,7 +18,7 @@ public class Project {
     @Column(name = "project_id")
     private Long id;
 
-    @Column(name = "project_name")
+    @Column(name = "project_name", nullable = false)
     private String name;
 
     @Column(name = "project_start_date")
@@ -27,10 +27,10 @@ public class Project {
     @Column(name = "project_end_date")
     private LocalDate endDate;
 
-    @Column(name = "project_description", columnDefinition = "TEXT")
+    @Column(name = "project_description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "project_member_id", referencedColumnName = "member_id")
     private Member member;

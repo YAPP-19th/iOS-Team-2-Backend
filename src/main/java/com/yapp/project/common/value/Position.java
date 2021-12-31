@@ -41,45 +41,45 @@ public enum Position {
 
     ;
 
-    private final int positionCode;
-    private final String positionName;
+    private final int code;
+    private final String name;
 
-    Position(int positionCode, String positionName) {
-        this.positionCode = positionCode;
-        this.positionName = positionName;
+    Position(int code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
     public static Position of(int positionCode) {
         return Arrays.stream(Position.values())
-                .filter(v -> v.positionCode == positionCode)
+                .filter(v -> v.code == positionCode)
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POSITION_CODE));
     }
 
     public static Position of(String positionName) {
         return Arrays.stream(Position.values())
-                .filter(v -> v.positionName.equals(positionName))
+                .filter(v -> v.name.equals(positionName))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POSITION_NAME));
     }
 
-    public static RootPosition getRootPosition(int positionCode){
-        String prefix = Position.of(positionCode).name().split("_")[0];
+    public static BasePosition getBasePosition(int positionCode){
+        String prefix = Position.of(positionCode).name().split("_")[0].toUpperCase();
 
-        if(RootPosition.DESIGNER.toString().equals(prefix))
-            return RootPosition.DESIGNER;
-        else if(RootPosition.DEVELOPER.toString().equals(prefix))
-            return RootPosition.DEVELOPER;
-        else if (RootPosition.PLANNER.toString().equals(prefix))
-            return RootPosition.PLANNER;
+        if(BasePosition.DESIGNER.toString().toUpperCase().equals(prefix))
+            return BasePosition.DESIGNER;
+        else if(BasePosition.DEVELOPER.toString().toUpperCase().equals(prefix))
+            return BasePosition.DEVELOPER;
+        else if (BasePosition.PLANNER.toString().toUpperCase().equals(prefix))
+            return BasePosition.PLANNER;
 
-        throw new NotFoundException(ExceptionMessage.NOT_EXIST_ROOT_POSITION_NAME);
+        throw new NotFoundException(ExceptionMessage.NOT_EXIST_BASE_POSITION_NAME);
     }
 
-    public static List<String> listOf(String rootPosition) {
+    public static List<String> listOf(String basePosition) {
         List<String> list = Stream.of(Position.values())
-                .filter(name->name.toString().contains(rootPosition.toUpperCase()))
-                .map(name->name.getPositionName())
+                .filter(name->name.toString().contains(basePosition.toUpperCase()))
+                .map(name->name.getName())
                 .collect(Collectors.toList());
         return list;
     }

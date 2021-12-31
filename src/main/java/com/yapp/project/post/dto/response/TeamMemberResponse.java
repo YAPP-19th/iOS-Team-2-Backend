@@ -1,5 +1,6 @@
 package com.yapp.project.post.dto.response;
 
+import com.yapp.project.common.dto.PositionAndColor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class TeamMemberResponse {
-    private List<TeamMember> teamMembers = new ArrayList<>();
+    private final List<TeamMember> teamMembers = new ArrayList<>();
 
     @Getter
     @RequiredArgsConstructor
@@ -22,5 +23,7 @@ public class TeamMemberResponse {
         private final String profileImageUrl;
 
         private final String address;
+
+        private final PositionAndColor position;
     }
 }

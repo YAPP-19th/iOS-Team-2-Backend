@@ -8,37 +8,56 @@ import com.yapp.project.member.service.LikeMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/members")
 @Api(tags = "사용자 좋아요(팔로잉)")
+@Validated
 public class LikeMemberController {
     private final LikeMemberService likeMemberService;
     private final JwtService jwtService;
 
     @ApiOperation("사용자 좋아요 상태 변경")
     @PutMapping(value = "/{memberId}/like-members")
-    public ResponseEntity<ApiResult> switchLikeMemberStatus(@PathVariable Long memberId, @RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<ApiResult> switchLikeMemberStatus(
+            @PathVariable @Positive long memberId,
+            @RequestHeader("accessToken") @NotBlank String accessToken
+    ) {
+
         jwtService.validateTokenForm(accessToken);
 
         Long fromMemberId = jwtService.getMemberId(accessToken);
-        likeMemberService.switchLikeMemberStatus(fromMemberId, memberId);
+        boolean isLiked = likeMemberService.switchLikeMemberStatus(fromMemberId, memberId);
+
+        var response = new HashMap<String, Boolean>();
+        response.put("isLiked", isLiked);
 
         return ResponseEntity.ok(
-                ApiResult.of(ResponseMessage.SUCCESS)
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
     @ApiOperation("내가 좋아한 모든 상대방")
     @GetMapping(value = "/like-members")
-    public ResponseEntity<ApiResult> getAll(@RequestHeader("accessToken") String accessToken) {
+    public ResponseEntity<ApiResult> getAll(
+            @RequestHeader("accessToken") @NotBlank String accessToken,
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
         jwtService.validateTokenForm(accessToken);
 
-        Long fromMemberId = jwtService.getMemberId(accessToken);
-        LikeMemberResponse response = likeMemberService.findAll(fromMemberId);
+        long fromMemberId = jwtService.getMemberId(accessToken);
+        Page<LikeMemberResponse> response = likeMemberService.findAll(pageable, fromMemberId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

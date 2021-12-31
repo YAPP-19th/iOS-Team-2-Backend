@@ -14,10 +14,11 @@ public class BudiMemberInfoResponse {
     private String imgUrl;
     private String nickName;
     private String level;
-    private List<String> position;
+    private List<String> positions;
+    private Long likeCount;
 
     private List<ProjectResponse> projectList;
     private String[] portfolioList;
 
-    // TODO: like member
+    private Boolean isLikedFromCurrentMember;
 }

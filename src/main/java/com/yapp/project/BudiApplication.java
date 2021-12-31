@@ -1,8 +1,7 @@
 package com.yapp.project;
 
-import com.yapp.project.config.ApplicationConfig;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
@@ -16,9 +15,7 @@ public class BudiApplication {
     }
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(BudiApplication.class)
-                .properties(ApplicationConfig.APPLICATION_LOCATIONS)
-                .run(args);
+        SpringApplication.run(BudiApplication.class, args);
     }
 
 }

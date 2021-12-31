@@ -1,6 +1,5 @@
 package com.yapp.project.post.entity;
 
-import com.yapp.project.common.entity.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -13,27 +12,24 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "recruiting_position")
-public class RecruitingPosition extends BaseEntity<Long> {
+public class RecruitingPosition {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recruiting_position_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "recruiting_position_post_id", referencedColumnName = "post_id")
     private Post post;
 
-    @Column(name = "recruiting_position_root_position_code")
-    private Integer rootPositionCode;
+    @Column(name = "recruiting_position_base_position_code", nullable = false)
+    private Integer basePositionCode;
 
-    @Column(name = "recruiting_position_position_code")
+    @Column(name = "recruiting_position_position_code", nullable = false)
     private Integer positionCode;
 
-    @Column(name = "recruiting_position_skill_code")
-    private Integer skillCode;
-
-    @Column(name = "recruiting_position_recruiting_number")
+    @Column(name = "recruiting_position_recruiting_number", nullable = false)
     private Integer recruitingNumber;
 
     public void setPost(Post post) {

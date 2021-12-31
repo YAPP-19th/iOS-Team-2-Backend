@@ -1,5 +1,7 @@
 package com.yapp.project.review.service;
 
+import com.yapp.project.apply.entity.Apply;
+import com.yapp.project.apply.entity.value.ApplyStatus;
 import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.IllegalRequestException;
@@ -28,30 +30,49 @@ public class TextReviewHistoryService {
     private final ApplyRepository applyRepository;
 
     @Transactional
-    public void create(Long reviewerId, TextReviewCreateRequest request){
+    public void create(long reviewerId, long revieweeId, long postId, TextReviewCreateRequest request) {
         Member reviewer = memberRepository.findById(reviewerId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-        Member targetMember = memberRepository.findById(request.getTargetMemberId())
+        Member reviewee = memberRepository.findById(revieweeId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        Post post = postRepository.findById(request.getPostId())
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
-
-        if(!post.validateLeader(targetMember)){
-            throw new IllegalRequestException(ExceptionMessage.POST_ID_AND_MEMBER_ID_MISMATCH);
-        }
-
-        if(applyRepository.existsByMemberAndPost(reviewer, post)){
-            throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
-        }
-
-        if(targetMember.isSameMember(reviewer)){
+        if (reviewer.getId().longValue() == reviewee.getId().longValue()) {
             throw new IllegalRequestException(ExceptionMessage.NO_SELF_REVIEW);
         }
 
-        var textReviewHistory = converter.toEntity(reviewer, targetMember, post, request.getTitle(), request.getContent());
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        if (post.getOwner().getId().longValue() == reviewee.getId().longValue()) { // 타겟이 프로젝트 리더인 경우
+            Apply reviewerApply = applyRepository.findByMemberAndPost(reviewer, post)
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
+
+            ApplyStatus.validateApprovedCodeOrElseThrow(reviewerApply.getApplyStatusCode());
+        } else {  // 타겟이 팀원인 경우
+            if (reviewer.getId().longValue() == post.getOwner().getId().longValue()) { // 리뷰어가 프로젝트 리더인 경우
+                Apply revieweeApply = applyRepository.findByMemberAndPost(reviewee, post)
+                        .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
+
+                ApplyStatus.validateApprovedCodeOrElseThrow(revieweeApply.getApplyStatusCode());
+            } else { // 참여자가 또 다른 참여자에게 리뷰를 남기는 경우
+                Apply reviewerApply = applyRepository.findByMemberAndPost(reviewer, post)
+                        .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
+                Apply revieweeApply = applyRepository.findByMemberAndPost(reviewer, post)
+                        .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
+
+                ApplyStatus.validateApprovedCodeOrElseThrow(reviewerApply.getApplyStatusCode());
+                ApplyStatus.validateApprovedCodeOrElseThrow(revieweeApply.getApplyStatusCode());
+            }
+        }
+
+        if (textReviewHistoryRepository.existsByReviewerAndTargetMemberAndPost(reviewer, reviewee, post)) {
+            throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
+        }
+
+        var textReviewHistory = converter.toEntity(reviewer, reviewee, post, request.getTitle(), request.getContent());
         textReviewHistoryRepository.save(textReviewHistory);
+
+        // TODO: 상대방의 레벨 검사 로직
     }
 
     @Transactional(readOnly = true)
