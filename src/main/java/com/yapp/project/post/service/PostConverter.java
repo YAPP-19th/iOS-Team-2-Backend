@@ -45,7 +45,7 @@ public class PostConverter {
     }
 
     // used
-    public PostDetailResponse toPostDetailResponse(Post post, Member leader, boolean isLiked){
+    public PostDetailResponse toPostDetailResponse(Post post, Member leader, boolean isLiked, boolean isAlreadyApplied){
         return PostDetailResponse.builder()
                 .postId(post.getId())
                 .imageUrl(post.getImageUrl())
@@ -71,6 +71,7 @@ public class PostConverter {
                 .modifiedAt(post.getLastModifiedDate())
                 .isLiked(isLiked)
                 .likeCount(post.getLikeCount())
+                .isAlreadyApplied(isAlreadyApplied)
                 .build();
     }
 
