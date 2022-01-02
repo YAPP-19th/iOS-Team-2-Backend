@@ -1,6 +1,7 @@
 package com.yapp.project.post.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.yapp.project.common.dto.PositionAndColor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,6 @@ public class PostDetailResponse {
 
         private final String address;
 
-        private final String position;
+        private final PositionAndColor position;
     }
 }
