@@ -33,6 +33,13 @@ public class MemberService {
     private final JwtService jwtService;
 
     @Transactional(readOnly = true)
+    public boolean isExistMember(long memberId) {
+        Optional<Member> member = memberRepository.findById(memberId);
+
+        return member.isPresent();
+    }
+
+    @Transactional(readOnly = true)
     public String findByLoginId(String loginId) {
         Optional<Member> member = memberRepository.findMemberByLoginId(loginId);
         String memberId = "";
@@ -110,4 +117,11 @@ public class MemberService {
         return responses;
     }
 
+    @Transactional
+    public void updateFcmToken(long currentMemberId, String fcmToken, Boolean isFcmTokenActive) {
+        Member currentMember = memberRepository.findById(currentMemberId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+
+        currentMember.updateFcmTokenAndActiveStatus(fcmToken, isFcmTokenActive);
+    }
 }
