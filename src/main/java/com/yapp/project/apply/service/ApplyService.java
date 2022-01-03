@@ -34,7 +34,7 @@ public class ApplyService {
     private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     @Transactional
-    public ApplyResponse apply(long memberId, ApplyRequest request) throws IOException { // TODO: 지원 알림처리
+    public ApplyResponse apply(long memberId, ApplyRequest request) throws IOException { 
         RecruitingPosition rp = recruitingPositionRepository.findById(request.getRecruitingPositionId())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_RECRUITING_POSITION_ID));
 
