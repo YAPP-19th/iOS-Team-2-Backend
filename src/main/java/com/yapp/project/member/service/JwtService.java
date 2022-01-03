@@ -19,7 +19,6 @@ import javax.crypto.SecretKey;
 import java.time.Duration;
 
 @Service
-@Slf4j
 public class JwtService {
     @Value("${jwt.issuer}")
     private String ISSUER;
