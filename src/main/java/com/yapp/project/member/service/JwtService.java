@@ -8,8 +8,8 @@ import com.yapp.project.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,6 @@ import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.time.Duration;
 
-@RequiredArgsConstructor
 @Service
 @Slf4j
 public class JwtService {
@@ -34,6 +33,11 @@ public class JwtService {
     private final Long refreshExpiredTime = Duration.ofDays(365).toMillis();
 
     private JwtUtil jwtUtil;
+
+    @Autowired
+    public JwtService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @PostConstruct
     public void postConstruct() {
