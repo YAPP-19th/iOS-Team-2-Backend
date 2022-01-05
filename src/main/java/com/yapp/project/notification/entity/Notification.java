@@ -1,5 +1,7 @@
 package com.yapp.project.notification.entity;
 
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -38,5 +40,11 @@ public class Notification {
 
     public void updateIsRead(boolean isRead) {
         this.isRead = isRead;
+    }
+
+    public void validateMemberOrElseThrow(long receiverId) {
+        if(this.receiver.getId().longValue() != receiverId){
+            throw new IllegalRequestException(ExceptionMessage.ACCESS_DENIED);
+        }
     }
 }

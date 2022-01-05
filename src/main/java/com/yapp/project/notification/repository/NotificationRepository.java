@@ -1,7 +1,18 @@
 package com.yapp.project.notification.repository;
 
-import com.yapp.project.external.fcm.FcmMessage;
+import com.yapp.project.notification.entity.Notification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NotificationRepository extends JpaRepository<FcmMessage.Notification, Long> {
+import java.util.Optional;
+
+public interface NotificationRepository extends JpaRepository<Notification, Long> {
+    @Override
+    <S extends Notification> S save(S entity);
+
+    @Override
+    Optional<Notification> findById(Long aLong);
+
+    Page<Notification> findAllByReceiverId(Pageable pageable, long receiverId);
 }
