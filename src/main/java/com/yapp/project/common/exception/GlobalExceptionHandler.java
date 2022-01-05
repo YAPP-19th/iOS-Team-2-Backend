@@ -94,10 +94,10 @@ public class GlobalExceptionHandler {
         return createApiExceptionResult(ExceptionMessage.JWT_SIGNATURE_DOES_NOT_MATCH);
     }
 
-    @ExceptionHandler(Exception.class)
-    protected ApiExceptionResult handleException(Exception exception) {
-        return createApiExceptionResult(ExceptionMessage.UNEXPECTED_EXCEPTIONS);
-    }
+//    @ExceptionHandler(Exception.class)
+//    protected ApiExceptionResult handleException(Exception exception) {
+//        return createApiExceptionResult(ExceptionMessage.UNEXPECTED_EXCEPTIONS);
+//    }
 
     private ApiExceptionResult createApiExceptionResult(Exception exception) {
         ExceptionMessage exceptionMessage = ExceptionMessage.valueOf(exception.getMessage());
