@@ -21,16 +21,16 @@ public class Notification {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "notification_receiver", referencedColumnName = "member_id")
+    @JoinColumn(name = "notification_receiver_id", referencedColumnName = "member_id")
     private Member receiver;
 
-    @Column(name = "notification_title")
+    @Column(name = "notification_title", nullable = false)
     private String title;
 
-    @Column(name = "notification_body")
+    @Column(name = "notification_body", nullable = false)
     private String body;
 
-    @Column(name = "notification_is_read")
+    @Column(name = "notification_is_read", nullable = false)
     private Boolean isRead;
 
     @Column(name = "notification_date", nullable = false, columnDefinition = "TIMESTAMP")
