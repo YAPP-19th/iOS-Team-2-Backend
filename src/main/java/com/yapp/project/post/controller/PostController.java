@@ -115,7 +115,7 @@ public class PostController {
         );
     }
 
-    @ApiOperation("position으로 조회")
+    @ApiOperation(value = "position으로 조회", notes = "개발 / 기획 / 디자인")
     @GetMapping(value = "/positions/{basePositionName}")
     public ResponseEntity<ApiResult> getAllByPosition(
             @PathVariable String basePositionName,

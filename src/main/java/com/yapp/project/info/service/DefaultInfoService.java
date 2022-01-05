@@ -3,16 +3,19 @@ package com.yapp.project.info.service;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.common.value.PostCategory;
 import com.yapp.project.info.dto.CodeReviewListResponse;
+import com.yapp.project.info.dto.PostStatusResponse;
+import com.yapp.project.post.entity.value.PostStatus;
 import com.yapp.project.review.entity.value.ReviewCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class DefaultInfoService {
-    public List getPostionInfo(String positionInfo){
+    public List getPostionInfo(String positionInfo) {
         List positionList = Position.listOf(positionInfo);
         return positionList;
     }
@@ -31,5 +34,17 @@ public class DefaultInfoService {
                 ReviewCode.getAllPositiveReviewNames(),
                 ReviewCode.getAllNegativeReviewNames()
         );
+    }
+
+    public List<PostStatusResponse> findAllPostStatus() {
+        List<PostStatusResponse> response = new ArrayList<>();
+
+        for (var postStatus : PostStatus.values()) {
+            response.add(
+                    new PostStatusResponse(postStatus.getName(), postStatus.getCode())
+            );
+        }
+
+        return response;
     }
 }

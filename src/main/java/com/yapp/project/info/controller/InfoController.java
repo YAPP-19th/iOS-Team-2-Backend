@@ -51,10 +51,20 @@ public class InfoController {
         );
     }
 
-    @ApiOperation("리뷰 '목록' 전체 조회")
+    @ApiOperation(value = "리뷰 '목록' 전체 조회", notes = "선택하는 리뷰 목록 전체 조회")
     @GetMapping(value = "/select-reviews-list")
     public ResponseEntity<ApiResult> getAllSelectReviewList() {
         var response = defaultInfoService.findAllReviews();
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation(value = "게시글 상태정보 전체 조회", notes = "게시글 상태정보 수정시 이용바랍니다")
+    @GetMapping(value = "/postStatus")
+    public ResponseEntity<ApiResult> getAllPostStatus() {
+        var response = defaultInfoService.findAllPostStatus();
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
