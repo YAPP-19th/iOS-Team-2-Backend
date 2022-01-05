@@ -85,8 +85,8 @@ public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세�
         this.likeCount--;
     }
 
-    public synchronized void updateFcmTokenAndActiveStatus(String fcmToken, boolean isFcmTokenActive) {
+    public synchronized void updateFcmTokenAndActiveStatus(String fcmToken, Boolean isFcmTokenActive) {
         this.fcmToken = fcmToken;
-        this.isFcmTokenActive = isFcmTokenActive;
+        this.isFcmTokenActive = isFcmTokenActive == null ? true : isFcmTokenActive;
     }
 }

@@ -115,7 +115,7 @@ public class PostController {
         );
     }
 
-    @ApiOperation("position으로 조회")
+    @ApiOperation(value = "position으로 조회", notes = "개발 / 기획 / 디자인")
     @GetMapping(value = "/positions/{basePositionName}")
     public ResponseEntity<ApiResult> getAllByPosition(
             @PathVariable String basePositionName,
@@ -142,6 +142,23 @@ public class PostController {
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation("게시글 상태정보 수정")
+    @PatchMapping(value = "/{postId}/{postStatusCode}")
+    public ResponseEntity<ApiResult> switchPostStatus(
+            @RequestHeader("accessToken") @NotBlank String accessToken,
+            @PathVariable @Positive long postId,
+            @PathVariable @Positive int postStatusCode
+    ) {
+
+        jwtService.validateTokenForm(accessToken);
+
+        postService.switchPostStatus(accessToken, postStatusCode, postId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS)
         );
     }
 
