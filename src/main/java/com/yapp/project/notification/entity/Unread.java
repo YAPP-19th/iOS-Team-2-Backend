@@ -12,17 +12,17 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
-public class UnreadCount {
+public class Unread {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "unread_count_id")
+    @Column(name = "unread_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "unread_count_member_id", referencedColumnName = "member_id", unique = true)
+    @JoinColumn(name = "unread_member_id", referencedColumnName = "member_id", unique = true)
     private Member member;
 
-    @Column(name = "unread_count_count", nullable = false)
+    @Column(name = "unread_count", nullable = false)
     private Integer count;
 }
