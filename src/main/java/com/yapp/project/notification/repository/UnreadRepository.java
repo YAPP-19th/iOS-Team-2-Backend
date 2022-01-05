@@ -1,6 +1,5 @@
 package com.yapp.project.notification.repository;
 
-import com.yapp.project.member.entity.Member;
 import com.yapp.project.notification.entity.Unread;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +9,5 @@ public interface UnreadRepository extends JpaRepository<Unread, Long> {
     @Override
     <S extends Unread> S save(S entity);
 
-    Optional<Unread> findByMember(Member member);
+    Optional<Unread> findByMemberId(long memberId);
 }

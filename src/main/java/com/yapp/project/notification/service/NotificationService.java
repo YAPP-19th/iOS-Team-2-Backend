@@ -34,7 +34,7 @@ public class NotificationService {
         Notification notification = converter.toEntity(receiver, title, body);
         notificationRepository.save(notification);
 
-        Optional<Unread> unreadOpt = unreadRepository.findByMember(receiver);
+        Optional<Unread> unreadOpt = unreadRepository.findByMemberId(receiverId);
         if (unreadOpt.isPresent()) {
             unreadOpt.get().addCount();
         } else {
@@ -58,10 +58,21 @@ public class NotificationService {
 
         notification.updateIsRead(true);
 
-        Unread unread = unreadRepository.findByMember(notification.getReceiver())
+        Unread unread = unreadRepository.findByMemberId(receiverId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
 
         unread.substractCount();
+    }
+
+    @Transactional(readOnly = true)
+    public int getUnreadCount(long currentMemberId) {
+        Optional<Unread> unreadOpt = unreadRepository.findByMemberId(currentMemberId);
+
+        if (unreadOpt.isEmpty()) {
+            return 0;
+        }
+
+        return unreadOpt.get().getCount();
     }
 
 }

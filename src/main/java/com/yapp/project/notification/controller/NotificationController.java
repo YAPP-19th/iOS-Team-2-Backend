@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -65,6 +66,24 @@ public class NotificationController {
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
+        );
+    }
+
+    @ApiOperation("안읽은 알림 개수 조회")
+    @GetMapping(value = "/unreadCount")
+    public ResponseEntity<ApiResult> getUnreadCount(@RequestHeader("accessToken") @NotBlank String accessToken) {
+
+        jwtService.validateTokenForm(accessToken);
+
+        long currentMemberId = jwtService.getMemberId(accessToken);
+
+        int count = notificationService.getUnreadCount(currentMemberId);
+
+        var response = new HashMap<>();
+        response.put("unreadCount", count);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 }
