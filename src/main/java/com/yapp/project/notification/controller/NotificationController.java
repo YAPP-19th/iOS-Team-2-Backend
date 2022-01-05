@@ -79,7 +79,7 @@ public class NotificationController {
 
         int count = notificationService.getUnreadCount(currentMemberId);
 
-        var response = new HashMap<>();
+        var response = new HashMap<String, Integer>();
         response.put("unreadCount", count);
 
         return ResponseEntity.ok(
