@@ -145,5 +145,5 @@ public class PostController {
         );
     }
 
-    //TODO: 내가 모집중인 전체 프로젝트
+    //TODO: 내가 모집중인 전체 프로젝트 + 내가 참여한 프로젝트
 }
