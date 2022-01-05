@@ -119,7 +119,7 @@ public class PostController {
     @GetMapping(value = "/positions/{basePositionName}")
     public ResponseEntity<ApiResult> getAllByPosition(
             @PathVariable String basePositionName,
-            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 20) Pageable pageable
     ) {
 
         Page<PostSimpleResponse> response = postService.findAllByPosition(basePositionName, pageable);
