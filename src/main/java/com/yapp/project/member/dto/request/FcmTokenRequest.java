@@ -14,7 +14,4 @@ import javax.validation.constraints.NotNull;
 public class FcmTokenRequest {
     @NotBlank(message = DtoValidationFailMessage.INVALID_FCM_TOKEN_REQUEST)
     private String fcmToken;
-
-    @NotNull(message = DtoValidationFailMessage.INVALID_FCM_TOKEN_REQUEST)
-    private Boolean isFcmTokenActive;
 }

@@ -48,7 +48,7 @@ public class AuthController {
         jwtService.validateTokenForm(accessToken);
         long currentMemberId = jwtService.getMemberId(accessToken);
 
-        memberService.updateFcmToken(currentMemberId, request.getFcmToken(), request.getIsFcmTokenActive());
+        memberService.updateFcmToken(currentMemberId, request.getFcmToken());
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
