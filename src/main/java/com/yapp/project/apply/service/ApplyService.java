@@ -13,9 +13,11 @@ import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.external.fcm.FirebaseCloudMessageService;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
+import com.yapp.project.notification.service.NotificationService;
 import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApplyService {
@@ -32,9 +35,10 @@ public class ApplyService {
     private final RecruitingPositionRepository recruitingPositionRepository;
     private final ApplyConverter applyConverter;
     private final FirebaseCloudMessageService firebaseCloudMessageService;
+    private final NotificationService notificationService;
 
     @Transactional
-    public ApplyResponse apply(long memberId, ApplyRequest request) throws IOException { 
+    public ApplyResponse apply(long memberId, ApplyRequest request) {
         RecruitingPosition rp = recruitingPositionRepository.findById(request.getRecruitingPositionId())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_RECRUITING_POSITION_ID));
 
@@ -56,16 +60,22 @@ public class ApplyService {
         return applyConverter.toApplyResponse(applyEntity);
     }
 
-    private void sendNotificationToLeader(Member applyer, Apply apply) throws IOException {
+    private void sendNotificationToLeader(Member applyer, Apply apply) {
         Member leader = apply.getPost().getOwner();
 
         if (!leader.isFcmTokenActive()) return;
 
-        firebaseCloudMessageService.sendMessageTo(
-                leader.getFcmToken(),
-                MessageFormat.format("{0}님이 {1} 프로젝트에 지원했습니다.", applyer.getNickName(), apply.getPost().getTitle()),
-                "지원내용을 확인하세요!"
-        );
+        String title = MessageFormat.format("{0}님이 {1} 프로젝트에 지원했습니다.", applyer.getNickName(), apply.getPost().getTitle());
+        String body = "지원내용을 확인하세요!";
+
+        try {
+            firebaseCloudMessageService.sendMessageTo(leader.getFcmToken(), title, body);
+        } catch (Exception e) {
+            log.error(MessageFormat.format("지원 알림 FCM 전송 실패: leaderId: {0}", leader.getId()));
+            return;
+        }
+
+        notificationService.save(leader.getId(), title, body);
     }
 
     @Transactional

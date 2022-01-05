@@ -10,6 +10,8 @@ public enum ExceptionMessage {
     CLOUD_FAIL(StatusCode.CLOUD_FAIL),
 
     // bad request / not found
+    ACCESS_DENIED(StatusCode.BAD_REQUEST),
+    BAD_REQUEST(StatusCode.BAD_REQUEST),
     MEMBER_NOT_FOUND(StatusCode.MEMBER_NOT_FOUND),
     NOT_EXIST_POST_STATUS(StatusCode.NOT_EXIST_POST_STATUS),
     NOT_EXIST_POSITION_CODE(StatusCode.NOT_EXIST_POSITION_CODE),
