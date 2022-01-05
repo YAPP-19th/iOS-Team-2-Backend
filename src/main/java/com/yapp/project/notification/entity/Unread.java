@@ -1,5 +1,7 @@
 package com.yapp.project.notification.entity;
 
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -25,4 +27,21 @@ public class Unread {
 
     @Column(name = "unread_count", nullable = false)
     private Integer count;
+
+    public Unread(Member member, Integer count) {
+        this.member = member;
+        this.count = count;
+    }
+
+    public void addCount() {
+        this.count++;
+    }
+
+    public void substractCount() {
+        if (this.count <= 0) {
+            throw new IllegalRequestException(ExceptionMessage.UNEXPECTED_EXCEPTIONS);
+        }
+
+        this.count--;
+    }
 }

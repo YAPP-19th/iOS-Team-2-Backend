@@ -2,8 +2,11 @@ package com.yapp.project.notification.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.member.entity.Member;
+import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.notification.dto.NotificationResponse;
 import com.yapp.project.notification.entity.Notification;
+import com.yapp.project.notification.entity.Unread;
 import com.yapp.project.notification.repository.NotificationRepository;
 import com.yapp.project.notification.repository.UnreadRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -19,9 +24,22 @@ public class NotificationService {
     private final UnreadRepository unreadRepository;
     private final NotificationConverter converter;
 
-    @Transactional
-    public void save() {
+    private final MemberRepository memberRepository;
 
+    @Transactional
+    public void save(long receiverId, String title, String body) {
+        Member receiver = memberRepository.findById(receiverId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
+
+        Notification notification = converter.toEntity(receiver, title, body);
+        notificationRepository.save(notification);
+
+        Optional<Unread> unreadOpt = unreadRepository.findByMember(receiver);
+        if (unreadOpt.isPresent()) {
+            unreadOpt.get().addCount();
+        } else {
+            unreadRepository.save(new Unread(receiver, 1));
+        }
     }
 
     @Transactional(readOnly = true)
@@ -39,6 +57,11 @@ public class NotificationService {
         notification.validateMemberOrElseThrow(receiverId);
 
         notification.updateIsRead(true);
+
+        Unread unread = unreadRepository.findByMember(notification.getReceiver())
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
+
+        unread.substractCount();
     }
 
 }

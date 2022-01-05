@@ -12,7 +12,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     <S extends Notification> S save(S entity);
 
     @Override
-    Optional<Notification> findById(Long aLong);
+    Optional<Notification> findById(Long id);
 
     Page<Notification> findAllByReceiverId(Pageable pageable, long receiverId);
 }
