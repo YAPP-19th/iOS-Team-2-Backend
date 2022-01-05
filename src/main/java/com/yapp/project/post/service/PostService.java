@@ -102,18 +102,17 @@ public class PostService {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
         boolean isLiked = false;
+        boolean isAlreadyApplied = false;
         if (accessTokenOptional.isPresent()) { // 로그인 사용자
             Long currentMemberId = jwtService.getMemberId(accessTokenOptional.get());
 
-            Member currentMember = memberRepository.findById(currentMemberId)
-                    .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
-
-            isLiked = likePostRepository.existsByMemberAndPost(currentMember, post);
+            isLiked = likePostRepository.existsByMemberIdAndPostId(currentMemberId, postId);
+            isAlreadyApplied = applyRepository.existsByMemberIdAndPostId(currentMemberId, postId);
         }
 
         post.addViewCount();
 
-        return postConverter.toPostDetailResponse(post, post.getOwner(), isLiked);
+        return postConverter.toPostDetailResponse(post, post.getOwner(), isLiked, isAlreadyApplied);
     }
 
     @Transactional

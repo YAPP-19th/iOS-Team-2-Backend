@@ -20,4 +20,5 @@ public class DtoValidationFailMessage {  //TODO: 메모리 효율적인 방안�
     public final static String INVALID_URL = "INVALID_URL";
     public final static String INVALID_LOGIN_ID = "INVALID_LOGIN_ID";
     public final static String INVALID_PROJECT_TITLE = "INVALID_POST_ID";
+    public final static String INVALID_FCM_TOKEN_REQUEST = "INVALID_FCM_TOKEN_REQUEST";
 }

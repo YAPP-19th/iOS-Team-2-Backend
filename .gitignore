@@ -343,6 +343,9 @@ gradle-app.setting
 # AWS 접속 키 : 절대 GIT에 올리지 말 것
 src/main/resources/*.yml
 
+# FCM 접속키
+src/main/resources/firebase/*.json
+
 # s3 upload fail image
 *.png
 *.jpeg

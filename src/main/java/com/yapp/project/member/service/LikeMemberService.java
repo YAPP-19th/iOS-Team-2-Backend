@@ -2,9 +2,6 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
-import com.yapp.project.common.value.Position;
-import com.yapp.project.likepost.dto.LikePostResponse;
-import com.yapp.project.likepost.entity.LikePost;
 import com.yapp.project.member.dto.response.LikeMemberResponse;
 import com.yapp.project.member.entity.LikeMember;
 import com.yapp.project.member.entity.Member;
@@ -15,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

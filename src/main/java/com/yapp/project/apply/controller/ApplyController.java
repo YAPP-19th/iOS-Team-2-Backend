@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,7 @@ public class ApplyController {
 
     @ApiOperation("지원하기")
     @PostMapping()
-    public ResponseEntity<ApiResult> insert(@Valid @RequestBody ApplyRequest request, @RequestHeader("accessToken") @NotBlank String accessToken) {
+    public ResponseEntity<ApiResult> insert(@Valid @RequestBody ApplyRequest request, @RequestHeader("accessToken") @NotBlank String accessToken) throws IOException {
         jwtService.validateTokenForm(accessToken);
 
         long memberId = jwtService.getMemberId(accessToken);

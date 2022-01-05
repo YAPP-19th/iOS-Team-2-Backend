@@ -34,6 +34,7 @@ public class MemberConverter {
                 .portfolioLink("")
                 .projects(List.of())
                 .profileImageUrl("")
+                .isFcmTokenActive(true)
                 .build();
     }
 

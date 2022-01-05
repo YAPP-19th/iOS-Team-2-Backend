@@ -45,7 +45,7 @@ public class PostConverter {
     }
 
     // used
-    public PostDetailResponse toPostDetailResponse(Post post, Member leader, boolean isLiked){
+    public PostDetailResponse toPostDetailResponse(Post post, Member leader, boolean isLiked, boolean isAlreadyApplied){
         return PostDetailResponse.builder()
                 .postId(post.getId())
                 .imageUrl(post.getImageUrl())
@@ -63,7 +63,10 @@ public class PostConverter {
                                 leader.getNickName(),
                                 leader.getProfileImageUrl(),
                                 leader.getAddress(),
-                                Position.of(Integer.parseInt(leader.getPositionCode().split(" ")[0])).getName()
+                                new PositionAndColor(
+                                        Position.of(Integer.parseInt(leader.getPositionCode().split(" ")[0])).getName(),
+                                        Position.getBasePosition(Integer.parseInt(leader.getPositionCode().split(" ")[0])).getCode()
+                                )
                         )
                 )
                 .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getName())
@@ -71,6 +74,7 @@ public class PostConverter {
                 .modifiedAt(post.getLastModifiedDate())
                 .isLiked(isLiked)
                 .likeCount(post.getLikeCount())
+                .isAlreadyApplied(isAlreadyApplied)
                 .build();
     }
 
