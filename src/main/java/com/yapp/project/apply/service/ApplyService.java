@@ -13,6 +13,7 @@ import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.external.fcm.FirebaseCloudMessageService;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
+import com.yapp.project.notification.service.NotificationService;
 import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,10 @@ public class ApplyService {
     private final RecruitingPositionRepository recruitingPositionRepository;
     private final ApplyConverter applyConverter;
     private final FirebaseCloudMessageService firebaseCloudMessageService;
+    private final NotificationService notificationService;
 
     @Transactional
-    public ApplyResponse apply(long memberId, ApplyRequest request) throws IOException { 
+    public ApplyResponse apply(long memberId, ApplyRequest request) throws IOException {
         RecruitingPosition rp = recruitingPositionRepository.findById(request.getRecruitingPositionId())
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_RECRUITING_POSITION_ID));
 
@@ -61,11 +63,16 @@ public class ApplyService {
 
         if (!leader.isFcmTokenActive()) return;
 
+        String title = MessageFormat.format("{0}님이 {1} 프로젝트에 지원했습니다.", applyer.getNickName(), apply.getPost().getTitle());
+        String body = "지원내용을 확인하세요!";
+        
         firebaseCloudMessageService.sendMessageTo(
                 leader.getFcmToken(),
-                MessageFormat.format("{0}님이 {1} 프로젝트에 지원했습니다.", applyer.getNickName(), apply.getPost().getTitle()),
-                "지원내용을 확인하세요!"
+                title,
+                body
         );
+
+        notificationService.save(leader.getId(), title, body);
     }
 
     @Transactional
