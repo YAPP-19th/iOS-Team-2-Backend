@@ -118,10 +118,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateFcmToken(long currentMemberId, String fcmToken, Boolean isFcmTokenActive) {
+    public void updateFcmToken(long currentMemberId, String fcmToken) {
         Member currentMember = memberRepository.findById(currentMemberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
-        currentMember.updateFcmTokenAndActiveStatus(fcmToken, isFcmTokenActive);
+        currentMember.updateFcmTokenAndActiveStatus(fcmToken, null);
     }
 }
