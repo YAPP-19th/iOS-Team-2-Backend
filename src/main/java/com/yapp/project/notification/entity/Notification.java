@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -28,4 +29,14 @@ public class Notification {
 
     @Column(name = "notification_body")
     private String body;
+
+    @Column(name = "notification_is_read")
+    private Boolean isRead;
+
+    @Column(name = "notification_date", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime date;
+
+    public void updateIsRead(boolean isRead) {
+        this.isRead = isRead;
+    }
 }
