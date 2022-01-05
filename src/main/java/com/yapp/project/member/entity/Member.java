@@ -45,7 +45,7 @@ public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_email")
     private String email;
 
-    @Column(name = "member_token")
+    @Column(name = "member_token", columnDefinition = "TEXT")
     private String token;
 
     @Column(name = "member_login_id")
@@ -57,7 +57,7 @@ public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_like_count", nullable = false)
     private Long likeCount;
 
-    @Column(name = "member_fcm_token")
+    @Column(name = "member_fcm_token", columnDefinition = "TEXT")
     private String fcmToken;
 
     @Column(name = "member_is_fcmToken_active", nullable = false, columnDefinition = "boolean default true")
