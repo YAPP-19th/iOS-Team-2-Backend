@@ -146,16 +146,16 @@ public class PostController {
     }
 
     @ApiOperation("게시글 상태정보 수정")
-    @PatchMapping(value = "/{postId}/{postStatusCodde}")
+    @PatchMapping(value = "/{postId}/{postStatusCode}")
     public ResponseEntity<ApiResult> switchPostStatus(
             @RequestHeader("accessToken") @NotBlank String accessToken,
             @PathVariable @Positive long postId,
-            @PathVariable @Positive int postStatusCodde
+            @PathVariable @Positive int postStatusCode
     ) {
 
         jwtService.validateTokenForm(accessToken);
 
-        postService.switchPostStatus(accessToken, postStatusCodde, postId);
+        postService.switchPostStatus(accessToken, postStatusCode, postId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
