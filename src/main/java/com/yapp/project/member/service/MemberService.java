@@ -3,6 +3,7 @@ package com.yapp.project.member.service;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.BasePosition;
+import com.yapp.project.common.value.Position;
 import com.yapp.project.member.dto.request.CareerRequest;
 import com.yapp.project.member.dto.request.CreateInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,6 +100,23 @@ public class MemberService {
 
         List<Member> m = memberRepository.getMemberBybasePositionCode(basePosition.getCode());
         List<BudiMemberResponse> responses = memberConverter.toBudiMemberResponse(m);
+
+        return responses;
+    }
+
+    @Transactional(readOnly = true)
+    public List<BudiMemberResponse> getBudiPositionList(String position, String positionName) {
+        BasePosition basePosition = BasePosition.fromEnglishName(position);
+        int positionCode = Position.of(positionName).getCode();
+        List<Member> m = memberRepository.getMemberBybasePositionCode(basePosition.getCode());
+        List<Member> filter = new ArrayList<>();
+        for(Member member : m){
+            String positionList[] = member.getPositionCode().split(" ");
+            if( Arrays.stream(positionList).anyMatch(code -> code.equals(String.valueOf(positionCode)) ) ){
+                filter.add(member);
+            }
+        }
+        List<BudiMemberResponse> responses = memberConverter.toBudiMemberResponse(filter);
 
         return responses;
     }

@@ -66,6 +66,15 @@ public class MemberController {
         );
     }
 
+    @ApiOperation(value = "버디 찾기(필터)", notes = "developer / designer / planner 중 하나로 요청해주세요.")
+    @GetMapping(value = "/budiLists/{position}/{positionName}")
+    public ResponseEntity<ApiResult> getBudiList(@PathVariable @NotBlank String position, @PathVariable @NotBlank String positionName) {
+        List<BudiMemberResponse> response = memberService.getBudiPositionList(position, positionName);
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
     @ApiOperation(value = "버디 상세조회", notes = "member id를 요청해주세요.")
     @GetMapping(value = "/budiDetails/{memberId}")
     public ResponseEntity<ApiResult> getBudiDetail(
