@@ -19,6 +19,7 @@ import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.entity.value.OnlineStatus;
 import com.yapp.project.common.value.PostCategory;
+import com.yapp.project.post.entity.value.PostStatus;
 import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
@@ -154,6 +155,18 @@ public class PostService {
         return postConverter.toPostDeleteResponse(postId);
     }
 
+    @Transactional
+    public void switchPostStatus(String accessToken, int postStatusCode, long postId) {
+        long memberId = jwtService.getMemberId(accessToken);
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        post.validateLeaderOrElseThrow(memberId);
+
+        post.updateStatusCode(PostStatus.of(postStatusCode).getCode());
+    }
+
     @Transactional(readOnly = true)
     public Page<PostSimpleResponse> findAllByPosition(String basePositionName, Pageable pageable) {
         Page<Post> allByPositionCode = recruitingPositionRepository.findDistinctPostByPositionCode(BasePosition.of(basePositionName).getCode(), pageable);
@@ -176,5 +189,4 @@ public class PostService {
 
         return postConverter.toPostSimpleResponse(post, positions);
     }
-
 }

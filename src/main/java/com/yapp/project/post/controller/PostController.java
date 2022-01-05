@@ -145,5 +145,22 @@ public class PostController {
         );
     }
 
+    @ApiOperation("게시글 상태정보 수정")
+    @PatchMapping(value = "/{postId}/{postStatusCodde}")
+    public ResponseEntity<ApiResult> switchPostStatus(
+            @RequestHeader("accessToken") @NotBlank String accessToken,
+            @PathVariable @Positive long postId,
+            @PathVariable @Positive int postStatusCodde
+    ) {
+
+        jwtService.validateTokenForm(accessToken);
+
+        postService.switchPostStatus(accessToken, postStatusCodde, postId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS)
+        );
+    }
+
     //TODO: 내가 모집중인 전체 프로젝트 + 내가 참여한 프로젝트
 }
