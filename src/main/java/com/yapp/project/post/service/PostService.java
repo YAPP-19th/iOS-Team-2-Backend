@@ -91,8 +91,14 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostSimpleResponse> findAllByPages(Pageable pageable) {
-        Page<Post> postPage = postRepository.findAll(pageable);
+    public Page<PostSimpleResponse> findAllByPages(Pageable pageable, Optional<String> titleOpt) {
+        Page<Post> postPage;
+
+        if (titleOpt.isPresent()) {
+            postPage = postRepository.findByTitleIgnoreCaseContains(pageable, titleOpt.get());
+        } else {
+            postPage = postRepository.findAll(pageable);
+        }
 
         return postPage.map(v -> makePostSimpleResponse(v));
     }

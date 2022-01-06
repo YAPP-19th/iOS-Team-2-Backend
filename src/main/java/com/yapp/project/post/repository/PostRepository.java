@@ -19,4 +19,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Override
     boolean existsById(Long id);
+
+    Page<Post> findByTitleIgnoreCaseContains(Pageable pageable, String title);
 }
