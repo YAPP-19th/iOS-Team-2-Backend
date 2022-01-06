@@ -102,13 +102,14 @@ public class PostController {
         );
     }
 
-    @ApiOperation("게시글 전체 조회")
+    @ApiOperation(value = "게시글 전체 조회 / 프로젝트 title로 검색", notes = "parameter title을 지정하지 않을 시 전체게시글을 조회하며 title을 지정하면 title로 검색합니다")
     @GetMapping()
     public ResponseEntity<ApiResult> getAll(
+            @RequestParam(value = "title", required = false) @Nullable String title,
             @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
     ) {
 
-        Page<PostSimpleResponse> response = postService.findAllByPages(pageable);
+        Page<PostSimpleResponse> response = postService.findAllByPages(pageable, Optional.ofNullable(title));
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
