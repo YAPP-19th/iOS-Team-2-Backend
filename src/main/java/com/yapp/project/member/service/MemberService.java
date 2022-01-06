@@ -2,6 +2,7 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.common.util.PositionParser;
 import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.dto.request.CareerRequest;
@@ -110,9 +111,9 @@ public class MemberService {
         int positionCode = Position.of(positionName).getCode();
         List<Member> m = memberRepository.getMemberBybasePositionCode(basePosition.getCode());
         List<Member> filter = new ArrayList<>();
-        for(Member member : m){
-            String positionList[] = member.getPositionCode().split(" ");
-            if( Arrays.stream(positionList).anyMatch(code -> code.equals(String.valueOf(positionCode)) ) ){
+        for (Member member : m) {
+            int[] positionCodes = PositionParser.parse(member.getPositionCode(), "-");
+            if (Arrays.stream(positionCodes).anyMatch(code -> code == positionCode)) {
                 filter.add(member);
             }
         }
