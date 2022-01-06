@@ -80,27 +80,22 @@ public class MemberConverter {
 
     }
 
-    public List<BudiMemberResponse> toBudiMemberResponse(List<Member> members) {
-        List<BudiMemberResponse> responses = new LinkedList<>();
-        for (Member m : members) {
-            List<String> positionNames = new LinkedList<>();
-            int[] codes = PositionParser.parse(m.getPositionCode(), "-");
-            for (int code : codes) {
-                positionNames.add(Position.of(code).getName());
-            }
-            responses.add(
-                    new BudiMemberResponse(
-                            m.getId(),
-                            m.getProfileImageUrl(),
-                            m.getNickName(),
-                            m.getAddress(),
-                            m.getIntroduce(),
-                            positionNames,
-                            m.getLikeCount()
-                    )
-            );
+    public BudiMemberResponse toBudiMemberResponse(Member member) {
+        List<String> positionNames = new LinkedList<>();
+        int[] codes = PositionParser.parse(member.getPositionCode(), "-");
+        for (int code : codes) {
+            positionNames.add(Position.of(code).getName());
         }
-        return responses;
+
+        return new BudiMemberResponse(
+                member.getId(),
+                member.getProfileImageUrl(),
+                member.getNickName(),
+                member.getAddress(),
+                member.getIntroduce(),
+                positionNames,
+                member.getLikeCount()
+        );
     }
 
     public BudiMemberInfoResponse toBudiMemberInfoResponse(Member m, List<Project> projectList, boolean isLikedFromCurrentMember) {

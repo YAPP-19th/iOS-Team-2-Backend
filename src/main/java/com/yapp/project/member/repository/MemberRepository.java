@@ -1,6 +1,8 @@
 package com.yapp.project.member.repository;
 
 import com.yapp.project.member.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +28,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByNickName(String nickName);
 
-    List<Member> getMemberBybasePositionCode(int basePositionCode);
+    Page<Member> findAllByBasePositionCode(Pageable pageable, int basePositionCode);
+
+    Page<Member> findAllByPositionCodeContains(String position, Pageable pageable);
 }

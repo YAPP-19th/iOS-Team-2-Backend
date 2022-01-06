@@ -17,6 +17,8 @@ import com.yapp.project.member.entity.Project;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.member.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,30 +98,20 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<BudiMemberResponse> getBudiList(String position) {
+    public Page<BudiMemberResponse> getBudiList(Pageable pageable, String position) {
         BasePosition basePosition = BasePosition.fromEnglishName(position);
 
-        List<Member> m = memberRepository.getMemberBybasePositionCode(basePosition.getCode());
-        List<BudiMemberResponse> responses = memberConverter.toBudiMemberResponse(m);
+        Page<Member> budiPage = memberRepository.findAllByBasePositionCode(pageable, basePosition.getCode());
 
-        return responses;
+        return budiPage.map(b -> memberConverter.toBudiMemberResponse(b));
     }
 
     @Transactional(readOnly = true)
-    public List<BudiMemberResponse> getBudiPositionList(String position, String positionName) {
-        BasePosition basePosition = BasePosition.fromEnglishName(position);
-        int positionCode = Position.of(positionName).getCode();
-        List<Member> m = memberRepository.getMemberBybasePositionCode(basePosition.getCode());
-        List<Member> filter = new ArrayList<>();
-        for (Member member : m) {
-            int[] positionCodes = PositionParser.parse(member.getPositionCode(), "-");
-            if (Arrays.stream(positionCodes).anyMatch(code -> code == positionCode)) {
-                filter.add(member);
-            }
-        }
-        List<BudiMemberResponse> responses = memberConverter.toBudiMemberResponse(filter);
+    public Page<BudiMemberResponse> getBudiPositionList(String basePosition, String detailPosition, Pageable pageable) {
+        int positionCode = Position.of(detailPosition).getCode();
+        Page<Member> budiPage = memberRepository.findAllByPositionCodeContains("-" + positionCode + "-", pageable);
 
-        return responses;
+        return budiPage.map(b -> memberConverter.toBudiMemberResponse(b));
     }
 
     @Transactional(readOnly = true)
