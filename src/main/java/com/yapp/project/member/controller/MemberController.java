@@ -11,6 +11,10 @@ import com.yapp.project.member.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
@@ -59,17 +63,26 @@ public class MemberController {
 
     @ApiOperation(value = "버디 찾기", notes = "developer / designer / planner 중 하나로 요청해주세요.")
     @GetMapping(value = "/budiLists/{position}")
-    public ResponseEntity<ApiResult> getBudiList(@PathVariable @NotBlank String position) {
-        List<BudiMemberResponse> response = memberService.getBudiList(position);
+    public ResponseEntity<ApiResult> getBudiList(
+            @PathVariable @NotBlank String position,
+            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
+    ) {
+
+        Page<BudiMemberResponse> response = memberService.getBudiList(pageable, position);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
 
-    @ApiOperation(value = "버디 찾기(필터)", notes = "developer / designer / planner 중 하나로 요청해주세요.")
-    @GetMapping(value = "/budiLists/{position}/{positionName}")
-    public ResponseEntity<ApiResult> getBudiList(@PathVariable @NotBlank String position, @PathVariable @NotBlank String positionName) {
-        List<BudiMemberResponse> response = memberService.getBudiPositionList(position, positionName);
+    @ApiOperation(value = "버디 찾기(필터)", notes = "developer / designer / planner 중 하나로 요청해주세요. \n detailPosition 예시: iOS 개발")
+    @GetMapping(value = "/budiLists/{position}/{detailPosition}")
+    public ResponseEntity<ApiResult> getBudiList(
+            @PathVariable @NotBlank String position,
+            @PathVariable @NotBlank String detailPosition,
+            @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
+    ) {
+
+        Page<BudiMemberResponse> response = memberService.getBudiPositionList(position, detailPosition, pageable);
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
@@ -78,7 +91,7 @@ public class MemberController {
     @ApiOperation(value = "버디 상세조회", notes = "member id를 요청해주세요.")
     @GetMapping(value = "/budiDetails/{memberId}")
     public ResponseEntity<ApiResult> getBudiDetail(
-            @RequestHeader("accessToken") @Nullable String accessToken,
+            @RequestHeader(value = "accessToken", required = false) @Nullable String accessToken,
             @PathVariable @Positive long memberId
     ) {
 

@@ -2,6 +2,7 @@ package com.yapp.project.post.service;
 
 import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.common.dto.PositionAndColor;
+import com.yapp.project.common.util.PositionParser;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.dto.request.PostCreateRequest;
@@ -64,8 +65,8 @@ public class PostConverter {
                                 leader.getProfileImageUrl(),
                                 leader.getAddress(),
                                 new PositionAndColor(
-                                        Position.of(Integer.parseInt(leader.getPositionCode().split(" ")[0])).getName(),
-                                        Position.getBasePosition(Integer.parseInt(leader.getPositionCode().split(" ")[0])).getCode()
+                                        Position.of(PositionParser.parse(leader.getPositionCode(), "-")[0]).getName(),
+                                        Position.getBasePosition(PositionParser.parse(leader.getPositionCode(), "-")[0]).getCode()
                                 )
                         )
                 )

@@ -1,5 +1,6 @@
 package com.yapp.project.member.service;
 
+import com.yapp.project.common.util.PositionParser;
 import com.yapp.project.common.value.Level;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.common.value.BasePosition;
@@ -11,7 +12,6 @@ import com.yapp.project.member.dto.request.ProjectRequest;
 import com.yapp.project.member.dto.response.ProjectResponse;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.entity.Project;
-import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -30,7 +30,7 @@ public class MemberConverter {
                 .email("")
                 .introduce("")
                 .nickName("")
-                .positionCode(Integer.toString(Position.DEVELOPER_DEFAULT.getCode()) + " ") //TODO: position code가 string이어서 다른 부분에서 에러발생
+                .positionCode("--") //TODO: position code가 string이어서 다른 부분에서 에러발생
                 .portfolioLink("")
                 .projects(List.of())
                 .profileImageUrl("")
@@ -48,7 +48,7 @@ public class MemberConverter {
                 .map(v -> Position.of(v).getCode())
                 .map(v -> v.toString())
                 .collect(Collectors.toList());
-        String positionListString = StringUtils.join(positionList, ' ');
+        String joinedPositions = PositionParser.join(positionList, "-");
         return Member.builder()
                 .id(member.getId())
                 .token(member.getToken())
@@ -60,7 +60,7 @@ public class MemberConverter {
                 .address(request.getMemberAddress())
                 .introduce(request.getDescription())
                 .basePositionCode(request.getBasePosition())
-                .positionCode(positionListString)
+                .positionCode(joinedPositions)
                 .portfolioLink(request.getPortfolioLink()
                         .stream()
                         .map(n -> String.valueOf(n))
@@ -80,35 +80,30 @@ public class MemberConverter {
 
     }
 
-    public List<BudiMemberResponse> toBudiMemberResponse(List<Member> members) {
-        List<BudiMemberResponse> responses = new LinkedList<>();
-        for (Member m : members) {
-            List<String> positionList = new LinkedList<>();
-            String[] codeList = m.getPositionCode().split(" ");
-            for (String code : codeList) {
-                positionList.add(Position.of(Integer.parseInt(code)).getName());
-            }
-            responses.add(
-                    new BudiMemberResponse(
-                            m.getId(),
-                            m.getProfileImageUrl(),
-                            m.getNickName(),
-                            m.getAddress(),
-                            m.getIntroduce(),
-                            positionList,
-                            m.getLikeCount()
-                    )
-            );
+    public BudiMemberResponse toBudiMemberResponse(Member member) {
+        List<String> positionNames = new LinkedList<>();
+        int[] codes = PositionParser.parse(member.getPositionCode(), "-");
+        for (int code : codes) {
+            positionNames.add(Position.of(code).getName());
         }
-        return responses;
+
+        return new BudiMemberResponse(
+                member.getId(),
+                member.getProfileImageUrl(),
+                member.getNickName(),
+                member.getAddress(),
+                member.getIntroduce(),
+                positionNames,
+                member.getLikeCount()
+        );
     }
 
     public BudiMemberInfoResponse toBudiMemberInfoResponse(Member m, List<Project> projectList, boolean isLikedFromCurrentMember) {
-        List<String> positionList = new LinkedList<>();
-        String[] codeList = m.getPositionCode().split(" ");
+        List<String> positionNames = new LinkedList<>();
+        int[] codes = PositionParser.parse(m.getPositionCode(), "-");
         String[] portfolioList = m.getPortfolioLink().split(" ");
-        for (String code : codeList) {
-            positionList.add(Position.of(Integer.parseInt(code)).getName());
+        for (int code : codes) {
+            positionNames.add(Position.of(code).getName());
         }
         List<ProjectResponse> projectResponses = toProjectResponse(projectList);
         BudiMemberInfoResponse response = BudiMemberInfoResponse.builder()
@@ -116,7 +111,7 @@ public class MemberConverter {
                 .imgUrl(m.getProfileImageUrl())
                 .nickName(m.getNickName())
                 .level(Level.of(m.getScore()).getLevelName())
-                .positions(positionList)
+                .positions(positionNames)
                 .projectList(projectResponses)
                 .portfolioList(portfolioList)
                 .likeCount(m.getLikeCount())
