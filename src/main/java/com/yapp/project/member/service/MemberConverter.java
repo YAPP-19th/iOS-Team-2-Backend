@@ -7,7 +7,6 @@ import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
-import com.yapp.project.member.dto.request.MemberInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
 import com.yapp.project.member.dto.response.ProjectResponse;
 import com.yapp.project.member.entity.Member;
@@ -15,7 +14,6 @@ import com.yapp.project.member.entity.Project;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class MemberConverter {
