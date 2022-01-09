@@ -3,6 +3,7 @@ package com.yapp.project.likepost.controller;
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
 import com.yapp.project.likepost.dto.LikePostResponse;
+import com.yapp.project.likepost.dto.LikeStatusResponse;
 import com.yapp.project.likepost.service.LikePostService;
 import com.yapp.project.member.service.JwtService;
 import io.swagger.annotations.Api;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,10 +35,7 @@ public class LikePostController {
         jwtService.validateTokenForm(accessToken);
 
         Long memberId = jwtService.getMemberId(accessToken);
-        boolean isLiked = likePostService.switchLikeStatus(memberId, postId);
-
-        var response = new HashMap<String, Boolean>();
-        response.put("isLiked", isLiked);
+        LikeStatusResponse response = likePostService.switchLikeStatus(memberId, postId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
