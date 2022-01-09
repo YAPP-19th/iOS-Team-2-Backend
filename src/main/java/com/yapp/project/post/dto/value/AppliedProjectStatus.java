@@ -31,6 +31,6 @@ public interface AppliedProjectStatus {
             return PARTICIPATING;
         }
 
-        throw new NotFoundException(ExceptionMessage.UNEXPECTED_EXCEPTIONS);
+        throw new NotFoundException(ExceptionMessage.NOT_EXIST_APPLY_STATUS_CODE);
     }
 }
