@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -169,7 +168,7 @@ public class PostController {
     }
 
     @ApiOperation(value = "나의버디(마이페이지): 참여프로젝트, 모집프로젝트", notes = "참여프로젝트, 모집프로젝트를 각각 응답합니다")
-    @GetMapping(value = "/post/me")
+    @GetMapping(value = "/posts/me")
     public ResponseEntity<ApiResult> getAllAboutMyProjectAndLikeProjects(
             @RequestHeader(value = "accessToken", required = false) @NotBlank String accessToken
     ) {

@@ -22,4 +22,6 @@ public interface TextReviewHistoryRepository extends JpaRepository<TextReviewHis
     void deleteAllByPost(Post post);
 
     List<TextReviewHistory> findAllByTargetMemberIdAndPostId(long targetMemberId, long postId);
+
+    boolean existsByReviewerIdAndTargetMemberIdAndPostId(long reviewerId, long targetMemberId, long postId);
 }

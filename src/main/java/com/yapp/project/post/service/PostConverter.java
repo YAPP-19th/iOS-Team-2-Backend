@@ -1,6 +1,5 @@
 package com.yapp.project.post.service;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.common.dto.PositionAndColor;
 import com.yapp.project.common.util.PositionParser;
@@ -13,6 +12,7 @@ import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.value.OnlineStatus;
 import com.yapp.project.common.value.PostCategory;
 import com.yapp.project.post.entity.value.PostStatus;
+import com.yapp.project.review.dto.response.TeamResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
