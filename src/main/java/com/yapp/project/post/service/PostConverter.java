@@ -8,6 +8,7 @@ import com.yapp.project.common.value.Position;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.post.dto.request.PostCreateRequest;
 import com.yapp.project.post.dto.response.*;
+import com.yapp.project.post.dto.value.AppliedProjectStatus;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.value.OnlineStatus;
 import com.yapp.project.common.value.PostCategory;
@@ -126,6 +127,9 @@ public class PostConverter {
         var participatedPostResponse = new ArrayList<MyBudiProjectResponse.ProjectSimple>();
         for(var apply : applies){
             Post post = apply.getPost();
+
+            String appliedStatus = AppliedProjectStatus.makeAppliedProjectStatus(apply.getApplyStatusCode(), apply.getPost().getEndDate());
+
             participatedPostResponse.add(
                     MyBudiProjectResponse.ProjectSimple.builder()
                             .id(post.getId())
@@ -136,6 +140,7 @@ public class PostConverter {
                             .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getName())
                             .category(PostCategory.of(post.getCategoryCode()).getName())
                             .likeCount(post.getLikeCount())
+                            .appliedStatus(appliedStatus)
                             .build()
             );
         }
