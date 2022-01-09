@@ -29,7 +29,7 @@ public class LikeMemberController {
     private final LikeMemberService likeMemberService;
     private final JwtService jwtService;
 
-    @ApiOperation("사용자 좋아요 상태 변경")
+    @ApiOperation(value = "사용자 좋아요 상태 변경", notes = "toggle된 좋아요 상태(true, false)와 갱신된 좋아요 개수를 응답합니다")
     @PutMapping(value = "/{memberId}/like-members")
     public ResponseEntity<ApiResult> switchLikeMemberStatus(
             @PathVariable @Positive long memberId,
@@ -49,7 +49,7 @@ public class LikeMemberController {
         );
     }
 
-    @ApiOperation("내가 좋아한 모든 상대방")
+    @ApiOperation("내가 좋아한 모든 버디")
     @GetMapping(value = "/like-members")
     public ResponseEntity<ApiResult> getAll(
             @RequestHeader("accessToken") @NotBlank String accessToken,

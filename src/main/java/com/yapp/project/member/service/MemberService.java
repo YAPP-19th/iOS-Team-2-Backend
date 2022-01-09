@@ -2,10 +2,11 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.common.util.PositionParser;
 import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.dto.request.CareerRequest;
-import com.yapp.project.member.dto.request.CreateInfoRequest;
+import com.yapp.project.member.dto.request.MemberInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,18 +65,37 @@ public class MemberService {
     }
 
     @Transactional
-    public Long createInfo(String accessToken, CreateInfoRequest request) {
+    public Long updateInfo(String accessToken, MemberInfoRequest request) {
         Member member = memberRepository.findById(jwtService.getMemberId(accessToken))
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
 
         int score = getMemberScore(request.getProjectList(), request.getCareerList());
 
-        Member m = memberRepository.save(memberConverter.toMemberEntity(member, request, score));
+        List<String> positionList = request.getPositionList()
+                .stream()
+                .map(v -> Position.of(v).getCode())
+                .map(v -> v.toString())
+                .collect(Collectors.toList());
 
-        for (ProjectRequest req : request.getProjectList())
-            projectRepository.save(memberConverter.toProjectEntity(member, req));
+        member.updateInfo(
+                request.getMemberAddress(),
+                request.getDescription(),
+                BasePosition.of(request.getBasePosition()).getCode(),
+                request.getNickName(),
+                PositionParser.join(positionList, "-"),
+                score,
+                request.getPortfolioLink()
+                        .stream()
+                        .map(n -> String.valueOf(n))
+                        .collect(Collectors.joining(" "))
+        );
 
-        return m.getId();
+        projectRepository.deleteAllByMemberId(member.getId());
+        for (ProjectRequest projectRequest : request.getProjectList()) {
+            projectRepository.save(memberConverter.toProjectEntity(member, projectRequest));
+        }
+
+        return member.getId();
     }
 
     public int getMemberScore(List<ProjectRequest> projectRequest, List<CareerRequest> careerRequest) {

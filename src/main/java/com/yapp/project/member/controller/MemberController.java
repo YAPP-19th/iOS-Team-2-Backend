@@ -5,7 +5,7 @@ import com.yapp.project.common.web.ResponseMessage;
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
-import com.yapp.project.member.dto.request.CreateInfoRequest;
+import com.yapp.project.member.dto.request.MemberInfoRequest;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.member.service.MemberService;
 import io.swagger.annotations.Api;
@@ -46,11 +46,11 @@ public class MemberController {
         );
     }
 
-    @ApiOperation("회원 정보 입력")
+    @ApiOperation("회원 정보 입력 또는 수정")
     @PostMapping(value = "/infos")
-    public ResponseEntity<ApiResult> createInfo(@RequestHeader("accessToken") @NotBlank String accessToken, @Valid @RequestBody CreateInfoRequest request) {
+    public ResponseEntity<ApiResult> updaetInfo(@RequestHeader("accessToken") @NotBlank String accessToken, @Valid @RequestBody MemberInfoRequest request) {
         jwtService.validateTokenForm(accessToken);
-        Long memberId = memberService.createInfo(accessToken, request);
+        Long memberId = memberService.updateInfo(accessToken, request);
 
         var response = new HashMap<String, Long>();
         response.put("memberId", memberId);
