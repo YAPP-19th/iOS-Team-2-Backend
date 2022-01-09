@@ -195,4 +195,13 @@ public class PostService {
 
         return postConverter.toPostSimpleResponse(post, positions);
     }
+
+    @Transactional(readOnly = true)
+    public MyBudiProjectResponse getAllAboutMyProjectAndLikeProjects(long memberId) {
+        List<Apply> applies = applyRepository.findAllByMemberIdAndApplyStatusCode(memberId, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode());
+
+        List<Post> recruitedPosts = postRepository.findAllByOwnerId(memberId);
+
+        return postConverter.toMyBudiProjectResponse(applies, recruitedPosts);
+    }
 }
