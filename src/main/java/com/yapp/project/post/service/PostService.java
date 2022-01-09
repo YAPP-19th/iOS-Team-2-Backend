@@ -8,6 +8,7 @@ import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.common.value.BasePosition;
+import com.yapp.project.external.fcm.FirebaseCloudMessageService;
 import com.yapp.project.likepost.repository.LikePostRepository;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
@@ -23,15 +24,16 @@ import com.yapp.project.post.entity.value.PostStatus;
 import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.text.MessageFormat;
+import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -46,6 +48,7 @@ public class PostService {
     private final LikePostRepository likePostRepository;
 
     private final PostMediator postMediator;
+    private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     @Transactional
     public PostCreateResponse create(PostCreateRequest request, String accessToken) {
@@ -203,5 +206,29 @@ public class PostService {
         List<Post> recruitedPosts = postRepository.findAllByOwnerId(memberId);
 
         return postConverter.toMyBudiProjectResponse(applies, recruitedPosts);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Map<String, String>> sendInvitationNotification(long senderId, long postId, long receiverId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        Member sender = memberRepository.findById(senderId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+
+        Member receiver = memberRepository.findById(receiverId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
+
+        String title = MessageFormat.format("{0}님이 {1} 프로젝트에 초대했습니다.", sender.getNickName(), post.getTitle());
+        String body = "초대받은 프로젝트를 확인하세요!";
+
+        try {
+            firebaseCloudMessageService.sendMessageTo(receiver.getFcmToken(), title, body);
+        } catch (Exception e) {
+            log.error(MessageFormat.format("초대 알림 FCM 전송 실패: receiverId: {0}", receiverId));
+            return Optional.empty();
+        }
+
+        return Optional.of(Map.of("title", title, "body", body));
     }
 }

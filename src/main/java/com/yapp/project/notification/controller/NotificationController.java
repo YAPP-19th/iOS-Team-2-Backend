@@ -32,7 +32,6 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final JwtService jwtService;
 
-
     @ApiOperation("받은 알림 전체 조회")
     @GetMapping()
     public ResponseEntity<ApiResult> getAll(

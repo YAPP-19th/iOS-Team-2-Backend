@@ -38,6 +38,9 @@ public class Notification {
     @Column(name = "notification_date", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime date;
 
+    @Column(name = "notification_code", nullable = false)
+    private Integer code;
+
     public void updateIsRead(boolean isRead) {
         this.isRead = isRead;
     }

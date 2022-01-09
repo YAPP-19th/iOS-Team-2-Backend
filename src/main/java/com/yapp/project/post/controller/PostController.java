@@ -1,8 +1,12 @@
 package com.yapp.project.post.controller;
 
+import com.yapp.project.common.exception.ExceptionMessage;
+import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
 import com.yapp.project.member.service.JwtService;
+import com.yapp.project.notification.entity.value.NotificationType;
+import com.yapp.project.notification.service.NotificationService;
 import com.yapp.project.post.dto.request.PostCreateRequest;
 import com.yapp.project.post.dto.request.PostUpdateRequest;
 import com.yapp.project.post.dto.response.*;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -32,7 +37,7 @@ import java.util.Optional;
 @Validated
 public class PostController {
     private final PostService postService;
-
+    private final NotificationService notificationService;
     private final JwtService jwtService;
 
     @ApiOperation("게시글 생성")
@@ -177,6 +182,30 @@ public class PostController {
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation("프로젝트 초대")
+    @GetMapping(value = "/invitations")
+    public ResponseEntity<ApiResult> invite(
+            @RequestHeader("accessToken") @NotBlank String accessToken,
+            @RequestParam @Positive long postId,
+            @RequestParam @Positive long receiverId
+    ) {
+
+        jwtService.validateTokenForm(accessToken);
+
+        long senderId = jwtService.getMemberId(accessToken);
+
+        var messageOpt = postService.sendInvitationNotification(senderId, postId, receiverId);
+
+        if (messageOpt.isEmpty()) {
+            throw new NotFoundException(ExceptionMessage.UNABLE_SEND_NOTIFICATION);
+        }
+        notificationService.save(receiverId, messageOpt.get().get("title"), messageOpt.get().get("body"), NotificationType.INVITE_TO_PROJECT.getCode());
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS)
         );
     }
 }
