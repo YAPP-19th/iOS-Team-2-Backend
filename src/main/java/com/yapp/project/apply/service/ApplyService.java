@@ -75,7 +75,7 @@ public class ApplyService {
             return;
         }
 
-        notificationService.save(leader.getId(), title, body, NotificationType.APPLY.getCode());
+        notificationService.save(leader.getId(), title, body, NotificationType.APPLY_FOR_PROJECT.getCode());
     }
 
     @Transactional

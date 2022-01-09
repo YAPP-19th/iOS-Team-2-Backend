@@ -8,8 +8,8 @@ import java.util.Arrays;
 
 @Getter
 public enum NotificationType {
-    APPLY(2),
-    INVITE(4),
+    APPLY_FOR_PROJECT(2),
+    INVITE_TO_PROJECT(4),
 
     ;
 
