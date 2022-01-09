@@ -1,6 +1,7 @@
 package com.yapp.project.post.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,5 +38,8 @@ public class MyBudiProjectResponse {
         private final String category;
 
         private final Long likeCount;
+
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        private final String appliedStatus;
     }
 }

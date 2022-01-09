@@ -4,6 +4,7 @@ import com.yapp.project.common.web.ApiResult;
 import com.yapp.project.common.web.ResponseMessage;
 import com.yapp.project.member.service.JwtService;
 import com.yapp.project.review.dto.request.TextReviewCreateRequest;
+import com.yapp.project.review.dto.response.CodeReviewCountResponse;
 import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import com.yapp.project.review.service.TextReviewHistoryService;
 import io.swagger.annotations.Api;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,6 +61,24 @@ public class TextReviewHistoryController {
     ) {
 
         Page<TextReviewSimpleResponse> response = textReviewHistoryService.findAllByPages(memberId, pageable);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
+
+    @ApiOperation(value = "'특정 프로젝트에서' 내가 받은 '텍스트 리뷰' 개수", notes = "'나의버디 -> 참여프로젝트 -> 완료-> 내 평가보기' 결과입니다")
+    @GetMapping(value = "/text-reviews/posts/{postId}")
+    public ResponseEntity<ApiResult> getAllByPost(
+            @PathVariable(required = true) @Positive long postId,
+            @RequestHeader("accessToken") @NotBlank String accessToken
+    ) {
+
+        jwtService.validateTokenForm(accessToken);
+
+        long currentMemberId = jwtService.getMemberId(accessToken);
+
+        List<TextReviewSimpleResponse> response = textReviewHistoryService.findAllByMemberAndPost(currentMemberId, postId);
 
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS, response)

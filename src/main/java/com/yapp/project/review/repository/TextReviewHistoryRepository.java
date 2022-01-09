@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface TextReviewHistoryRepository extends JpaRepository<TextReviewHistory, Long> {
     @Override
     <S extends TextReviewHistory> S save(S entity);
@@ -18,4 +20,8 @@ public interface TextReviewHistoryRepository extends JpaRepository<TextReviewHis
     boolean existsByReviewerAndTargetMemberAndPost(Member reviewer, Member targetMember, Post post);
 
     void deleteAllByPost(Post post);
+
+    List<TextReviewHistory> findAllByTargetMemberIdAndPostId(long targetMemberId, long postId);
+
+    boolean existsByReviewerIdAndTargetMemberIdAndPostId(long reviewerId, long targetMemberId, long postId);
 }

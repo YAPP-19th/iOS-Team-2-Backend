@@ -74,7 +74,7 @@ public class ApplyController {
         );
     }
 
-    @ApiOperation(value = "지원자 조회", notes = "developer / designer / planner 는 선택사항입니다.")
+    @ApiOperation(value = "지원자 조회", notes = "developer / designer / planner 는 선택사항입니다. \n cf. 나의버디 -> 모집 프로젝트 -> 팀원관리 및 지원자 관리 결과입니다.")
     @GetMapping()
     public ResponseEntity<ApiResult> getApplyList(
             @RequestParam @Positive long postId,

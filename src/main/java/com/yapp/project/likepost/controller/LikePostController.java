@@ -42,7 +42,7 @@ public class LikePostController {
         );
     }
 
-    @ApiOperation("내가 좋아한 모든 게시글(프로젝트)")
+    @ApiOperation(value = "내가 좋아한 모든 게시글(프로젝트)", notes = "나의 버디 -> 관심목록 -> 프로젝트 결과입니다")
     @GetMapping(value = "/like-posts")
     public ResponseEntity<ApiResult> getAll(
             @RequestHeader("accessToken") @NotBlank String accessToken,
