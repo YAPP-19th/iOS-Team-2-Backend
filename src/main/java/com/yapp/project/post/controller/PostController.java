@@ -163,7 +163,7 @@ public class PostController {
         );
     }
 
-    @ApiOperation(value = "나의버디(마이페이지): 참여프로젝트, 모집프로젝트, 관심목록", notes = "참여프로젝트, 모집프로젝트, 관심목록를 각각 응답합니다")
+    @ApiOperation(value = "나의버디(마이페이지): 참여프로젝트, 모집프로젝트", notes = "참여프로젝트, 모집프로젝트를 각각 응답합니다")
     @GetMapping(value = "/post/me")
     public ResponseEntity<ApiResult> getAllAboutMyProjectAndLikeProjects(
             @RequestHeader(value = "accessToken", required = false) @NotBlank String accessToken
