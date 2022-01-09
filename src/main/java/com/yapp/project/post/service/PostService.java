@@ -201,7 +201,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public MyBudiProjectResponse getAllAboutMyProjectAndLikeProjects(long memberId) {
-        List<Apply> applies = applyRepository.findAllByMemberIdAndApplyStatusCode(memberId, ApplyStatus.APPROVAL_FOR_PARTICIPATION.getCode());
+        List<Apply> applies = applyRepository.findAllByMemberId(memberId);
 
         List<Post> recruitedPosts = postRepository.findAllByOwnerId(memberId);
 
