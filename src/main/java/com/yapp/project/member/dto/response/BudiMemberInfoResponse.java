@@ -1,24 +1,25 @@
 package com.yapp.project.member.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Getter
 @Builder
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BudiMemberInfoResponse {
-    private Long id;
-    private String imgUrl;
-    private String nickName;
-    private String level;
-    private List<String> positions;
-    private Long likeCount;
+    private final Long id;
+    private final String imgUrl;
+    private final String nickName;
+    private final String description;
+    private final String level;
+    private final List<String> positions;
+    private final Long likeCount;
 
-    private List<ProjectResponse> projectList;
-    private String[] portfolioList;
+    private final List<ProjectResponse> projectList;
+    private final String[] portfolioList;
 
-    private Boolean isLikedFromCurrentMember;
+    private final Boolean isLikedFromCurrentMember;
 }
