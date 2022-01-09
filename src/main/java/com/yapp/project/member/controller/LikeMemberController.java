@@ -49,7 +49,7 @@ public class LikeMemberController {
         );
     }
 
-    @ApiOperation("내가 좋아한 모든 버디")
+    @ApiOperation(value = "내가 좋아한 모든 버디", notes = "'나의 버디 -> 관심목록 -> 버디' 결과입니다")
     @GetMapping(value = "/like-members")
     public ResponseEntity<ApiResult> getAll(
             @RequestHeader("accessToken") @NotBlank String accessToken,
