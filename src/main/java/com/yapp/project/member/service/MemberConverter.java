@@ -27,7 +27,7 @@ public class MemberConverter {
                 .basePositionCode(BasePosition.DEVELOPER.getCode())
                 .email("아직 이메일을 입력하지 않았어요")
                 .introduce("소개글이 없어요")
-                .nickName(UUID.randomUUID().toString())
+                .nickName("익명")
                 .positionCode("--") //TODO: position code가 string이어서 다른 부분에서 에러발생
                 .portfolioLink("")
                 .projects(List.of())
