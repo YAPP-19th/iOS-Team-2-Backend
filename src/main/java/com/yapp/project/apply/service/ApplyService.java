@@ -13,6 +13,7 @@ import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.external.fcm.FirebaseCloudMessageService;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
+import com.yapp.project.notification.entity.value.NotificationType;
 import com.yapp.project.notification.service.NotificationService;
 import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
@@ -21,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +75,7 @@ public class ApplyService {
             return;
         }
 
-        notificationService.save(leader.getId(), title, body);
+        notificationService.save(leader.getId(), title, body, NotificationType.APPLY.getCode());
     }
 
     @Transactional

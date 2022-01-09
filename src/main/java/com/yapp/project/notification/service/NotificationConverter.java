@@ -3,6 +3,7 @@ package com.yapp.project.notification.service;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.notification.dto.NotificationResponse;
 import com.yapp.project.notification.entity.Notification;
+import com.yapp.project.notification.entity.value.NotificationType;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -19,13 +20,14 @@ public class NotificationConverter {
         );
     }
 
-    public Notification toEntity(Member receiver, String title, String body) {
+    public Notification toEntity(Member receiver, String title, String body, int notificationCode) {
         return Notification.builder()
                 .receiver(receiver)
                 .title(title)
                 .body(body)
                 .isRead(false)
                 .date(LocalDateTime.now())
+                .code(NotificationType.of(notificationCode).getCode())
                 .build();
     }
 }

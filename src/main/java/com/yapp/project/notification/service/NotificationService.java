@@ -7,6 +7,7 @@ import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.notification.dto.NotificationResponse;
 import com.yapp.project.notification.entity.Notification;
 import com.yapp.project.notification.entity.Unread;
+import com.yapp.project.notification.entity.value.NotificationType;
 import com.yapp.project.notification.repository.NotificationRepository;
 import com.yapp.project.notification.repository.UnreadRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,11 @@ public class NotificationService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void save(long receiverId, String title, String body) {
+    public void save(long receiverId, String title, String body, int notificationTypeCode) {
         Member receiver = memberRepository.findById(receiverId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
 
-        Notification notification = converter.toEntity(receiver, title, body);
+        Notification notification = converter.toEntity(receiver, title, body, notificationTypeCode);
         notificationRepository.save(notification);
 
         Optional<Unread> unreadOpt = unreadRepository.findByMemberId(receiverId);
