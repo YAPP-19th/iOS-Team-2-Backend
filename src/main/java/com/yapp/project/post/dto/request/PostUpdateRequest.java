@@ -25,6 +25,7 @@ public class PostUpdateRequest {
     private String categoryName;
 
     @ApiModelProperty(example = "'2020-12-31T23:59:59'")
+    @NotNull(message = DtoValidationFailMessage.INVALID_TIME)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
 
