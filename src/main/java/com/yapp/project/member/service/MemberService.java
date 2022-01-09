@@ -2,7 +2,6 @@ package com.yapp.project.member.service;
 
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
-import com.yapp.project.common.util.PositionParser;
 import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.common.value.Position;
 import com.yapp.project.member.dto.request.CareerRequest;
@@ -24,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
