@@ -56,4 +56,22 @@ public class CodeReviewHistoryController {
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
+
+    @ApiOperation(value = "'특정 프로젝트에서' 내가 받은 '선택하는 리뷰' 개수", notes = "'나의버디 -> 참여프로젝트 -> 완료 -> 내 평가보기' 결과입니다")
+    @GetMapping(value = "/select-reviews/posts/{postId}")
+    public ResponseEntity<ApiResult> getAllByPost(
+            @PathVariable(required = true) @Positive long postId,
+            @RequestHeader("accessToken") @NotBlank String accessToken
+    ) {
+
+        jwtService.validateTokenForm(accessToken);
+
+        long currentMemberId = jwtService.getMemberId(accessToken);
+
+        CodeReviewCountResponse response = codeReviewHistoryService.findAllByMemberAndPost(currentMemberId, postId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
 }

@@ -23,4 +23,6 @@ public interface CodeReviewHistoryRepository extends JpaRepository<CodeReviewHis
     boolean existsByReviewerAndTargetMemberAndPost(Member reviewer, Member targetMember, Post post);
 
     void deleteAllByPost(Post post);
+
+    List<CodeReviewHistory> findAllByTargetMemberIdAndPostId(long targetMemberId, long postId);
 }

@@ -88,5 +88,12 @@ public class CodeReviewHistoryService {
 
         return converter.toCodeReviewCountResponse(codeReviews);
     }
+
+    @Transactional(readOnly = true)
+    public CodeReviewCountResponse findAllByMemberAndPost(long currentMemberId, long postId) {
+        List<CodeReviewHistory> codeReviews = codeReviewHistoryRepository.findAllByTargetMemberIdAndPostId(currentMemberId, postId);
+
+        return converter.toCodeReviewCountResponse(codeReviews);
+    }
 }
 

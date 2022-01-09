@@ -12,6 +12,7 @@ import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.review.dto.request.TextReviewCreateRequest;
 import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
+import com.yapp.project.review.entity.CodeReviewHistory;
 import com.yapp.project.review.entity.TextReviewHistory;
 import com.yapp.project.review.repository.TextReviewHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -83,5 +86,12 @@ public class TextReviewHistoryService {
         Page<TextReviewHistory> allByMember = textReviewHistoryRepository.findAllByTargetMember(targetMember, pageable);
 
         return allByMember.map(t -> converter.toTextReviewSimpleResponse(t));
+    }
+
+    @Transactional(readOnly = true)
+    public List<TextReviewSimpleResponse> findAllByMemberAndPost(long currentMemberId, long postId) {
+        List<TextReviewHistory> textReviews = textReviewHistoryRepository.findAllByTargetMemberIdAndPostId(currentMemberId, postId);
+
+        return converter.toTextReviewSimpleResponses(textReviews);
     }
 }

@@ -6,9 +6,12 @@ import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
 import com.yapp.project.review.entity.TextReviewHistory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class TextReviewHistoryConverter {
-    public TextReviewHistory toEntity(Member reviewer, Member targetMember, Post post, String title, String content){
+    public TextReviewHistory toEntity(Member reviewer, Member targetMember, Post post, String title, String content) {
         return TextReviewHistory.builder()
                 .reviewer(reviewer)
                 .targetMember(targetMember)
@@ -25,5 +28,15 @@ public class TextReviewHistoryConverter {
                 textReviewHistory.getTitle(),
                 textReviewHistory.getContent()
         );
+    }
+
+    public List<TextReviewSimpleResponse> toTextReviewSimpleResponses(List<TextReviewHistory> textReviews) {
+        List<TextReviewSimpleResponse> result = new ArrayList<>(textReviews.size());
+
+        for (var textReview : textReviews) {
+            result.add(toTextReviewSimpleResponse(textReview));
+        }
+
+        return result;
     }
 }
