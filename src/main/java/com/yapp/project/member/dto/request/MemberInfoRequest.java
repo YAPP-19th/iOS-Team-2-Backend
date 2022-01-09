@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateInfoRequest {
+public class MemberInfoRequest {
     @Size(min = 2, max = 12, message = DtoValidationFailMessage.INVALID_NICKNAME)
     private String nickName;
 

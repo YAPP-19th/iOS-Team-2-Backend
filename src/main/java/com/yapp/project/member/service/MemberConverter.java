@@ -7,7 +7,7 @@ import com.yapp.project.common.value.BasePosition;
 import com.yapp.project.member.dto.response.BudiMemberInfoResponse;
 import com.yapp.project.member.dto.response.BudiMemberResponse;
 import com.yapp.project.member.dto.response.CheckNameResponse;
-import com.yapp.project.member.dto.request.CreateInfoRequest;
+import com.yapp.project.member.dto.request.MemberInfoRequest;
 import com.yapp.project.member.dto.request.ProjectRequest;
 import com.yapp.project.member.dto.response.ProjectResponse;
 import com.yapp.project.member.entity.Member;
@@ -25,11 +25,11 @@ public class MemberConverter {
                 .loginId(loginId)
                 .likeCount(0L)
                 .score(0)
-                .address("")  //TODO: 초기 값으로 설정 해주지 않으면 오류 발생
+                .address("버디시")  //TODO: 초기 값으로 설정 해주지 않으면 오류 발생
                 .basePositionCode(BasePosition.DEVELOPER.getCode())
-                .email("")
-                .introduce("")
-                .nickName("")
+                .email("아직 이메일을 입력하지 않았어요")
+                .introduce("소개글이 없어요")
+                .nickName(UUID.randomUUID().toString())
                 .positionCode("--") //TODO: position code가 string이어서 다른 부분에서 에러발생
                 .portfolioLink("")
                 .projects(List.of())
@@ -42,32 +42,32 @@ public class MemberConverter {
         return new CheckNameResponse(available);
     }
 
-    public Member toMemberEntity(Member member, CreateInfoRequest request, int score) {
-        List<String> positionList = request.getPositionList()
-                .stream()
-                .map(v -> Position.of(v).getCode())
-                .map(v -> v.toString())
-                .collect(Collectors.toList());
-        String joinedPositions = PositionParser.join(positionList, "-");
-        return Member.builder()
-                .id(member.getId())
-                .token(member.getToken())
-                .score(score)
-                .email(member.getEmail())
-                .loginId(member.getLoginId())
-                .profileImageUrl(member.getProfileImageUrl())
-                .nickName(request.getNickName())
-                .address(request.getMemberAddress())
-                .introduce(request.getDescription())
-                .basePositionCode(request.getBasePosition())
-                .positionCode(joinedPositions)
-                .portfolioLink(request.getPortfolioLink()
-                        .stream()
-                        .map(n -> String.valueOf(n))
-                        .collect(Collectors.joining(" ")))
-                .likeCount(0L)
-                .build();
-    }
+//    public Member toMemberEntity(Member member, MemberInfoRequest request, int score) {  //TODO: 삭제
+//        List<String> positionList = request.getPositionList()
+//                .stream()
+//                .map(v -> Position.of(v).getCode())
+//                .map(v -> v.toString())
+//                .collect(Collectors.toList());
+//        String joinedPositions = PositionParser.join(positionList, "-");
+//        return Member.builder()
+//                .id(member.getId())
+//                .token(member.getToken())
+//                .score(score)
+//                .email(member.getEmail())
+//                .loginId(member.getLoginId())
+//                .profileImageUrl(member.getProfileImageUrl())
+//                .nickName(request.getNickName())
+//                .address(request.getMemberAddress())
+//                .introduce(request.getDescription())
+//                .basePositionCode(request.getBasePosition())
+//                .positionCode(joinedPositions)
+//                .portfolioLink(request.getPortfolioLink()
+//                        .stream()
+//                        .map(n -> String.valueOf(n))
+//                        .collect(Collectors.joining(" ")))
+//                .likeCount(0L)
+//                .build();
+//    }
 
     public Project toProjectEntity(Member m, ProjectRequest request) {
         return Project.builder()
