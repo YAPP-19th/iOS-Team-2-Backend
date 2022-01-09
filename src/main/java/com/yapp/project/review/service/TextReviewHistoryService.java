@@ -6,8 +6,11 @@ import com.yapp.project.apply.repository.ApplyRepository;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.common.exception.type.NotFoundException;
+import com.yapp.project.external.fcm.FirebaseCloudMessageService;
 import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
+import com.yapp.project.notification.entity.value.NotificationType;
+import com.yapp.project.notification.service.NotificationService;
 import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.review.dto.request.TextReviewCreateRequest;
@@ -16,13 +19,16 @@ import com.yapp.project.review.entity.CodeReviewHistory;
 import com.yapp.project.review.entity.TextReviewHistory;
 import com.yapp.project.review.repository.TextReviewHistoryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TextReviewHistoryService {
@@ -31,6 +37,9 @@ public class TextReviewHistoryService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final ApplyRepository applyRepository;
+
+    private final FirebaseCloudMessageService firebaseCloudMessageService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void create(long reviewerId, long revieweeId, long postId, TextReviewCreateRequest request) {
@@ -75,6 +84,8 @@ public class TextReviewHistoryService {
         var textReviewHistory = converter.toEntity(reviewer, reviewee, post, request.getTitle(), request.getContent());
         textReviewHistoryRepository.save(textReviewHistory);
 
+        sendNotificationToReviewee(reviewee, post);
+
         // TODO: 상대방의 레벨 검사 로직
     }
 
@@ -93,5 +104,21 @@ public class TextReviewHistoryService {
         List<TextReviewHistory> textReviews = textReviewHistoryRepository.findAllByTargetMemberIdAndPostId(currentMemberId, postId);
 
         return converter.toTextReviewSimpleResponses(textReviews);
+    }
+
+    private void sendNotificationToReviewee(Member reviewee, Post post) {
+        if (!reviewee.isFcmTokenActive()) return;
+
+        String title = MessageFormat.format("{0} 프로젝트 팀원으로부터 리뷰가 추가되었어요", post.getTitle());
+        String body = "리뷰내용을 확인하세요!";
+
+        try {
+            firebaseCloudMessageService.sendMessageTo(reviewee.getFcmToken(), title, body);
+        } catch (Exception e) {
+            log.error(MessageFormat.format("리뷰 등록 알림 FCM 전송 실패: revieweeId: {0}", reviewee.getId()));
+            return;
+        }
+
+        notificationService.save(reviewee.getId(), title, body, NotificationType.REVIEW_REGISTRATION.getCode());
     }
 }
