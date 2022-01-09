@@ -11,6 +11,7 @@ import java.util.Arrays;
 public enum ApplyStatus {
     DONE_APPLYING("지원완료", 2),
     APPROVAL_FOR_PARTICIPATION("참여승인", 4),
+    REJECT_PARTICIPATION("참여거절", 8),
 
     ;
 
