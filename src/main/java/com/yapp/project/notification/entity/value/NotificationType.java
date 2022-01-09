@@ -11,6 +11,8 @@ public enum NotificationType {
     APPLY_FOR_PROJECT(2),
     INVITE_TO_PROJECT(4),
     REVIEW_REGISTRATION(8),
+    REJECT_APPLY(16),
+    APPROVAL(32),
 
     ;
 
