@@ -31,4 +31,6 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
     List<Apply> findALlByBasePositionCodeAndPostId(int basePositionCode, long postId);
 
     List<Apply> findAllByPostId(long postId);
+
+    List<Apply> findAllByMemberIdAndApplyStatusCode(long memberId, int applyStatusCode);
 }

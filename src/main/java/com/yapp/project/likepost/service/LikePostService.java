@@ -3,6 +3,7 @@ package com.yapp.project.likepost.service;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.NotFoundException;
 import com.yapp.project.likepost.dto.LikePostResponse;
+import com.yapp.project.likepost.dto.LikeStatusResponse;
 import com.yapp.project.likepost.entity.LikePost;
 import com.yapp.project.likepost.repository.LikePostRepository;
 import com.yapp.project.member.entity.Member;
@@ -32,13 +33,14 @@ public class LikePostService {
     }
 
     @Transactional
-    public boolean switchLikeStatus(Long memberId, Long postId) {
+    public LikeStatusResponse switchLikeStatus(Long memberId, Long postId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
+        boolean isLiked = false;
         if (likePostRepository.existsByMemberAndPost(member, post)) {
             LikePost likePost = likePostRepository.findByMemberAndPost(member, post)
                     .orElseThrow(() -> new NotFoundException(ExceptionMessage.INVALID_HTTP_REQUEST));
@@ -46,14 +48,16 @@ public class LikePostService {
             likePostRepository.delete(likePost);
             post.substractLikeCount();
 
-            return false;
+            isLiked = false;
         }
         else{
             LikePost likePost = new LikePost(member, post);
             likePostRepository.save(likePost);
             post.addLikeCount();
 
-            return true;
+            isLiked = true;
         }
+
+        return new LikeStatusResponse(isLiked, post.getLikeCount() + 1);
     }
 }

@@ -1,7 +1,9 @@
 package com.yapp.project.likepost.service;
 
+import com.yapp.project.common.value.PostCategory;
 import com.yapp.project.likepost.dto.LikePostResponse;
 import com.yapp.project.likepost.entity.LikePost;
+import com.yapp.project.post.entity.value.OnlineStatus;
 import com.yapp.project.post.entity.value.PostStatus;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +14,13 @@ public class LikePostConverter {
 
         return LikePostResponse.builder()
                 .postId(post.getId())
-                .mainImageUrl(post.getImageUrl())
+                .imageUrl(post.getImageUrl())
                 .title(post.getTitle())
                 .startDate(post.getStartDate())
                 .endDate(post.getEndDate())
-                .projectStatus(PostStatus.of(post.getStatusCode()).getName())
+                .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getName())
+                .category(PostCategory.of(post.getCategoryCode()).getName())
+                .likeCount(post.getLikeCount())
                 .build();
     }
 }

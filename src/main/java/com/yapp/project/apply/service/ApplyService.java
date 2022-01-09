@@ -113,4 +113,14 @@ public class ApplyService {
 
         return applyConverter.toApplicantResponses(applies);
     }
+
+    @Transactional
+    public void reject(long applyId, long leaderId) {
+        Apply apply = applyRepository.findById(applyId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_APPLY_ID));
+
+        apply.getPost().validateLeaderOrElseThrow(leaderId);
+
+        apply.updateApplyStatusCode(ApplyStatus.REJECT_PARTICIPATION.getCode());
+    }
 }

@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/posts", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(tags = "프로젝트 관련")
 @Validated
 public class PostController {
@@ -36,7 +36,7 @@ public class PostController {
     private final JwtService jwtService;
 
     @ApiOperation("게시글 생성")
-    @PostMapping()
+    @PostMapping(value = "/posts")
     public ResponseEntity<ApiResult> insert(
             @Valid @RequestBody PostCreateRequest request,
             @RequestHeader("accessToken") @NotBlank String accessToken
@@ -52,7 +52,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 수정 (모집정보 수정 불가)")
-    @PutMapping(value = "/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/posts/{postId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResult> update(
             @PathVariable @Positive long postId,
             @Valid @RequestBody PostUpdateRequest request,
@@ -69,7 +69,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 단건 조회 (전체 틀)")
-    @GetMapping(value = "/{postId}")
+    @GetMapping(value = "/posts/{postId}")
     public ResponseEntity<ApiResult> getOne(
             @PathVariable @Positive long postId,
             @Nullable @RequestHeader("accessToken") String accessToken
@@ -83,7 +83,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 단건 조회 (참여승인된 멤버 조회)")
-    @GetMapping(value = "/{postId}/members")
+    @GetMapping(value = "/posts/{postId}/members")
     public ResponseEntity<ApiResult> getTeamMembers(@PathVariable @Positive Long postId) {
         TeamMemberResponse response = postService.findTeamMembersById(postId);
 
@@ -93,7 +93,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 단건 조회 (모집 정보 조회)")
-    @GetMapping(value = "/{postId}/recruitingStatus")
+    @GetMapping(value = "/posts/{postId}/recruitingStatus")
     public ResponseEntity<ApiResult> getRecruitingStatus(@PathVariable @Positive long postId) {
         var response = postService.findRecruitingStatusByPostId(postId);
 
@@ -103,7 +103,7 @@ public class PostController {
     }
 
     @ApiOperation(value = "게시글 전체 조회 / 프로젝트 title로 검색", notes = "parameter title을 지정하지 않을 시 전체게시글을 조회하며 title을 지정하면 title로 검색합니다")
-    @GetMapping()
+    @GetMapping(value = "/posts")
     public ResponseEntity<ApiResult> getAll(
             @RequestParam(value = "title", required = false) @Nullable String title,
             @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC, size = 20) Pageable pageable
@@ -117,7 +117,7 @@ public class PostController {
     }
 
     @ApiOperation(value = "position으로 조회", notes = "개발 / 기획 / 디자인")
-    @GetMapping(value = "/positions/{basePositionName}")
+    @GetMapping(value = "/posts/positions/{basePositionName}")
     public ResponseEntity<ApiResult> getAllByPosition(
             @PathVariable String basePositionName,
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 20) Pageable pageable
@@ -131,7 +131,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 단건 삭제")
-    @DeleteMapping(value = "/{postId}")
+    @DeleteMapping(value = "/posts/{postId}")
     public ResponseEntity<ApiResult> deleteOne(
             @RequestHeader("accessToken") @NotBlank String accessToken,
             @PathVariable @Positive long postId
@@ -147,7 +147,7 @@ public class PostController {
     }
 
     @ApiOperation("게시글 상태정보 수정")
-    @PatchMapping(value = "/{postId}/{postStatusCode}")
+    @PatchMapping(value = "/posts/{postId}/{postStatusCode}")
     public ResponseEntity<ApiResult> switchPostStatus(
             @RequestHeader("accessToken") @NotBlank String accessToken,
             @PathVariable @Positive long postId,
@@ -163,5 +163,20 @@ public class PostController {
         );
     }
 
-    //TODO: 내가 모집중인 전체 프로젝트 + 내가 참여한 프로젝트
+    @ApiOperation(value = "나의버디(마이페이지): 참여프로젝트, 모집프로젝트, 관심목록", notes = "참여프로젝트, 모집프로젝트, 관심목록를 각각 응답합니다")
+    @GetMapping(value = "/post/me")
+    public ResponseEntity<ApiResult> getAllAboutMyProjectAndLikeProjects(
+            @RequestHeader(value = "accessToken", required = false) @NotBlank String accessToken
+    ) {
+
+        jwtService.validateTokenForm(accessToken);
+
+        long memberId = jwtService.getMemberId(accessToken);
+
+        MyBudiProjectResponse response = postService.getAllAboutMyProjectAndLikeProjects(memberId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS, response)
+        );
+    }
 }

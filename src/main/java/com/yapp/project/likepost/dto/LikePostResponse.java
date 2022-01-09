@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class LikePostResponse {
     private final Long postId;
 
-    private final String mainImageUrl;
+    private final String imageUrl;
 
     private final String title;
 
@@ -21,5 +21,9 @@ public class LikePostResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime endDate;
 
-    private final String projectStatus;
+    private final String onlineInfo;
+
+    private final String category;
+
+    private final Long likeCount;
 }

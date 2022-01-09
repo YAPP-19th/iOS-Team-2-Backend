@@ -90,4 +90,18 @@ public class ApplyController {
                 ApiResult.of(ResponseMessage.SUCCESS, response)
         );
     }
+
+    @ApiOperation("지원 거절하기")
+    @PatchMapping(value = "/{applyId}/deny")  //TODO: 추후 지원 승인하기랑 API 통합
+    public ResponseEntity<ApiResult> reject(@PathVariable @Positive long applyId, @RequestHeader("accessToken") @NotBlank String accessToken) {
+        jwtService.validateTokenForm(accessToken);
+
+        long leaderId = jwtService.getMemberId(accessToken);
+
+        applyService.reject(applyId, leaderId);
+
+        return ResponseEntity.ok(
+                ApiResult.of(ResponseMessage.SUCCESS)
+        );
+    }
 }

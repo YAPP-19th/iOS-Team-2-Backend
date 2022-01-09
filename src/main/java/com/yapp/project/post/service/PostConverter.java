@@ -1,5 +1,6 @@
 package com.yapp.project.post.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yapp.project.apply.entity.Apply;
 import com.yapp.project.common.dto.PositionAndColor;
 import com.yapp.project.common.util.PositionParser;
@@ -14,6 +15,7 @@ import com.yapp.project.post.entity.value.PostStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -118,5 +120,42 @@ public class PostConverter {
         }
 
         return response;
+    }
+
+    public MyBudiProjectResponse toMyBudiProjectResponse(List<Apply> applies, List<Post> recruitedPosts) {
+        var participatedPostResponse = new ArrayList<MyBudiProjectResponse.ProjectSimple>();
+        for(var apply : applies){
+            Post post = apply.getPost();
+            participatedPostResponse.add(
+                    MyBudiProjectResponse.ProjectSimple.builder()
+                            .id(post.getId())
+                            .imageUrl(post.getImageUrl())
+                            .title(post.getTitle())
+                            .startDate(post.getStartDate())
+                            .endDate(post.getEndDate())
+                            .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getName())
+                            .category(PostCategory.of(post.getCategoryCode()).getName())
+                            .likeCount(post.getLikeCount())
+                            .build()
+            );
+        }
+
+        var recruitedPostResponse = new ArrayList<MyBudiProjectResponse.ProjectSimple>();
+        for(var post : recruitedPosts){
+            recruitedPostResponse.add(
+                    MyBudiProjectResponse.ProjectSimple.builder()
+                            .id(post.getId())
+                            .imageUrl(post.getImageUrl())
+                            .title(post.getTitle())
+                            .startDate(post.getStartDate())
+                            .endDate(post.getEndDate())
+                            .onlineInfo(OnlineStatus.of(post.getOnlineCode()).getName())
+                            .category(PostCategory.of(post.getCategoryCode()).getName())
+                            .likeCount(post.getLikeCount())
+                            .build()
+            );
+        }
+
+        return new MyBudiProjectResponse(participatedPostResponse, recruitedPostResponse);
     }
 }
