@@ -112,6 +112,7 @@ public class MemberConverter {
                 .nickName(m.getNickName())
                 .description(m.getIntroduce())
                 .level(Level.of(m.getScore()).getLevelName())
+                .basePosition(m.getBasePositionCode())
                 .positions(positionNames)
                 .projectList(projectResponses)
                 .portfolioList(portfolioList)

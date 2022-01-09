@@ -15,6 +15,7 @@ public class BudiMemberInfoResponse {
     private final String nickName;
     private final String description;
     private final String level;
+    private final int basePosition;
     private final List<String> positions;
     private final Long likeCount;
 
