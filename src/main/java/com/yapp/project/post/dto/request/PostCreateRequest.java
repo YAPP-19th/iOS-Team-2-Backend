@@ -26,12 +26,13 @@ public class PostCreateRequest {
     private String categoryName;
 
     @ApiModelProperty(example = "'2021-12-31T23:59:59'")
+    @NotNull(message = DtoValidationFailMessage.INVALID_TIME)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
 
     @ApiModelProperty(example = "'2022-12-31T23:59:59'")
     @NotNull(message = DtoValidationFailMessage.INVALID_TIME)
-    @FutureOrPresent(message = DtoValidationFailMessage.INVALID_TIME)
+//    @FutureOrPresent(message = DtoValidationFailMessage.INVALID_TIME)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
