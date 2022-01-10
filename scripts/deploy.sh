@@ -1,5 +1,3 @@
-#!/bin/bash
-
 REPOSITORY=/home/ubuntu/budi-app
 cd $REPOSITORY
 
@@ -21,6 +19,6 @@ echo "> $JAR_PATH 에 실행 권한 추가" >> /home/ubuntu/budi-app/deploy.log
 chmod +x $JAR_PATH
 
 echo "> $JAR_PATH 배포" >> /home/ubuntu/budi-app/deploy.log
-nohup java -jar -Dspring.config.location=/home/ubuntu/budi-env/application-prod.yml $JAR_PATH >/home/ubuntu/budi-app/build/libs/nohup.out 2>&1 &
+nohup java -jar -Dspring.config.location=/home/ubuntu/budi-env/application-prod.yml $JAR_PATH >/home/ubuntu/budi-log/log_$(date +"%Y%m%d_%H:%M:%S").out 2>&1 &
 
 exit 0
