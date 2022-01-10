@@ -108,6 +108,7 @@ public class MemberConverter {
                 .id(m.getId())
                 .imgUrl(m.getProfileImageUrl())
                 .nickName(m.getNickName())
+                .address(m.getAddress())
                 .description(m.getIntroduce())
                 .level(Level.of(m.getScore()).getLevelName())
                 .basePosition(m.getBasePositionCode())
