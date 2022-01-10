@@ -31,7 +31,13 @@
     </appender>
 
     <root level="warn">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="ASYNC_SLACK"/>
+        <springProfile name="local">
+            <appender-ref ref="STDOUT" />
+        </springProfile>
+
+        <springProfile name="!local">
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="ASYNC_SLACK"/>
+        </springProfile>
     </root>
 </configuration>
