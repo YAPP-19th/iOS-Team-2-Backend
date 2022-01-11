@@ -51,7 +51,7 @@ public class S3Uploader {
         if (targetFile.delete()) {
             log.info("FILE_DELETION_SUCCESS");
         } else {
-            log.info("FILE_DELETION_FAIL");
+            log.error("FILE_DELETION_FAIL");
         }
     }
 

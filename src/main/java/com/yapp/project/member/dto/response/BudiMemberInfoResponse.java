@@ -13,6 +13,7 @@ public class BudiMemberInfoResponse {
     private final Long id;
     private final String imgUrl;
     private final String nickName;
+    private final String address;
     private final String description;
     private final String level;
     private final int basePosition;
