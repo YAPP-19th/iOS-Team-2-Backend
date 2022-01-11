@@ -19,7 +19,7 @@
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>${SLACK_LOG_PATTERN}</pattern>
         </layout>
-        <username>BUDI-Notification</username>
+        <username>BUDI-Log-Notificator</username>
         <iconEmoji>:stuck_out_tongue_winking_eye:</iconEmoji>
         <colorCoding>true</colorCoding>
     </appender>
