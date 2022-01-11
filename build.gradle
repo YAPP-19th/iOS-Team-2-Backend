@@ -45,8 +45,16 @@ dependencies {
     // okhttp
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
 
-    // logback notification
+    // slack logging web hook
     implementation "com.github.maricn:logback-slack-appender:${logbackSlackAppenderVersion}"
+
+    // slf4j, logback upgrade version due to security issues
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.9'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
+    implementation group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.32'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: '2.16.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.16.0'
 }
 
 test {
