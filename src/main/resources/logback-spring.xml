@@ -6,6 +6,7 @@
                     converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
 
     <property name="LOG_PATTERN" value="[%clr(%d{yyyy-MM-dd HH:mm:ss.SSS, Asia/Seoul}){faint}] [%thread] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(%logger{0}){cyan} - %msg%n" />
+    <property name="SLACK_LOG_PATTERN" value="%clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(%logger{0}){cyan} - %msg%n" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -16,7 +17,7 @@
     <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
         <webhookUri>${SLACK_WEBHOOK_URI}</webhookUri>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg %n</pattern>
+            <pattern>${SLACK_LOG_PATTERN}</pattern>
         </layout>
         <username>BUDI-Notification</username>
         <iconEmoji>:stuck_out_tongue_winking_eye:</iconEmoji>
