@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -17,6 +18,9 @@ import java.util.List;
 public class MemberInfoRequest {
     @Size(min = 2, max = 12, message = DtoValidationFailMessage.INVALID_NICKNAME)
     private String nickName;
+
+    @NotBlank(message = DtoValidationFailMessage.INVALID_URL)
+    private String imgUrl;
 
     @Size(min = 2, message = DtoValidationFailMessage.INVALID_ADDRESS)
     private String memberAddress;

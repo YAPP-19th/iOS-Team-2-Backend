@@ -79,6 +79,7 @@ public class MemberService {
 
         member.updateInfo(
                 request.getMemberAddress(),
+                request.getImgUrl(),
                 request.getDescription(),
                 BasePosition.of(request.getBasePosition()).getCode(),
                 request.getNickName(),
