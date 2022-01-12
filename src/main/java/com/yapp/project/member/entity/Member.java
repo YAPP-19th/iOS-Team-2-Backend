@@ -90,8 +90,9 @@ public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세�
         this.isFcmTokenActive = isFcmTokenActive == null ? true : isFcmTokenActive;
     }
 
-    public void updateInfo(String address, String introduce, int basePositionCode, String nickName, String positionCode, int score, String portfolioLink) {
+    public void updateInfo(String address, String profileImageUrl, String introduce, int basePositionCode, String nickName, String positionCode, int score, String portfolioLink) {
         this.address = address;
+        this.profileImageUrl = profileImageUrl;
         this.introduce = introduce;
         this.basePositionCode = basePositionCode;
         this.nickName = nickName;
