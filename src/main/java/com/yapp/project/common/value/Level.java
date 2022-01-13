@@ -29,7 +29,7 @@ public enum Level {
     }
 
     public static Level of(int score) {
-        if (score >= 0 && score <= 3) {
+        if (score <= 3) {
             return LEVEL1_1;
         } else if (score >= 4 && score <= 6) {
             return LEVEL1_2;
