@@ -54,6 +54,9 @@ public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세�
     @Column(name = "member_score", nullable = false)
     private Integer score;
 
+    @Column(name = "member_review_score", nullable = false)
+    private Integer reviewScore;
+
     @Column(name = "member_like_count", nullable = false)
     private Long likeCount;
 
@@ -99,5 +102,9 @@ public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세�
         this.positionCode = positionCode;
         this.score = score;
         this.portfolioLink = portfolioLink;
+    }
+
+    public void updateReviewScore(int reviewScore) {
+        this.reviewScore = reviewScore;
     }
 }

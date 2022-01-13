@@ -55,6 +55,10 @@ public class TextReviewHistoryService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
+        if (textReviewHistoryRepository.existsByReviewerAndTargetMemberAndPost(reviewer, reviewee, post)) {
+            throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
+        }
+
         if (post.getOwner().getId().longValue() == reviewee.getId().longValue()) { // 타겟이 프로젝트 리더인 경우
             Apply reviewerApply = applyRepository.findByMemberAndPost(reviewer, post)
                     .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
@@ -77,16 +81,10 @@ public class TextReviewHistoryService {
             }
         }
 
-        if (textReviewHistoryRepository.existsByReviewerAndTargetMemberAndPost(reviewer, reviewee, post)) {
-            throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
-        }
-
         var textReviewHistory = converter.toEntity(reviewer, reviewee, post, request.getTitle(), request.getContent());
         textReviewHistoryRepository.save(textReviewHistory);
 
         sendNotificationToReviewee(reviewee, post);
-
-        // TODO: 상대방의 레벨 검사 로직
     }
 
     @Transactional(readOnly = true)
