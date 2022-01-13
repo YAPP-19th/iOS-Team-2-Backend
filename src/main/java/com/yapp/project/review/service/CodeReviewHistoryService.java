@@ -43,6 +43,10 @@ public class CodeReviewHistoryService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
 
+        if (codeReviewHistoryRepository.existsByReviewerAndTargetMemberAndPost(reviewer, reviewee, post)) {
+            throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
+        }
+
         if (post.getOwner().getId().longValue() == reviewee.getId().longValue()) { // 타겟이 프로젝트 리더인 경우
             Apply reviewerApply = applyRepository.findByMemberAndPost(reviewer, post)
                     .orElseThrow(() -> new NotFoundException(ExceptionMessage.ILLEGAL_TARGETMEMBER));
@@ -65,18 +69,18 @@ public class CodeReviewHistoryService {
             }
         }
 
-        if (codeReviewHistoryRepository.existsByReviewerAndTargetMemberAndPost(reviewer, reviewee, post)) {
-            throw new IllegalRequestException(ExceptionMessage.ALREADY_REVIEWED);
-        }
-
+        int toBeAddedScore = 0;
         for (var selectedReview : selectedReviews) { // TODO: 선택된 리뷰 count로 변경 (reviewer가 문제가 됨)
             ReviewCode.validateIsExistReviewOrElseThrow(selectedReview);
 
-            var codeReviewHistory = converter.toEntity(reviewer, reviewee, selectedReview, post);
+            int reviewCode = ReviewCode.of(selectedReview).getCode();
+            toBeAddedScore = reviewCode < 0 ? toBeAddedScore - 1 : toBeAddedScore + 1;
+
+            var codeReviewHistory = converter.toEntity(reviewer, reviewee, reviewCode, post);
             codeReviewHistoryRepository.save(codeReviewHistory);
         }
 
-        // TODO: 상대방의 레벨 검사 로직
+        reviewee.updateReviewScore(reviewee.getReviewScore() + toBeAddedScore);
     }
 
     @Transactional(readOnly = true)

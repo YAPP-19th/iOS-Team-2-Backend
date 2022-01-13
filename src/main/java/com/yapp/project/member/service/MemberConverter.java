@@ -23,9 +23,10 @@ public class MemberConverter {
                 .loginId(loginId)
                 .likeCount(0L)
                 .score(0)
-                .address("버디시")  //TODO: 초기 값으로 설정 해주지 않으면 오류 발생
+                .reviewScore(0)
+                .address("버디시 버디구")  //TODO: 초기 값으로 설정 해주지 않으면 오류 발생
                 .basePositionCode(BasePosition.DEVELOPER.getCode())
-                .email("아직 이메일을 입력하지 않았어요")
+                .email("이메일이 없어요")
                 .introduce("소개글이 없어요")
                 .nickName("익명")
                 .positionCode("--") //TODO: position code가 string이어서 다른 부분에서 에러발생
@@ -110,7 +111,7 @@ public class MemberConverter {
                 .nickName(m.getNickName())
                 .address(m.getAddress())
                 .description(m.getIntroduce())
-                .level(Level.of(m.getScore()).getLevelName())
+                .level(Level.of(m.getScore() + m.getReviewScore()).getLevelName())
                 .basePosition(m.getBasePositionCode())
                 .positions(positionNames)
                 .projectList(projectResponses)

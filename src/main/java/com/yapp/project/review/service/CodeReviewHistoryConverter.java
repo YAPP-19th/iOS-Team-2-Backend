@@ -11,11 +11,11 @@ import java.util.List;
 
 @Component
 public class CodeReviewHistoryConverter {
-    public CodeReviewHistory toEntity(Member reviewer, Member targetmember, String selectedReview, Post post){
+    public CodeReviewHistory toEntity(Member reviewer, Member targetmember, int reviewCode, Post post){
         return CodeReviewHistory.builder()
                 .reviewer(reviewer)
                 .targetMember(targetmember)
-                .reviewCode(ReviewCode.of(selectedReview).getCode())
+                .reviewCode(reviewCode)
                 .post(post)
                 .build();
     }

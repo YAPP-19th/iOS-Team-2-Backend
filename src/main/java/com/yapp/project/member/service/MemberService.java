@@ -108,12 +108,12 @@ public class MemberService {
             projectPeriod += (Math.round((float) ChronoUnit.DAYS.between(startDate, endDate) / 30));
 
         }
-        for (CareerRequest p : careerRequest) {
-            LocalDate startDate = p.getStartDate();
-            LocalDate endDate = p.getEndDate();
-            careerPeriod += Math.round((float) ChronoUnit.DAYS.between(startDate, endDate) / 30);
-        }
-        return (projectPeriod) * 2 + (careerPeriod) * 2;
+//        for (CareerRequest p : careerRequest) {
+//            LocalDate startDate = p.getStartDate();
+//            LocalDate endDate = p.getEndDate();
+//            careerPeriod += Math.round((float) ChronoUnit.DAYS.between(startDate, endDate) / 30);
+//        }
+        return (projectPeriod) * 2;
     }
 
     @Transactional(readOnly = true)
