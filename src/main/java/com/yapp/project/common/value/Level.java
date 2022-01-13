@@ -1,23 +1,26 @@
 package com.yapp.project.common.value;
+
 import lombok.Getter;
 
 @Getter
 public enum Level {
-    LEVEL1_1("새싹 1단계"),
-    LEVEL1_2("새싹 2단계"),
-    LEVEL1_3("새싹 3단계"),
+    LEVEL1_1("씨앗 1단계"),
+    LEVEL1_2("씨앗 2단계"),
+    LEVEL1_3("씨앗 3단계"),
 
-    LEVEL2_1("묘목 1단계"),
-    LEVEL2_2("묘목 2단계"),
-    LEVEL2_3("묘목 3단계"),
+    LEVEL2_1("새싹 1단계"),
+    LEVEL2_2("새싹 2단계"),
+    LEVEL2_3("새싹 3단계"),
 
-    LEVEL3_1("나무 1단계"),
-    LEVEL3_2("나무 2단계"),
-    LEVEL3_3("나무 3단계"),
+    LEVEL3_1("꽃잎 1단계"),
+    LEVEL3_2("꽃잎 2단계"),
+    LEVEL3_3("꽃잎 3단계"),
 
-    LEVEL4_1("숲 1단계"),
-    LEVEL4_2("숲 2단계"),
-    LEVEL4_3("숲 3단계");
+    LEVEL4_1("열매 1단계"),
+    LEVEL4_2("열매 2단계"),
+    LEVEL4_3("열매 3단계"),
+
+    ;
 
     private final String levelName;
 
