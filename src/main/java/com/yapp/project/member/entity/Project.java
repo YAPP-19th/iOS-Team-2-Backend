@@ -12,6 +12,9 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(indexes = {
+        @Index(name = "PROJECT_IX01", columnList = "project_member_id")
+})
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
