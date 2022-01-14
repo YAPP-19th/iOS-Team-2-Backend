@@ -18,6 +18,11 @@ import java.util.List;
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id=?")
 @Where(clause = "is_deleted = false")
+@Table(indexes = {
+        @Index(name = "MEMBER_IX01", columnList = "member_login_id"),
+        @Index(name = "MEMBER_IX02", columnList = "member_nick_name"),
+        @Index(name = "MEMBER_IX03", columnList = "member_base_position_code")
+})
 public class Member extends DeletableEntity {  //TODO: 1차 구현 상태. 세분화 할 것.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

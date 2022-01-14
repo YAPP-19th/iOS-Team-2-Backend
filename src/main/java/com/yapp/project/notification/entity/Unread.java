@@ -14,6 +14,9 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
+@Table(indexes = {
+        @Index(name = "UNREAD_IX01", columnList = "unread_member_id")
+})
 public class Unread {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

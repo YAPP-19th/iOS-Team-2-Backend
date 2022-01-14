@@ -11,7 +11,12 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "recruiting_position")
+@Table(
+        name = "recruiting_position",
+        indexes = {
+        @Index(name = "RECRUITINGPOSITION_IX01", columnList = "recruiting_position_post_id"),
+        @Index(name = "RECRUITINGPOSITION_IX02", columnList = "recruiting_position_base_position_code")
+})
 public class RecruitingPosition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

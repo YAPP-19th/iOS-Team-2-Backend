@@ -21,6 +21,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE apply SET is_deleted = true WHERE apply_id=?")
 @Where(clause = "is_deleted = false")
+@Table(indexes = {
+        @Index(name = "APPLY_IX01", columnList = "apply_post_id, apply_recruiting_position_id, apply_status_code"),
+        @Index(name = "APPLY_IX02", columnList = "apply_post_id, apply_member_id"),
+})
 public class Apply extends DeletableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

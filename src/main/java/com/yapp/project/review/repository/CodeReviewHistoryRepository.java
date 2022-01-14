@@ -18,7 +18,7 @@ public interface CodeReviewHistoryRepository extends JpaRepository<CodeReviewHis
             "WHERE c.targetMember.id = :targetId " +
             "GROUP BY c.reviewCode " +
             "ORDER BY 1 desc, 2 desc")
-    List<CodeReviewResponse> findALLByTargetMemberIdOrderByCount(@Param("targetId") Long targetId);
+    List<CodeReviewResponse> findALLByTargetMemberIdOrderByCount(@Param("targetId") Long targetId); // 미사용 쿼리메소드 -> 삭제 예정
 
     boolean existsByReviewerAndTargetMemberAndPost(Member reviewer, Member targetMember, Post post);
 

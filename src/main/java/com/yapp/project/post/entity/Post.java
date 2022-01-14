@@ -20,6 +20,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE post SET is_deleted = true WHERE post_id=?")
 @Where(clause = "is_deleted = false")
+@Table(indexes = {
+        @Index(name = "POST_IX01", columnList = "post_owner_id")
+})
 public class Post extends DeletableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
