@@ -10,6 +10,9 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(indexes = {
+        @Index(name = "LIKEMEMBER_IX01", columnList = "like_member_from_member_id, like_member_to_member_id")
+})
 public class LikeMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
