@@ -18,6 +18,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE code_review_history SET is_deleted = true WHERE code_review_history_id=?")
 @Where(clause = "is_deleted = false")
+@Table(indexes = {
+        @Index(name = "CODEREVIEWHISTORY_IX01", columnList = "code_review_history_target_member_id, code_review_history_reviewer_id, code_review_history_post_id")
+})
 public class CodeReviewHistory extends DeletableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
