@@ -19,7 +19,8 @@ public class NotificationConverter {
                 notification.getIsRead(),
                 notification.getDate(),
                 notification.getPost().getId(),
-                notification.getPost().getImageUrl()
+                notification.getPost().getImageUrl(),
+                notification.getPost().getTitle()
         );
     }
 
