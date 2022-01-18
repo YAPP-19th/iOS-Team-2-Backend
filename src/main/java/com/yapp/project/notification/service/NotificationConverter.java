@@ -4,6 +4,7 @@ import com.yapp.project.member.entity.Member;
 import com.yapp.project.notification.dto.NotificationResponse;
 import com.yapp.project.notification.entity.Notification;
 import com.yapp.project.notification.entity.value.NotificationType;
+import com.yapp.project.post.entity.Post;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -16,11 +17,13 @@ public class NotificationConverter {
                 notification.getTitle(),
                 notification.getBody(),
                 notification.getIsRead(),
-                notification.getDate()
+                notification.getDate(),
+                notification.getPost().getId(),
+                notification.getPost().getImageUrl()
         );
     }
 
-    public Notification toEntity(Member receiver, String title, String body, int notificationCode) {
+    public Notification toEntity(Member receiver, String title, String body, int notificationCode, Post relatedPost) {
         return Notification.builder()
                 .receiver(receiver)
                 .title(title)
@@ -28,6 +31,7 @@ public class NotificationConverter {
                 .isRead(false)
                 .date(LocalDateTime.now())
                 .code(NotificationType.of(notificationCode).getCode())
+                .post(relatedPost)
                 .build();
     }
 }

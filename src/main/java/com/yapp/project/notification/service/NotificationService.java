@@ -7,9 +7,10 @@ import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.notification.dto.NotificationResponse;
 import com.yapp.project.notification.entity.Notification;
 import com.yapp.project.notification.entity.Unread;
-import com.yapp.project.notification.entity.value.NotificationType;
 import com.yapp.project.notification.repository.NotificationRepository;
 import com.yapp.project.notification.repository.UnreadRepository;
+import com.yapp.project.post.entity.Post;
+import com.yapp.project.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +27,17 @@ public class NotificationService {
     private final NotificationConverter converter;
 
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
 
     @Transactional
-    public void save(long receiverId, String title, String body, int notificationTypeCode) {
+    public void save(long receiverId, String title, String body, int notificationTypeCode, long relatedPostId) {
         Member receiver = memberRepository.findById(receiverId)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.MEMBER_NOT_FOUND));
 
-        Notification notification = converter.toEntity(receiver, title, body, notificationTypeCode);
+        Post relatedPost = postRepository.findById(relatedPostId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_POST_ID));
+
+        Notification notification = converter.toEntity(receiver, title, body, notificationTypeCode, relatedPost);
         notificationRepository.save(notification);
 
         Optional<Unread> unreadOpt = unreadRepository.findByMemberId(receiverId);
