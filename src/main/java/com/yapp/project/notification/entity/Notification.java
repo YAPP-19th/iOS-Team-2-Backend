@@ -3,6 +3,7 @@ package com.yapp.project.notification.entity;
 import com.yapp.project.common.exception.ExceptionMessage;
 import com.yapp.project.common.exception.type.IllegalRequestException;
 import com.yapp.project.member.entity.Member;
+import com.yapp.project.post.entity.Post;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -43,6 +44,11 @@ public class Notification {
 
     @Column(name = "notification_code", nullable = false)
     private Integer code;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "notification_post_id", referencedColumnName = "post_id")
+    private Post post;
 
     public void updateIsRead(boolean isRead) {
         this.isRead = isRead;

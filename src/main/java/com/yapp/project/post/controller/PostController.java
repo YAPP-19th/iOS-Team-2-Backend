@@ -198,7 +198,7 @@ public class PostController {
 
         var messageOpt = postService.sendInvitationNotification(senderId, postId, receiverId);
 
-        notificationService.save(receiverId, messageOpt.get().get("title"), messageOpt.get().get("body"), NotificationType.INVITE_TO_PROJECT.getCode());
+        notificationService.save(receiverId, messageOpt.get().get("title"), messageOpt.get().get("body"), NotificationType.INVITE_TO_PROJECT.getCode(), postId);
 
         if (messageOpt.isEmpty()) {
             throw new NotFoundException(ExceptionMessage.UNABLE_SEND_NOTIFICATION);
