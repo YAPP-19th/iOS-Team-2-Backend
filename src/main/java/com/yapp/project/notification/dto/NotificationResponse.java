@@ -19,4 +19,8 @@ public class NotificationResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private final LocalDateTime date;
+
+    private final Long postId;
+
+    private final String postImageUrl;
 }
