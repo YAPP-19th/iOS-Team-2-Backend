@@ -23,4 +23,6 @@ public class NotificationResponse {
     private final Long postId;
 
     private final String postImageUrl;
+
+    private final String postTitle;
 }
