@@ -198,11 +198,12 @@ public class PostController {
 
         var messageOpt = postService.sendInvitationNotification(senderId, postId, receiverId);
 
+        notificationService.save(receiverId, messageOpt.get().get("title"), messageOpt.get().get("body"), NotificationType.INVITE_TO_PROJECT.getCode());
+
         if (messageOpt.isEmpty()) {
             throw new NotFoundException(ExceptionMessage.UNABLE_SEND_NOTIFICATION);
         }
-        notificationService.save(receiverId, messageOpt.get().get("title"), messageOpt.get().get("body"), NotificationType.INVITE_TO_PROJECT.getCode());
-
+        
         return ResponseEntity.ok(
                 ApiResult.of(ResponseMessage.SUCCESS)
         );

@@ -130,7 +130,6 @@ public class ApplyService {
             firebaseCloudMessageService.sendMessageTo(receiver.getFcmToken(), title, body);
         } catch (Exception e) {
             log.error(MessageFormat.format("지원 알림 FCM 전송 실패: leaderId: {0}", receiver.getId()));
-            return;
         }
 
         notificationService.save(receiver.getId(), title, body, NotificationType.APPLY_FOR_PROJECT.getCode());

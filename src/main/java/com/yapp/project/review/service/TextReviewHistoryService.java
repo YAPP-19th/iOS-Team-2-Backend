@@ -114,7 +114,6 @@ public class TextReviewHistoryService {
             firebaseCloudMessageService.sendMessageTo(reviewee.getFcmToken(), title, body);
         } catch (Exception e) {
             log.error(MessageFormat.format("리뷰 등록 알림 FCM 전송 실패: revieweeId: {0}", reviewee.getId()));
-            return;
         }
 
         notificationService.save(reviewee.getId(), title, body, NotificationType.REVIEW_REGISTRATION.getCode());
