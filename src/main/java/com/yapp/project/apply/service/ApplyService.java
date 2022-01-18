@@ -15,6 +15,7 @@ import com.yapp.project.member.entity.Member;
 import com.yapp.project.member.repository.MemberRepository;
 import com.yapp.project.notification.entity.value.NotificationType;
 import com.yapp.project.notification.service.NotificationService;
+import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.entity.RecruitingPosition;
 import com.yapp.project.post.repository.RecruitingPositionRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,7 @@ public class ApplyService {
             String title = MessageFormat.format("{0}님이 {1} 프로젝트에 지원했습니다.", member.getNickName(), apply.getPost().getTitle());
             String body = "지원내용을 확인하세요!";
 
-            sendNotificationToReceiver(apply.getPost().getOwner(), title, body);
+            sendNotificationToReceiver(apply.getPost().getOwner(), title, body, recruitingPosition.getPost());
         }
 
         return applyConverter.toApplyResponse(applyEntity);
@@ -78,7 +79,7 @@ public class ApplyService {
             String title = MessageFormat.format("{0} 프로젝트에 승인되었습니다.", apply.getPost().getTitle());
             String body = "나의버디에서 확인하세요!";
 
-            sendNotificationToReceiver(apply.getMember(), title, body);
+            sendNotificationToReceiver(apply.getMember(), title, body, apply.getPost());
         }
     }
 
@@ -121,17 +122,17 @@ public class ApplyService {
             String title = MessageFormat.format("아쉽게도 {0} 프로젝트에 참여하기 힘들 것 같아요", apply.getPost().getTitle());
             String body = "나의버디에서 확인하세요!";
 
-            sendNotificationToReceiver(apply.getMember(), title, body);
+            sendNotificationToReceiver(apply.getMember(), title, body, apply.getPost());
         }
     }
 
-    private void sendNotificationToReceiver(Member receiver, String title, String body) {
+    private void sendNotificationToReceiver(Member receiver, String title, String body, Post relatedPost) {
         try {
             firebaseCloudMessageService.sendMessageTo(receiver.getFcmToken(), title, body);
         } catch (Exception e) {
             log.error(MessageFormat.format("지원 알림 FCM 전송 실패: leaderId: {0}", receiver.getId()));
         }
 
-        notificationService.save(receiver.getId(), title, body, NotificationType.APPLY_FOR_PROJECT.getCode());
+        notificationService.save(receiver.getId(), title, body, NotificationType.APPLY_FOR_PROJECT.getCode(), relatedPost.getId());
     }
 }

@@ -15,7 +15,6 @@ import com.yapp.project.post.entity.Post;
 import com.yapp.project.post.repository.PostRepository;
 import com.yapp.project.review.dto.request.TextReviewCreateRequest;
 import com.yapp.project.review.dto.response.TextReviewSimpleResponse;
-import com.yapp.project.review.entity.CodeReviewHistory;
 import com.yapp.project.review.entity.TextReviewHistory;
 import com.yapp.project.review.repository.TextReviewHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -116,6 +115,6 @@ public class TextReviewHistoryService {
             log.error(MessageFormat.format("리뷰 등록 알림 FCM 전송 실패: revieweeId: {0}", reviewee.getId()));
         }
 
-        notificationService.save(reviewee.getId(), title, body, NotificationType.REVIEW_REGISTRATION.getCode());
+        notificationService.save(reviewee.getId(), title, body, NotificationType.REVIEW_REGISTRATION.getCode(), post.getId());
     }
 }
