@@ -38,5 +38,5 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
 
     @Modifying
     @Query(value = "DELETE FROM Apply a WHERE a.isDeleted = true and a.lastModifiedDate < :baseDeletionTime")
-    void deleteExpiredApplies(LocalDateTime baseDeletionTime);
+    void deleteALlExpired(LocalDateTime baseDeletionTime);
 }

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -155,5 +156,10 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_EXIST_MEMBER_ID));
 
         currentMember.updateFcmTokenAndActiveStatus(fcmToken, null);
+    }
+
+    @Transactional
+    public void deleteAllExpiredDate(LocalDateTime baseDeletionTime) {
+        memberRepository.deleteAllExpired(baseDeletionTime);
     }
 }

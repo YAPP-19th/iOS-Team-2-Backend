@@ -139,6 +139,6 @@ public class ApplyService {
 
     @Transactional
     public void deleteAllExpiredDate(LocalDateTime baseDeletionTime) {
-        applyRepository.deleteExpiredApplies(baseDeletionTime);
+        applyRepository.deleteALlExpired(baseDeletionTime);
     }
 }

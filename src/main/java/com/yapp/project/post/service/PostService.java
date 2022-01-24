@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -230,5 +231,10 @@ public class PostService {
         }
 
         return Optional.of(Map.of("title", title, "body", body));
+    }
+
+    @Transactional
+    public void deleteAllExpiredDate(LocalDateTime baseDeletionTime) {
+        postRepository.deleteAllExpired(baseDeletionTime);
     }
 }

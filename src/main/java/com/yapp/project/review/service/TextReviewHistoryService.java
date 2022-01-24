@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -116,5 +117,10 @@ public class TextReviewHistoryService {
         }
 
         notificationService.save(reviewee.getId(), title, body, NotificationType.REVIEW_REGISTRATION.getCode(), post.getId());
+    }
+
+    @Transactional
+    public void deleteAllExpiredDate(LocalDateTime baseDeletionTime) {
+        textReviewHistoryRepository.deleteAllExpired(baseDeletionTime);
     }
 }
