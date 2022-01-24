@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,4 +32,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Page<Member> findAllByBasePositionCode(Pageable pageable, int basePositionCode);
 
     Page<Member> findAllByPositionCodeContains(String position, Pageable pageable);
+
+    @Modifying
+    @Query(value = "DELETE FROM Member m WHERE m.isDeleted = true and m.lastModifiedDate < :baseDeletionTime")
+    void deleteAllExpired(LocalDateTime baseDeletionTime);
 }

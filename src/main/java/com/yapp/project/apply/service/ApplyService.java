@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -134,5 +135,10 @@ public class ApplyService {
         }
 
         notificationService.save(receiver.getId(), title, body, NotificationType.APPLY_FOR_PROJECT.getCode(), relatedPost.getId());
+    }
+
+    @Transactional
+    public void deleteAllExpiredDate(LocalDateTime baseDeletionTime) {
+        applyRepository.deleteALlExpired(baseDeletionTime);
     }
 }
